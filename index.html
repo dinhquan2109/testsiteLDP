@@ -263,6 +263,11 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .illustration {
             position: absolute;
             right: 50px;
@@ -271,34 +276,6 @@
             opacity: 0.9;
         }
 
-        .success-message {
-            display: none;
-            background: #4caf50;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 18px;
-            margin-top: 20px;
-        }
-
-        .success-message.show {
-            display: block;
-            animation: slideIn 0.5s;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Popup Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -366,11 +343,6 @@
             margin-bottom: 20px;
         }
 
-        .modal-illustration img {
-            width: 150px;
-            height: 150px;
-        }
-
         .modal-text {
             text-align: center;
             color: #333;
@@ -403,12 +375,17 @@
             transition: all 0.3s;
         }
 
+        .modal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .modal-btn.secondary {
             background: #ff9800;
             color: white;
         }
 
-        .modal-btn.secondary:hover {
+        .modal-btn.secondary:hover:not(:disabled) {
             background: #f57c00;
             transform: translateY(-2px);
         }
@@ -418,12 +395,11 @@
             color: white;
         }
 
-        .modal-btn.primary:hover {
+        .modal-btn.primary:hover:not(:disabled) {
             background: #689f38;
             transform: translateY(-2px);
         }
 
-        /* Instructions Page */
         .instructions-page {
             display: none;
             position: fixed;
@@ -478,44 +454,6 @@
             margin-bottom: -30px;
         }
 
-        .instructions-banner::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 200px;
-            height: 200px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        }
-
-        .instructions-banner::after {
-            content: '';
-            position: absolute;
-            bottom: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        }
-
-        .banner-character-left {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            width: 100px;
-            z-index: 10;
-        }
-
-        .banner-character-right {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            width: 100px;
-            z-index: 10;
-        }
-
         .banner-title {
             font-size: 64px;
             font-weight: 900;
@@ -549,28 +487,6 @@
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             margin-top: 0;
-        }
-
-        .instructions-decoration {
-            position: absolute;
-            top: -15px;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: repeating-linear-gradient(90deg, 
-                #4caf50 0px, #4caf50 30px, transparent 30px, transparent 35px,
-                #4caf50 35px, #4caf50 65px, transparent 65px, transparent 70px
-            );
-            border-radius: 20px 20px 0 0;
-        }
-
-        .instructions-clip {
-            position: absolute;
-            top: -40px;
-            left: 40px;
-            width: 70px;
-            height: 70px;
-            z-index: 10;
         }
 
         .instructions-title {
@@ -647,40 +563,20 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        /* Tablet (iPad) - 768px to 1024px */
-        @media (max-width: 1024px) and (min-width: 769px) {
-            .container {
-                max-width: 90%;
-            }
-
-            .main-content {
-                padding: 40px 30px;
-            }
-
-            .hero-title {
-                font-size: 42px;
-            }
-
-            .hero-subtitle {
-                font-size: 28px;
-            }
-
-            .form-section {
-                padding: 35px 25px;
-            }
-
-            .illustration {
-                width: 200px;
-                right: 30px;
-                bottom: 30px;
-            }
-
-            .info-section {
-                padding: 25px;
-            }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
         }
 
-        /* Mobile - max 768px */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 15px;
@@ -697,15 +593,6 @@
                 font-size: 20px;
             }
 
-            .support-btn {
-                padding: 8px 20px;
-                font-size: 14px;
-            }
-
-            .hero-banner {
-                padding: 30px 15px;
-            }
-
             .hero-title {
                 font-size: 32px;
             }
@@ -719,20 +606,12 @@
                 padding: 30px 20px;
             }
 
-            .info-section {
-                padding: 20px;
-            }
-
             .info-icon {
                 float: none;
                 display: block;
                 margin-bottom: 15px;
                 margin-right: 0;
                 text-align: center;
-            }
-
-            .info-text {
-                font-size: 15px;
             }
 
             .form-section {
@@ -743,43 +622,7 @@
                 font-size: 20px;
             }
 
-            .form-row {
-                display: block;
-            }
-
-            .form-group {
-                margin-bottom: 15px;
-            }
-
-            .form-group label {
-                font-size: 13px;
-            }
-
-            .form-group input {
-                padding: 12px;
-                font-size: 15px;
-            }
-
-            .submit-btn {
-                padding: 15px;
-                font-size: 16px;
-            }
-
             .illustration {
-                display: none;
-            }
-
-            .decorative-lights {
-                height: 30px;
-                background-size: 50px;
-            }
-
-            .instructions-container {
-                margin: 20px auto;
-            }
-
-            .banner-character-left,
-            .banner-character-right {
                 display: none;
             }
 
@@ -792,48 +635,8 @@
                 padding: 8px 30px;
             }
 
-            .instructions-content {
-                padding: 30px 20px;
-            }
-
-            .instruction-item {
-                padding: 15px 20px;
-            }
-        }
-
-        /* Small Mobile - max 480px */
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 28px;
-            }
-
-            .hero-subtitle {
-                font-size: 20px;
-                padding: 6px 20px;
-            }
-
-            .main-content {
-                padding: 25px 15px;
-            }
-
-            .form-title {
-                font-size: 18px;
-            }
-
-            .info-text {
-                font-size: 14px;
-            }
-
-            .modal-content {
-                padding: 30px 20px;
-            }
-
             .modal-buttons {
                 flex-direction: column;
-            }
-
-            .modal-btn {
-                width: 100%;
             }
         }
     </style>
@@ -842,9 +645,7 @@
     <div class="container main-page" id="mainPage">
         <header>
             <div class="logo">Aloha</div>
-            <button class="support-btn">
-                💬 Hỗ trợ khẩn cấp
-            </button>
+            <button class="support-btn">Hỗ trợ khẩn cấp</button>
         </header>
 
         <div class="hero-banner">
@@ -906,32 +707,21 @@
 
                     <button type="submit" class="submit-btn">ĐI TỚI BÀI THI</button>
                 </form>
-
-                <div class="success-message" id="successMessage">
-                    ✓ Đã ghi nhận thông tin! Chuyển đến bài test...
-                </div>
             </div>
 
             <div class="illustration">
                 <svg viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
                     <ellipse cx="100" cy="200" rx="60" ry="20" fill="#7cb342" opacity="0.3"/>
-                    <path d="M 60 180 Q 60 150 80 140 L 80 200 Z" fill="#7cb342"/>
-                    <path d="M 140 180 Q 140 150 120 140 L 120 200 Z" fill="#7cb342"/>
                     <circle cx="100" cy="100" r="40" fill="#fdd5b1"/>
-                    <path d="M 70 85 Q 80 75 90 85" stroke="#333" stroke-width="3" fill="none"/>
-                    <path d="M 110 85 Q 120 75 130 85" stroke="#333" stroke-width="3" fill="none"/>
                     <circle cx="85" cy="100" r="3" fill="#333"/>
                     <circle cx="115" cy="100" r="3" fill="#333"/>
                     <path d="M 85 115 Q 100 125 115 115" stroke="#333" stroke-width="2" fill="none"/>
                     <path d="M 60 70 Q 100 50 140 70" fill="#2c2c2c"/>
                     <rect x="70" y="140" width="60" height="60" rx="10" fill="#7cb342"/>
-                    <circle cx="40" cy="120" r="15" fill="#ff9800"/>
-                    <circle cx="160" cy="120" r="15" fill="#ff9800"/>
                 </svg>
             </div>
         </div>
 
-        <!-- Popup Modal -->
         <div class="modal-overlay" id="modalOverlay">
             <div class="modal-content">
                 <button class="modal-close" id="modalClose">×</button>
@@ -943,15 +733,6 @@
                         <circle cx="85" cy="75" r="3" fill="#333"/>
                         <circle cx="115" cy="75" r="3" fill="#333"/>
                         <path d="M 85 90 Q 100 100 115 90" stroke="#333" stroke-width="2" fill="none"/>
-                        <path d="M 70 60 Q 100 45 130 60" fill="#2c2c2c"/>
-                        <rect x="60" y="130" width="80" height="50" rx="10" fill="#7cb342"/>
-                        <rect x="70" y="145" width="20" height="5" rx="2" fill="white"/>
-                        <rect x="70" y="155" width="20" height="5" rx="2" fill="white"/>
-                        <rect x="70" y="165" width="20" height="5" rx="2" fill="white"/>
-                        <circle cx="40" cy="100" r="12" fill="#ff9800"/>
-                        <path d="M 40 100 L 35 115" stroke="#ff9800" stroke-width="8" stroke-linecap="round"/>
-                        <circle cx="160" cy="100" r="12" fill="#ff9800"/>
-                        <path d="M 160 100 L 165 115" stroke="#ff9800" stroke-width="8" stroke-linecap="round"/>
                     </svg>
                 </div>
 
@@ -968,58 +749,18 @@
         </div>
     </div>
 
-    <!-- Instructions Page -->
     <div class="instructions-page" id="instructionsPage">
         <div class="instructions-container">
             <div class="instructions-header">
                 <div class="instructions-logo">easy-SPEAK</div>
                 
                 <div class="instructions-banner">
-                    <div class="banner-character-left">
-                        <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="35" r="22" fill="#7cb342"/>
-                            <circle cx="50" cy="35" r="18" fill="#fdd5b1"/>
-                            <circle cx="44" cy="33" r="2" fill="#333"/>
-                            <circle cx="56" cy="33" r="2" fill="#333"/>
-                            <path d="M 44 42 Q 50 46 56 42" stroke="#333" stroke-width="2" fill="none"/>
-                            <path d="M 35 27 Q 50 18 65 27" fill="#2c2c2c"/>
-                            <rect x="38" y="57" width="24" height="30" rx="4" fill="white"/>
-                            <ellipse cx="20" cy="65" rx="6" ry="10" fill="#8bc34a" transform="rotate(-25 20 65)"/>
-                            <rect x="17" y="60" width="12" height="3" rx="1" fill="#8bc34a"/>
-                            <rect x="17" y="65" width="12" height="3" rx="1" fill="#8bc34a"/>
-                        </svg>
-                    </div>
-
-                    <div class="banner-character-right">
-                        <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="50" cy="35" r="22" fill="#7cb342"/>
-                            <circle cx="50" cy="35" r="18" fill="#fdd5b1"/>
-                            <circle cx="44" cy="33" r="2" fill="#333"/>
-                            <circle cx="56" cy="33" r="2" fill="#333"/>
-                            <path d="M 44 42 Q 50 46 56 42" stroke="#333" stroke-width="2" fill="none"/>
-                            <path d="M 35 27 Q 50 18 65 27" fill="#2c2c2c"/>
-                            <rect x="38" y="57" width="24" height="30" rx="4" fill="white"/>
-                            <ellipse cx="80" cy="65" rx="6" ry="10" fill="#ff9800" transform="rotate(25 80 65)"/>
-                            <rect x="71" y="60" width="12" height="3" rx="1" fill="#ff9800"/>
-                            <rect x="71" y="65" width="12" height="3" rx="1" fill="#ff9800"/>
-                        </svg>
-                    </div>
-
                     <div class="banner-title">PLACEMENT</div>
                     <div class="banner-subtitle">TEST</div>
                 </div>
             </div>
 
             <div class="instructions-content">
-                <div class="instructions-decoration"></div>
-                
-                <svg class="instructions-clip" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="35" cy="22" rx="18" ry="9" fill="#4a9eff"/>
-                    <ellipse cx="35" cy="20" rx="15" ry="7" fill="#6bb3ff"/>
-                    <rect x="31" y="20" width="8" height="35" rx="2" fill="#4a9eff"/>
-                    <path d="M 22 55 Q 35 60 48 55" fill="#4a9eff"/>
-                </svg>
-
                 <h2 class="instructions-title">Hướng dẫn làm bài</h2>
 
                 <div class="instruction-item">
@@ -1063,9 +804,13 @@
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyF0XJVjhvGIR5xYzgDSwDqI3RuWwOwQVyqee_oFSv7P9Cj2aeoZafZ19SlgLpNv4TYbw/exec';
+        // ===== CẤU HÌNH =====
+        // QUAN TRỌNG: Thay URL này bằng URL Web App của bạn từ Google Apps Script
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLoQ7sqEVkDpawHJnjJWIkquzCq5SYHTuGasAvhWP5_8tv_cIIWhRbbU8xEP2OziQl-A/exec';
         
         let userRowId = null;
+
+        // ===== VALIDATION FUNCTIONS =====
         function validatePhone(phone) {
             const phoneRegex = /^[0-9]{10,11}$/;
             return phoneRegex.test(phone);
@@ -1076,6 +821,7 @@
             return emailRegex.test(email);
         }
 
+        // ===== FORM VALIDATION =====
         document.getElementById('fullname').addEventListener('blur', function() {
             const input = this;
             const error = document.getElementById('fullnameError');
@@ -1168,6 +914,7 @@
             }
         });
 
+        // ===== FORM SUBMIT =====
         document.getElementById('placementForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1214,6 +961,7 @@
             document.getElementById('modalOverlay').classList.add('show');
         });
 
+        // ===== MODAL HANDLERS =====
         document.getElementById('modalClose').addEventListener('click', function() {
             document.getElementById('modalOverlay').classList.remove('show');
         });
@@ -1223,7 +971,16 @@
             document.getElementById('phone').focus();
         });
 
-        document.getElementById('btnConfirm').addEventListener('click', function() {
+        // ===== SUBMIT TO GOOGLE SHEETS =====
+        document.getElementById('btnConfirm').addEventListener('click', async function() {
+            const btnConfirm = this;
+            const btnChangePhone = document.getElementById('btnChangePhone');
+            
+            // Disable buttons
+            btnConfirm.disabled = true;
+            btnChangePhone.disabled = true;
+            btnConfirm.innerHTML = '<span class="loading-spinner"></span> Đang lưu...';
+            
             const fullname = document.getElementById('fullname').value.trim();
             const ageValue = document.getElementById('age').value.trim();
             const phone = document.getElementById('phone').value;
@@ -1231,33 +988,130 @@
 
             const formData = {
                 fullname: fullname,
-                age: ageValue !== '' ? parseInt(ageValue) : null,
+                age: ageValue !== '' ? parseInt(ageValue) : '',
                 phone: phone,
-                email: email,
-                timestamp: new Date().toISOString()
+                email: email
             };
 
-            console.log('Form data:', formData);
+            console.log('📤 Đang gửi dữ liệu đến Google Sheets...', formData);
+            
+            try {
+                // Method 1: Using fetch with POST
+                const response = await fetch(SCRIPT_URL + '?action=submitForm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                    redirect: 'follow'
+                });
 
-            document.getElementById('modalOverlay').classList.remove('show');
-
-            setTimeout(() => {
-                document.getElementById('mainPage').classList.add('hide');
-                document.getElementById('instructionsPage').classList.add('show');
-            }, 300);
+                console.log('📥 Response status:', response.status);
+                
+                const result = await response.json();
+                console.log('✅ Kết quả từ server:', result);
+                
+                if (result.success) {
+                    userRowId = result.rowId;
+                    console.log('✅ Lưu thành công! Row ID:', userRowId);
+                    
+                    document.getElementById('modalOverlay').classList.remove('show');
+                    
+                    setTimeout(() => {
+                        document.getElementById('mainPage').classList.add('hide');
+                        document.getElementById('instructionsPage').classList.add('show');
+                    }, 300);
+                } else {
+                    throw new Error(result.error || 'Lỗi không xác định từ server');
+                }
+                
+            } catch (error) {
+                console.error('❌ Lỗi khi gửi dữ liệu:', error);
+                
+                // Thử method 2: Using form submission (fallback)
+                console.log('🔄 Đang thử phương thức backup...');
+                try {
+                    await submitViaFormMethod(formData);
+                    userRowId = Date.now(); // Temporary ID
+                    console.log('✅ Đã gửi qua phương thức backup');
+                    
+                    document.getElementById('modalOverlay').classList.remove('show');
+                    setTimeout(() => {
+                        document.getElementById('mainPage').classList.add('hide');
+                        document.getElementById('instructionsPage').classList.add('show');
+                    }, 300);
+                } catch (backupError) {
+                    console.error('❌ Cả hai phương thức đều thất bại:', backupError);
+                    alert('Có lỗi xảy ra khi lưu thông tin. Vui lòng kiểm tra:\n\n1. URL Google Apps Script có đúng không?\n2. Web App đã được deploy với quyền "Anyone" chưa?\n3. Kiểm tra Console (F12) để xem chi tiết lỗi.\n\nLỗi: ' + error.message);
+                    
+                    // Re-enable buttons
+                    btnConfirm.disabled = false;
+                    btnChangePhone.disabled = false;
+                    btnConfirm.textContent = 'Xác nhận';
+                }
+            }
         });
 
+        // Fallback method: Submit via hidden form
+        async function submitViaFormMethod(data) {
+            return new Promise((resolve, reject) => {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = SCRIPT_URL + '?action=submitForm';
+                form.target = 'hidden-iframe';
+                form.style.display = 'none';
+
+                // Create hidden iframe
+                let iframe = document.getElementById('hidden-iframe');
+                if (!iframe) {
+                    iframe = document.createElement('iframe');
+                    iframe.id = 'hidden-iframe';
+                    iframe.name = 'hidden-iframe';
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                }
+
+                // Add form fields
+                for (const key in data) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = data[key];
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+                
+                // Set timeout
+                const timeout = setTimeout(() => {
+                    reject(new Error('Timeout: Server không phản hồi'));
+                }, 10000);
+
+                // Handle iframe load
+                iframe.onload = function() {
+                    clearTimeout(timeout);
+                    form.remove();
+                    resolve();
+                };
+
+                form.submit();
+            });
+        }
+
+        // Close modal on overlay click
         document.getElementById('modalOverlay').addEventListener('click', function(e) {
             if (e.target === this) {
                 this.classList.remove('show');
             }
         });
 
+        // ===== START TEST =====
         document.getElementById('startTestBtn').addEventListener('click', function() {
-            alert('Chuyển đến trang làm bài test...');
+            console.log('🚀 Bắt đầu làm bài test...');
+            console.log('User Row ID:', userRowId);
+            alert('Chuyển đến trang làm bài test...\n\nRow ID: ' + userRowId);
+            // TODO: Navigate to test page with userRowId
         });
-        
     </script>
-    
 </body>
 </html>
