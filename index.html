@@ -996,59 +996,22 @@
             console.log('📤 Đang gửi dữ liệu đến Google Sheets...', formData);
             
             try {
-                // Method 1: Using fetch with POST
-                const response = await fetch(SCRIPT_URL + '?action=submitForm', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                    redirect: 'follow'
-                });
+  await submitViaFormMethod(formData);
+  userRowId = Date.now(); // tạm ID
+  console.log('✅ Đã gửi qua form trực tiếp (bỏ fetch)');
 
-                console.log('📥 Response status:', response.status);
-                
-                const result = await response.json();
-                console.log('✅ Kết quả từ server:', result);
-                
-                if (result.success) {
-                    userRowId = result.rowId;
-                    console.log('✅ Lưu thành công! Row ID:', userRowId);
-                    
-                    document.getElementById('modalOverlay').classList.remove('show');
-                    
-                    setTimeout(() => {
-                        document.getElementById('mainPage').classList.add('hide');
-                        document.getElementById('instructionsPage').classList.add('show');
-                    }, 300);
-                } else {
-                    throw new Error(result.error || 'Lỗi không xác định từ server');
-                }
-                
-            } catch (error) {
-                console.error('❌ Lỗi khi gửi dữ liệu:', error);
-                
-                // Thử method 2: Using form submission (fallback)
-                console.log('🔄 Đang thử phương thức backup...');
-                try {
-                    await submitViaFormMethod(formData);
-                    userRowId = Date.now(); // Temporary ID
-                    console.log('✅ Đã gửi qua phương thức backup');
-                    
-                    document.getElementById('modalOverlay').classList.remove('show');
-                    setTimeout(() => {
-                        document.getElementById('mainPage').classList.add('hide');
-                        document.getElementById('instructionsPage').classList.add('show');
-                    }, 300);
-                } catch (backupError) {
-                    console.error('❌ Cả hai phương thức đều thất bại:', backupError);
-                    alert('Có lỗi xảy ra khi lưu thông tin. Vui lòng kiểm tra:\n\n1. URL Google Apps Script có đúng không?\n2. Web App đã được deploy với quyền "Anyone" chưa?\n3. Kiểm tra Console (F12) để xem chi tiết lỗi.\n\nLỗi: ' + error.message);
-                    
-                    // Re-enable buttons
-                    btnConfirm.disabled = false;
-                    btnChangePhone.disabled = false;
-                    btnConfirm.textContent = 'Xác nhận';
-                }
+  document.getElementById('modalOverlay').classList.remove('show');
+  setTimeout(() => {
+      document.getElementById('mainPage').classList.add('hide');
+      document.getElementById('instructionsPage').classList.add('show');
+  }, 300);
+} catch (error) {
+  console.error('❌ Gửi form thất bại:', error);
+  alert('Không gửi được dữ liệu. Kiểm tra URL Apps Script hoặc quyền truy cập.');
+  btnConfirm.disabled = false;
+  btnChangePhone.disabled = false;
+  btnConfirm.textContent = 'Xác nhận';
+}
             }
         });
 
