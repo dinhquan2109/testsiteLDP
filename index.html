@@ -412,6 +412,243 @@
             transform: translateY(-2px);
         }
 
+        /* Instructions Page */
+        .instructions-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1e7e5f 0%, #0d5943 100%);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .instructions-page.show {
+            display: block;
+        }
+
+        .instructions-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding-bottom: 50px;
+        }
+
+        .instructions-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .instructions-logo {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .instructions-banner {
+            background: linear-gradient(135deg, #4a9eff 0%, #1976d2 100%);
+            border-radius: 20px;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .instructions-banner::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .instructions-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .banner-character-left {
+            position: absolute;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+        }
+
+        .banner-character-right {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 120px;
+        }
+
+        .banner-title {
+            font-size: 56px;
+            font-weight: 900;
+            color: #ffd700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-subtitle {
+            background: white;
+            color: #0d5943;
+            font-size: 36px;
+            font-weight: 900;
+            padding: 12px 50px;
+            display: inline-block;
+            border-radius: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .instructions-content {
+            background: #fef8e6;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .instructions-decoration {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: repeating-linear-gradient(90deg, 
+                #4caf50 0px, #4caf50 20px, transparent 20px, transparent 40px
+            );
+            border-radius: 20px 20px 0 0;
+        }
+
+        .instructions-clip {
+            position: absolute;
+            top: -30px;
+            left: 50px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .instructions-title {
+            text-align: center;
+            color: #0d5943;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            padding-top: 20px;
+        }
+
+        .instruction-item {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .instruction-item:hover {
+            transform: translateX(5px);
+        }
+
+        .instruction-icon {
+            width: 30px;
+            height: 30px;
+            background: #7cb342;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .instruction-text {
+            color: #333;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .instruction-text strong {
+            color: #1e7e5f;
+            font-weight: bold;
+        }
+
+        .start-test-btn {
+            width: 100%;
+            max-width: 300px;
+            margin: 40px auto 0;
+            display: block;
+            padding: 20px;
+            background: linear-gradient(135deg, #7cb342 0%, #558b2f 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .start-test-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 768px) {
+            .instructions-container {
+                margin: 20px auto;
+            }
+
+            .banner-character-left,
+            .banner-character-right {
+                display: none;
+            }
+
+            .banner-title {
+                font-size: 36px;
+            }
+
+            .banner-subtitle {
+                font-size: 24px;
+                padding: 8px 30px;
+            }
+
+            .instructions-content {
+                padding: 30px 20px;
+            }
+
+            .instruction-item {
+                padding: 15px 20px;
+            }
+        }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -573,6 +810,18 @@
             .info-text {
                 font-size: 14px;
             }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -701,6 +950,97 @@
                 <div class="modal-buttons">
                     <button class="modal-btn secondary" id="btnChangePhone">Số của tôi là số khác</button>
                     <button class="modal-btn primary" id="btnConfirm">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Page -->
+        <div class="instructions-page" id="instructionsPage">
+            <div class="instructions-container">
+                <div class="instructions-header">
+                    <div class="instructions-logo">easy-SPEAK</div>
+                    
+                    <div class="instructions-banner">
+                        <div class="banner-character-left">
+                            <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="40" r="25" fill="#7cb342"/>
+                                <circle cx="50" cy="40" r="20" fill="#fdd5b1"/>
+                                <circle cx="43" cy="37" r="2" fill="#333"/>
+                                <circle cx="57" cy="37" r="2" fill="#333"/>
+                                <path d="M 43 47 Q 50 52 57 47" stroke="#333" stroke-width="2" fill="none"/>
+                                <path d="M 35 30 Q 50 20 65 30" fill="#2c2c2c"/>
+                                <rect x="35" y="65" width="30" height="40" rx="5" fill="white"/>
+                                <path d="M 40 75 L 35 85 L 30 75" fill="#7cb342"/>
+                                <ellipse cx="65" cy="75" rx="8" ry="12" fill="#ffd700" transform="rotate(-20 65 75)"/>
+                            </svg>
+                        </div>
+
+                        <div class="banner-character-right">
+                            <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="40" r="25" fill="#7cb342"/>
+                                <circle cx="50" cy="40" r="20" fill="#fdd5b1"/>
+                                <circle cx="43" cy="37" r="2" fill="#333"/>
+                                <circle cx="57" cy="37" r="2" fill="#333"/>
+                                <path d="M 43 47 Q 50 52 57 47" stroke="#333" stroke-width="2" fill="none"/>
+                                <path d="M 35 30 Q 50 20 65 30" fill="#2c2c2c"/>
+                                <rect x="35" y="65" width="30" height="40" rx="5" fill="white"/>
+                                <path d="M 60 75 L 65 85 L 70 75" fill="#7cb342"/>
+                                <ellipse cx="35" cy="75" rx="8" ry="12" fill="#ff9800" transform="rotate(20 35 75)"/>
+                            </svg>
+                        </div>
+
+                        <div class="banner-title">PLACEMENT</div>
+                        <div class="banner-subtitle">TEST</div>
+                    </div>
+                </div>
+
+                <div class="instructions-content">
+                    <div class="instructions-decoration"></div>
+                    
+                    <svg class="instructions-clip" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="30" cy="20" rx="15" ry="8" fill="#4a9eff"/>
+                        <rect x="27" y="20" width="6" height="30" fill="#4a9eff"/>
+                        <path d="M 20 50 Q 30 55 40 50" fill="#4a9eff"/>
+                    </svg>
+
+                    <h2 class="instructions-title">Hướng dẫn làm bài</h2>
+
+                    <div class="instruction-item">
+                        <div class="instruction-icon">🌱</div>
+                        <div class="instruction-text">
+                            Thí sinh làm lần lượt <strong>20 câu hỏi</strong> kiểm tra kiến thức về Từ vựng, Ngữ pháp, kỹ năng Nghe và Đọc trong thời gian <strong>20 phút</strong>.
+                        </div>
+                    </div>
+
+                    <div class="instruction-item">
+                        <div class="instruction-icon">📝</div>
+                        <div class="instruction-text">
+                            Với mỗi câu trả lời đúng, thí sinh nhận được <strong>1 điểm</strong>. Trả lời sai không bị trừ điểm. Tổng điểm tối đa thí sinh có thể đạt được là <strong>20 điểm</strong>.
+                        </div>
+                    </div>
+
+                    <div class="instruction-item">
+                        <div class="instruction-icon">⏸️</div>
+                        <div class="instruction-text">
+                            Sau khi bấm "<strong>NỘP BÀI</strong>", thí sinh không thể làm lại bài thi.
+                        </div>
+                    </div>
+
+                    <div class="instruction-item">
+                        <div class="instruction-icon">📧</div>
+                        <div class="instruction-text">
+                            Thí sinh sẽ được nhận kết quả thi ngay sau khi hoàn thành bài thi.
+                        </div>
+                    </div>
+
+                    <div class="instruction-item">
+                        <div class="instruction-icon">▶️</div>
+                        <div class="instruction-text">
+                            Ấn "<strong>BẮT ĐẦU</strong>" để vào làm bài.
+                        </div>
+                    </div>
+
+                    <button class="start-test-btn" id="startTestBtn">BẮT ĐẦU</button>
                 </div>
             </div>
         </div>
@@ -914,6 +1254,11 @@
                 console.error('Error:', error);
                 alert('Backend chưa sẵn sàng. Đây là demo giao diện.');
                 document.getElementById('successMessage').classList.add('show');
+                
+                // Afficher la page d'instructions après 1 seconde
+                setTimeout(() => {
+                    document.getElementById('instructionsPage').classList.add('show');
+                }, 1000);
             }
         });
 
@@ -922,6 +1267,13 @@
             if (e.target === this) {
                 this.classList.remove('show');
             }
+        });
+
+        // Bouton "BẮT ĐẦU" sur la page d'instructions
+        document.getElementById('startTestBtn').addEventListener('click', function() {
+            alert('Chuyển đến trang làm bài test...');
+            // Ici vous pouvez rediriger vers la vraie page de test
+            // window.location.href = '/test-questions.html';
         });
     </script>
 </body>
