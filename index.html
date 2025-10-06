@@ -1218,7 +1218,7 @@
         });
 
         // Bouton "Xác nhận"
-        document.getElementById('btnConfirm').addEventListener('click', async function() {
+        document.getElementById('btnConfirm').addEventListener('click', function() {
             const fullname = document.getElementById('fullname').value.trim();
             const ageValue = document.getElementById('age').value.trim();
             const phone = document.getElementById('phone').value;
@@ -1237,32 +1237,11 @@
             // Fermer le modal
             document.getElementById('modalOverlay').classList.remove('show');
 
-            try {
-                const response = await fetch('/api/placement-test/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('Server response:', result);
-                    
-                    // Masquer la page principale et afficher la page d'instructions
-                    document.getElementById('mainPage').classList.add('hide');
-                    document.getElementById('instructionsPage').classList.add('show');
-                } else {
-                    alert('Có lỗi xảy ra. Vui lòng thử lại!');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                
-                // En mode demo, afficher directement la page d'instructions
+            // Masquer la page principale et afficher la page d'instructions
+            setTimeout(() => {
                 document.getElementById('mainPage').classList.add('hide');
                 document.getElementById('instructionsPage').classList.add('show');
-            }
+            }, 300);
         });
 
         // Fermer le modal en cliquant sur l'overlay
