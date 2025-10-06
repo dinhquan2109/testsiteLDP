@@ -861,7 +861,7 @@
             <div class="info-section">
                 <div class="info-icon">📝</div>
                 <div class="info-text">
-                    <p><strong>Test</strong> được phát triển độc quyền bởi <strong>Aloha</strong> và được giảng dạy trên nền tảng trực tuyến, giúp phát triển khả năng giao tiếp Tiếng Trung đồng thời bổ trợ kỹ năng cho các chứng chỉ Tiếng Trung quốc tế. Chương trình đặc biệt phù hợp với học viên có nhu cầu tăng phản xạ giao tiếp trong các bối cảnh đời sống, công việc và học thuật.</p>
+                    <p><strong>Test</strong> được phát triển độc quyền bởi <strong>Aloha</strong> và được giảng dạy trên nền tảng trực tuyến, giúp phát triển khả năng giao tiếp Tiếng Anh đồng thời bổ trợ kỹ năng Speaking cho các chứng chỉ Tiếng Anh quốc tế. Chương trình đặc biệt phù hợp với học viên có nhu cầu tăng phản xạ giao tiếp trong các bối cảnh đời sống, công việc và học thuật.</p>
                     
                     <ul class="info-list">
                         <li><strong>Placement Test</strong> là bài kiểm tra xác định trình độ đầu vào của học viên, từ đó xây dựng lộ trình học phù hợp và hiệu quả với từng cá nhân.</li>
@@ -972,7 +972,7 @@
     <div class="instructions-page" id="instructionsPage">
         <div class="instructions-container">
             <div class="instructions-header">
-                <div class="instructions-logo">Aloha</div>
+                <div class="instructions-logo">easy-SPEAK</div>
                 
                 <div class="instructions-banner">
                     <div class="banner-character-left">
@@ -1063,6 +1063,9 @@
     </div>
 
     <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyF0XJVjhvGIR5xYzgDSwDqI3RuWwOwQVyqee_oFSv7P9Cj2aeoZafZ19SlgLpNv4TYbw/exec';
+        
+        let userRowId = null;
         function validatePhone(phone) {
             const phoneRegex = /^[0-9]{10,11}$/;
             return phoneRegex.test(phone);
@@ -1253,6 +1256,8 @@
         document.getElementById('startTestBtn').addEventListener('click', function() {
             alert('Chuyển đến trang làm bài test...');
         });
+        
     </script>
+    
 </body>
 </html>
