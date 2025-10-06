@@ -803,278 +803,219 @@
         </div>
     </div>
 
-    <script>
-        // ===== CẤU HÌNH =====
-        // QUAN TRỌNG: Thay URL này bằng URL Web App của bạn từ Google Apps Script
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxXtCjYnvi9mq7nkhsK5SsMydgAwD1cG_icO2o0HFN/dev';
-        
-        let userRowId = null;
+   <script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-        // ===== VALIDATION FUNCTIONS =====
-        function validatePhone(phone) {
-            const phoneRegex = /^[0-9]{10,11}$/;
-            return phoneRegex.test(phone);
-        }
+  // ===== CẤU HÌNH SUPABASE =====
+  const SUPABASE_URL = "https://axllpuaybdzubfmsfkws.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_MMy3OLxh4wNRshI7IeMaTQ_M_nTiHJg";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function validateEmail(email) {
-            const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
-            return emailRegex.test(email);
-        }
+  let userRowId = null;
 
-        // ===== FORM VALIDATION =====
-        document.getElementById('fullname').addEventListener('blur', function() {
-            const input = this;
-            const error = document.getElementById('fullnameError');
-            const check = document.getElementById('fullnameCheck');
-            
-            if (input.value.trim().length < 3) {
-                input.classList.add('error');
-                input.classList.remove('valid');
-                error.classList.add('show');
-                check.classList.remove('show');
-            } else {
-                input.classList.remove('error');
-                input.classList.add('valid');
-                error.classList.remove('show');
-                check.classList.add('show');
-            }
-        });
+  // ===== VALIDATION FUNCTIONS =====
+  function validatePhone(phone) {
+      const phoneRegex = /^[0-9]{10,11}$/;
+      return phoneRegex.test(phone);
+  }
 
-        document.getElementById('age').addEventListener('blur', function() {
-            const input = this;
-            const error = document.getElementById('ageError');
-            const check = document.getElementById('ageCheck');
-            const value = input.value.trim();
-            
-            if (value === '') {
-                input.classList.remove('error');
-                input.classList.add('valid');
-                error.classList.remove('show');
-                check.classList.add('show');
-                return;
-            }
-            
-            const age = parseInt(value);
-            if (isNaN(age) || age < 1 || age > 120) {
-                input.classList.add('error');
-                input.classList.remove('valid');
-                error.classList.add('show');
-                check.classList.remove('show');
-            } else {
-                input.classList.remove('error');
-                input.classList.add('valid');
-                error.classList.remove('show');
-                check.classList.add('show');
-            }
-        });
+  function validateEmail(email) {
+      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+      return emailRegex.test(email);
+  }
 
-        document.getElementById('phone').addEventListener('input', function() {
-            const input = this;
-            const error = document.getElementById('phoneError');
-            const check = document.getElementById('phoneCheck');
-            
-            if (input.value.length > 0 && !validatePhone(input.value)) {
-                input.classList.add('error');
-                input.classList.remove('valid');
-                error.classList.add('show');
-                check.classList.remove('show');
-            } else if (validatePhone(input.value)) {
-                input.classList.remove('error');
-                input.classList.add('valid');
-                error.classList.remove('show');
-                check.classList.add('show');
-            } else {
-                input.classList.remove('error');
-                input.classList.remove('valid');
-                error.classList.remove('show');
-                check.classList.remove('show');
-            }
-        });
+  // ===== FORM VALIDATION =====
+  document.getElementById('fullname').addEventListener('blur', function() {
+      const input = this;
+      const error = document.getElementById('fullnameError');
+      const check = document.getElementById('fullnameCheck');
+      if (input.value.trim().length < 3) {
+          input.classList.add('error');
+          input.classList.remove('valid');
+          error.classList.add('show');
+          check.classList.remove('show');
+      } else {
+          input.classList.remove('error');
+          input.classList.add('valid');
+          error.classList.remove('show');
+          check.classList.add('show');
+      }
+  });
 
-        document.getElementById('email').addEventListener('input', function() {
-            const input = this;
-            const error = document.getElementById('emailError');
-            const check = document.getElementById('emailCheck');
-            
-            if (input.value.length > 0 && !validateEmail(input.value)) {
-                input.classList.add('error');
-                input.classList.remove('valid');
-                error.classList.add('show');
-                check.classList.remove('show');
-            } else if (validateEmail(input.value)) {
-                input.classList.remove('error');
-                input.classList.add('valid');
-                error.classList.remove('show');
-                check.classList.add('show');
-            } else {
-                input.classList.remove('error');
-                input.classList.remove('valid');
-                error.classList.remove('show');
-                check.classList.remove('show');
-            }
-        });
+  document.getElementById('age').addEventListener('blur', function() {
+      const input = this;
+      const error = document.getElementById('ageError');
+      const check = document.getElementById('ageCheck');
+      const value = input.value.trim();
 
-        // ===== FORM SUBMIT =====
-        document.getElementById('placementForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const fullname = document.getElementById('fullname').value.trim();
-            const ageValue = document.getElementById('age').value.trim();
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
+      if (value === '') {
+          input.classList.remove('error');
+          input.classList.add('valid');
+          error.classList.remove('show');
+          check.classList.add('show');
+          return;
+      }
 
-            let isValid = true;
+      const age = parseInt(value);
+      if (isNaN(age) || age < 1 || age > 120) {
+          input.classList.add('error');
+          input.classList.remove('valid');
+          error.classList.add('show');
+          check.classList.remove('show');
+      } else {
+          input.classList.remove('error');
+          input.classList.add('valid');
+          error.classList.remove('show');
+          check.classList.add('show');
+      }
+  });
 
-            if (fullname.length < 3) {
-                document.getElementById('fullname').classList.add('error');
-                document.getElementById('fullnameError').classList.add('show');
-                isValid = false;
-            }
+  document.getElementById('phone').addEventListener('input', function() {
+      const input = this;
+      const error = document.getElementById('phoneError');
+      const check = document.getElementById('phoneCheck');
+      if (input.value.length > 0 && !validatePhone(input.value)) {
+          input.classList.add('error');
+          input.classList.remove('valid');
+          error.classList.add('show');
+          check.classList.remove('show');
+      } else if (validatePhone(input.value)) {
+          input.classList.remove('error');
+          input.classList.add('valid');
+          error.classList.remove('show');
+          check.classList.add('show');
+      } else {
+          input.classList.remove('error');
+          input.classList.remove('valid');
+          error.classList.remove('show');
+          check.classList.remove('show');
+      }
+  });
 
-            if (ageValue !== '') {
-                const age = parseInt(ageValue);
-                if (isNaN(age) || age < 1 || age > 120) {
-                    document.getElementById('age').classList.add('error');
-                    document.getElementById('ageError').classList.add('show');
-                    isValid = false;
-                }
-            }
+  document.getElementById('email').addEventListener('input', function() {
+      const input = this;
+      const error = document.getElementById('emailError');
+      const check = document.getElementById('emailCheck');
+      if (input.value.length > 0 && !validateEmail(input.value)) {
+          input.classList.add('error');
+          input.classList.remove('valid');
+          error.classList.add('show');
+          check.classList.remove('show');
+      } else if (validateEmail(input.value)) {
+          input.classList.remove('error');
+          input.classList.add('valid');
+          error.classList.remove('show');
+          check.classList.add('show');
+      } else {
+          input.classList.remove('error');
+          input.classList.remove('valid');
+          error.classList.remove('show');
+          check.classList.remove('show');
+      }
+  });
 
-            if (!validatePhone(phone)) {
-                document.getElementById('phone').classList.add('error');
-                document.getElementById('phoneError').classList.add('show');
-                isValid = false;
-            }
+  // ===== FORM SUBMIT =====
+  document.getElementById('placementForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
 
-            if (!validateEmail(email)) {
-                document.getElementById('email').classList.add('error');
-                document.getElementById('emailError').classList.add('show');
-                isValid = false;
-            }
+      const fullname = document.getElementById('fullname').value.trim();
+      const ageValue = document.getElementById('age').value.trim();
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
 
-            if (!isValid) {
-                alert('Vui lòng kiểm tra lại thông tin đã nhập!');
-                return;
-            }
+      let isValid = true;
 
-            document.getElementById('modalPhone').textContent = phone;
-            document.getElementById('modalOverlay').classList.add('show');
-        });
+      if (fullname.length < 3) {
+          document.getElementById('fullname').classList.add('error');
+          document.getElementById('fullnameError').classList.add('show');
+          isValid = false;
+      }
 
-        // ===== MODAL HANDLERS =====
-        document.getElementById('modalClose').addEventListener('click', function() {
-            document.getElementById('modalOverlay').classList.remove('show');
-        });
+      if (ageValue !== '') {
+          const age = parseInt(ageValue);
+          if (isNaN(age) || age < 1 || age > 120) {
+              document.getElementById('age').classList.add('error');
+              document.getElementById('ageError').classList.add('show');
+              isValid = false;
+          }
+      }
 
-        document.getElementById('btnChangePhone').addEventListener('click', function() {
-            document.getElementById('modalOverlay').classList.remove('show');
-            document.getElementById('phone').focus();
-        });
+      if (!validatePhone(phone)) {
+          document.getElementById('phone').classList.add('error');
+          document.getElementById('phoneError').classList.add('show');
+          isValid = false;
+      }
 
-        // ===== SUBMIT TO GOOGLE SHEETS =====
-        document.getElementById('btnConfirm').addEventListener('click', async function() {
-            const btnConfirm = this;
-            const btnChangePhone = document.getElementById('btnChangePhone');
-            
-            // Disable buttons
-            btnConfirm.disabled = true;
-            btnChangePhone.disabled = true;
-            btnConfirm.innerHTML = '<span class="loading-spinner"></span> Đang lưu...';
-            
-            const fullname = document.getElementById('fullname').value.trim();
-            const ageValue = document.getElementById('age').value.trim();
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
+      if (!validateEmail(email)) {
+          document.getElementById('email').classList.add('error');
+          document.getElementById('emailError').classList.add('show');
+          isValid = false;
+      }
 
-            const formData = {
-                fullname: fullname,
-                age: ageValue !== '' ? parseInt(ageValue) : '',
-                phone: phone,
-                email: email
-            };
+      if (!isValid) {
+          alert('Vui lòng kiểm tra lại thông tin đã nhập!');
+          return;
+      }
 
-            console.log('📤 Đang gửi dữ liệu đến Google Sheets...', formData);
-            
-            try {
-  await submitViaFormMethod(formData);
-  userRowId = Date.now(); // tạm ID
-  console.log('✅ Đã gửi qua form trực tiếp (bỏ fetch)');
+      document.getElementById('modalPhone').textContent = phone;
+      document.getElementById('modalOverlay').classList.add('show');
+  });
 
-  document.getElementById('modalOverlay').classList.remove('show');
-  setTimeout(() => {
-      document.getElementById('mainPage').classList.add('hide');
-      document.getElementById('instructionsPage').classList.add('show');
-  }, 300);
-} catch (error) {
-  console.error('❌ Gửi form thất bại:', error);
-  alert('Không gửi được dữ liệu. Kiểm tra URL Apps Script hoặc quyền truy cập.');
-  btnConfirm.disabled = false;
-  btnChangePhone.disabled = false;
-  btnConfirm.textContent = 'Xác nhận';
-}
-            
-        });
+  // ===== MODAL HANDLERS =====
+  document.getElementById('modalClose').addEventListener('click', function() {
+      document.getElementById('modalOverlay').classList.remove('show');
+  });
 
-        // Fallback method: Submit via hidden form
-        async function submitViaFormMethod(data) {
-            return new Promise((resolve, reject) => {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = SCRIPT_URL + '?action=submitForm';
-                form.target = 'hidden-iframe';
-                form.style.display = 'none';
+  document.getElementById('btnChangePhone').addEventListener('click', function() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.getElementById('phone').focus();
+  });
 
-                // Create hidden iframe
-                let iframe = document.getElementById('hidden-iframe');
-                if (!iframe) {
-                    iframe = document.createElement('iframe');
-                    iframe.id = 'hidden-iframe';
-                    iframe.name = 'hidden-iframe';
-                    iframe.style.display = 'none';
-                    document.body.appendChild(iframe);
-                }
+  // ===== SUBMIT TO SUPABASE =====
+  document.getElementById('btnConfirm').addEventListener('click', async function() {
+      const btnConfirm = this;
+      const btnChangePhone = document.getElementById('btnChangePhone');
 
-                // Add form fields
-                for (const key in data) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = data[key];
-                    form.appendChild(input);
-                }
+      btnConfirm.disabled = true;
+      btnChangePhone.disabled = true;
+      btnConfirm.innerHTML = '<span class="loading-spinner"></span> Đang lưu...';
 
-                document.body.appendChild(form);
-                
-                // Set timeout
-                const timeout = setTimeout(() => {
-                    reject(new Error('Timeout: Server không phản hồi'));
-                }, 10000);
+      const fullname = document.getElementById('fullname').value.trim();
+      const ageValue = document.getElementById('age').value.trim();
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
 
-                // Handle iframe load
-                iframe.onload = function() {
-                    clearTimeout(timeout);
-                    form.remove();
-                    resolve();
-                };
+      const { data, error } = await supabase
+        .from('placement')
+        .insert([{ fullname, age: ageValue ? parseInt(ageValue) : null, phone, email }])
+        .select();
 
-                form.submit();
-            });
-        }
+      if (error) {
+        console.error('❌ Lỗi khi lưu:', error);
+        alert('Không thể lưu dữ liệu: ' + error.message);
+        btnConfirm.disabled = false;
+        btnChangePhone.disabled = false;
+        btnConfirm.textContent = 'Xác nhận';
+        return;
+      }
 
-        // Close modal on overlay click
-        document.getElementById('modalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('show');
-            }
-        });
+      console.log('✅ Lưu thành công:', data);
+      userRowId = data[0]?.id || Date.now();
 
-        // ===== START TEST =====
-        document.getElementById('startTestBtn').addEventListener('click', function() {
-            console.log('🚀 Bắt đầu làm bài test...');
-            console.log('User Row ID:', userRowId);
-            alert('Chuyển đến trang làm bài test...\n\nRow ID: ' + userRowId);
-            // TODO: Navigate to test page with userRowId
-        });
-    </script>
+      document.getElementById('modalOverlay').classList.remove('show');
+      setTimeout(() => {
+          document.getElementById('mainPage').classList.add('hide');
+          document.getElementById('instructionsPage').classList.add('show');
+      }, 300);
+  });
+
+  // ===== START TEST =====
+  document.getElementById('startTestBtn').addEventListener('click', function() {
+      console.log('🚀 Bắt đầu làm bài test...');
+      console.log('User Row ID:', userRowId);
+      alert('Chuyển đến trang làm bài test...\n\nRow ID: ' + userRowId);
+  });
+</script>
+
 </body>
 </html>
