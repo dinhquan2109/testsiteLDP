@@ -991,7 +991,6 @@
         .select();
 
       if (error) {
-        console.error('❌ Lỗi khi lưu:', error);
         alert('Không thể lưu dữ liệu: ' + error.message);
         btnConfirm.disabled = false;
         btnChangePhone.disabled = false;
@@ -999,7 +998,6 @@
         return;
       }
 
-      console.log('✅ Lưu thành công:', data);
       userRowId = data[0]?.id || Date.now();
 
       document.getElementById('modalOverlay').classList.remove('show');
