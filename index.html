@@ -577,9 +577,668 @@
             to { transform: rotate(360deg); }
         }
 
+        /* TEST PAGE STYLES */
+        .test-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #1e7e5f;
+            z-index: 3000;
+            overflow-y: auto;
+        }
+
+        .test-page.show {
+            display: block;
+        }
+
+        .test-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 50px;
+        }
+
+        .test-header {
+            background: #fef8e6;
+            border-radius: 15px 15px 0 0;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .test-header::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: repeating-linear-gradient(90deg, 
+                #ff6b6b 0px, #ff6b6b 15px, transparent 15px, transparent 20px,
+                #4ecdc4 20px, #4ecdc4 35px, transparent 35px, transparent 40px,
+                #ffe66d 40px, #ffe66d 55px, transparent 55px, transparent 60px,
+                #a8e6cf 60px, #a8e6cf 75px, transparent 75px, transparent 80px
+            );
+            border-radius: 10px 10px 0 0;
+        }
+
+        .question-progress {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-counter {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0d5943;
+        }
+
+        .progress-circles {
+            display: flex;
+            gap: 6px;
+        }
+
+        .progress-row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .circle {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #999;
+            transition: all 0.3s;
+        }
+
+        .circle.answered {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+
+        .circle.active {
+            background: #ffd700;
+            border-color: #ffd700;
+            color: #333;
+            transform: scale(1.15);
+            font-weight: bold;
+        }
+
+        .timer-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-icon {
+            width: 35px;
+            height: 35px;
+            background: #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .timer-display {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0d5943;
+        }
+
+        .question-card {
+            background: #fef8e6;
+            padding: 40px;
+            min-height: 400px;
+        }
+
+        .question-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0d5943;
+            margin-bottom: 25px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .audio-player {
+            margin: 25px 0;
+            display: none;
+        }
+
+        .audio-player audio {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .option-item {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option-item:hover {
+            border-color: #7cb342;
+            background: #f1f8e9;
+        }
+
+        .option-item.selected {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .option-label {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .option-item.selected .option-label {
+            background: #4caf50;
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .question-nav {
+            background: #fef8e6;
+            border-radius: 0 0 15px 15px;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-button {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-prev {
+            background: #9e9e9e;
+            color: white;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #757575;
+        }
+
+        .btn-next {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: #1976d2;
+        }
+
+        .btn-submit {
+            background: #ff6b6b;
+            color: white;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: #ee5a6f;
+            transform: translateY(-2px);
+        }
+
+        /* RESULT PAGE STYLES */
+        .result-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1e7e5f 0%, #0d5943 100%);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .result-page.show {
+            display: flex;
+        }
+
+        .result-container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: resultSlideIn 0.5s ease-out;
+        }
+
+        @keyframes resultSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0d5943;
+            margin-bottom: 30px;
+        }
+
+        .score-display {
+            font-size: 64px;
+            font-weight: 900;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+
+        .level-badge {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e7e5f;
+            margin-bottom: 20px;
+            padding: 15px 30px;
+            background: #e8f5e9;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .result-message {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .finish-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #7cb342 0%, #558b2f 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .finish-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .review-section {
+            margin: 30px 0;
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .review-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0d5943;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .answer-number {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .answer-number.correct {
+            background: #4caf50;
+            color: white;
+        }
+
+        .answer-number.wrong {
+            background: #f44336;
+            color: white;
+        }
+
+        .answer-number.unanswered {
+            background: #9e9e9e;
+            color: white;
+        }
+
+        .answer-number:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .answer-number::after {
+            content: attr(data-icon);
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            font-size: 12px;
+        }
+
+        .close-review-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .close-review-btn:hover {
+            background: #f57c00;
+            transform: translateY(-2px);
+        }
+
+        .review-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 4000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .review-popup.show {
+            display: flex;
+        }
+
+        .review-popup-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: popupSlideIn 0.3s ease-out;
+        }
+
+        @keyframes popupSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f44336;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .popup-close:hover {
+            background: #d32f2f;
+            transform: rotate(90deg);
+        }
+
+        .popup-question-num {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0d5943;
+            margin-bottom: 20px;
+        }
+
+        .popup-question-text {
+            font-size: 17px;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .popup-audio {
+            margin: 20px 0;
+        }
+
+        .popup-audio audio {
+            width: 100%;
+        }
+
+        .popup-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .popup-option {
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .popup-option.correct-answer {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .popup-option.user-wrong {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+
+        .popup-option.user-correct {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .option-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .popup-option.correct-answer .option-badge {
+            background: #4caf50;
+            color: white;
+        }
+
+        .popup-option.user-wrong .option-badge {
+            background: #f44336;
+            color: white;
+        }
+
+        .popup-option .option-badge {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .option-label-text {
+            flex: 1;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .answer-indicator {
+            font-size: 13px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        .popup-option.correct-answer .answer-indicator {
+            background: #4caf50;
+            color: white;
+        }
+
+        .popup-option.user-wrong .answer-indicator {
+            background: #f44336;
+            color: white;
+        }
+
+        .popup-option.user-correct .answer-indicator {
+            background: #4caf50;
+            color: white;
+        }
+
+        .popup-nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .popup-nav-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .popup-nav-btn.prev {
+            background: #9e9e9e;
+            color: white;
+        }
+
+        .popup-nav-btn.next {
+            background: #2196f3;
+            color: white;
+        }
+
+        .popup-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .popup-nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 768px) {
             body {
-                padding: 15px;
+                padding: 10px;
             }
 
             header {
@@ -637,6 +1296,50 @@
 
             .modal-buttons {
                 flex-direction: column;
+            }
+
+            .test-container {
+                padding: 10px;
+            }
+
+            .test-header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .question-progress {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .progress-circles {
+                flex-direction: column;
+            }
+
+            .question-card {
+                padding: 25px 20px;
+            }
+
+            .question-nav {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .nav-button {
+                width: 100%;
+            }
+
+            .btn-submit {
+                max-width: 100%;
+            }
+
+            .result-container {
+                padding: 30px 20px;
+            }
+
+            .score-display {
+                font-size: 48px;
             }
         }
     </style>
@@ -803,217 +1506,537 @@
         </div>
     </div>
 
-   <script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+    <div class="test-page" id="testPage">
+        <div class="test-container">
+            <div class="test-header">
+                <div class="question-progress">
+                    <div class="progress-counter" id="questionCounter">0/20</div>
+                    <div class="progress-circles">
+                        <div class="progress-row">
+                            <div class="circle">1</div>
+                            <div class="circle">2</div>
+                            <div class="circle">3</div>
+                            <div class="circle">4</div>
+                            <div class="circle">5</div>
+                            <div class="circle">6</div>
+                            <div class="circle">7</div>
+                            <div class="circle">8</div>
+                            <div class="circle">9</div>
+                            <div class="circle">10</div>
+                        </div>
+                        <div class="progress-row">
+                            <div class="circle">11</div>
+                            <div class="circle">12</div>
+                            <div class="circle">13</div>
+                            <div class="circle">14</div>
+                            <div class="circle">15</div>
+                            <div class="circle">16</div>
+                            <div class="circle">17</div>
+                            <div class="circle">18</div>
+                            <div class="circle">19</div>
+                            <div class="circle">20</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timer-section">
+                    <div class="timer-icon">⏱️</div>
+                    <div class="timer-display" id="timerDisplay">19:56</div>
+                </div>
+            </div>
 
-  // ===== CẤU HÌNH SUPABASE =====
-  const SUPABASE_URL = "https://axllpuaybdzubfmsfkws.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4bGxwdWF5YmR6dWJmbXNma3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3NDMzODgsImV4cCI6MjA3NTMxOTM4OH0.KrjW79ZpnPxu_Lp9mETgKZU-kOLu3oMmWkABqOcDbco";
-  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+            <div class="question-card">
+                <div class="question-header" id="questionHeader">1. Choose the correct answer</div>
+                <div class="question-text" id="questionText">
+                    It's windy outside. You should take a _______ with you.
+                </div>
 
-  let userRowId = null;
+                <div class="audio-player" id="audioPlayer">
+                    <!-- Audio will be inserted here -->
+                </div>
 
-  // ===== VALIDATION FUNCTIONS =====
-  function validatePhone(phone) {
-      const phoneRegex = /^[0-9]{10,11}$/;
-      return phoneRegex.test(phone);
-  }
+                <div class="options-list">
+                    <div class="option-item" data-option="A">
+                        <div class="option-label">A</div>
+                        <div class="option-text" id="optionA">coat</div>
+                    </div>
+                    <div class="option-item" data-option="B">
+                        <div class="option-label">B</div>
+                        <div class="option-text" id="optionB">dress</div>
+                    </div>
+                    <div class="option-item" data-option="C">
+                        <div class="option-label">C</div>
+                        <div class="option-text" id="optionC">T-shirt</div>
+                    </div>
+                </div>
+            </div>
 
-  function validateEmail(email) {
-      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
-      return emailRegex.test(email);
-  }
+            <div class="question-nav">
+                <button class="nav-button btn-prev" id="btnPrev">← Câu trước</button>
+                <button class="nav-button btn-submit" id="btnSubmit">NỘP BÀI</button>
+                <button class="nav-button btn-next" id="btnNext">Câu sau →</button>
+            </div>
+        </div>
+    </div>
 
-  // ===== FORM VALIDATION =====
-  document.getElementById('fullname').addEventListener('blur', function() {
-      const input = this;
-      const error = document.getElementById('fullnameError');
-      const check = document.getElementById('fullnameCheck');
-      if (input.value.trim().length < 3) {
-          input.classList.add('error');
-          input.classList.remove('valid');
-          error.classList.add('show');
-          check.classList.remove('show');
-      } else {
-          input.classList.remove('error');
-          input.classList.add('valid');
-          error.classList.remove('show');
-          check.classList.add('show');
-      }
-  });
+    <div class="result-page" id="resultPage">
+        <div class="result-container">
+            <div class="result-icon">🎉</div>
+            <h1 class="result-title">Hoàn thành bài test!</h1>
+            
+            <div class="score-display">
+                <span id="finalScore">0</span>/<span id="totalQuestions">20</span>
+            </div>
 
-  document.getElementById('age').addEventListener('blur', function() {
-      const input = this;
-      const error = document.getElementById('ageError');
-      const check = document.getElementById('ageCheck');
-      const value = input.value.trim();
+            <div class="level-badge" id="levelBadge">
+                Beginner (A1)
+            </div>
 
-      if (value === '') {
-          input.classList.remove('error');
-          input.classList.add('valid');
-          error.classList.remove('show');
-          check.classList.add('show');
-          return;
-      }
+            <p class="result-message" id="resultMessage">
+                Chúc mừng bạn đã hoàn thành bài kiểm tra!
+            </p>
 
-      const age = parseInt(value);
-      if (isNaN(age) || age < 1 || age > 120) {
-          input.classList.add('error');
-          input.classList.remove('valid');
-          error.classList.add('show');
-          check.classList.remove('show');
-      } else {
-          input.classList.remove('error');
-          input.classList.add('valid');
-          error.classList.remove('show');
-          check.classList.add('show');
-      }
-  });
+            <button class="finish-button" id="btnFinish">Hoàn tất</button>
+        </div>
+    </div>
 
-  document.getElementById('phone').addEventListener('input', function() {
-      const input = this;
-      const error = document.getElementById('phoneError');
-      const check = document.getElementById('phoneCheck');
-      if (input.value.length > 0 && !validatePhone(input.value)) {
-          input.classList.add('error');
-          input.classList.remove('valid');
-          error.classList.add('show');
-          check.classList.remove('show');
-      } else if (validatePhone(input.value)) {
-          input.classList.remove('error');
-          input.classList.add('valid');
-          error.classList.remove('show');
-          check.classList.add('show');
-      } else {
-          input.classList.remove('error');
-          input.classList.remove('valid');
-          error.classList.remove('show');
-          check.classList.remove('show');
-      }
-  });
+    <script type="module">
+        import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  document.getElementById('email').addEventListener('input', function() {
-      const input = this;
-      const error = document.getElementById('emailError');
-      const check = document.getElementById('emailCheck');
-      if (input.value.length > 0 && !validateEmail(input.value)) {
-          input.classList.add('error');
-          input.classList.remove('valid');
-          error.classList.add('show');
-          check.classList.remove('show');
-      } else if (validateEmail(input.value)) {
-          input.classList.remove('error');
-          input.classList.add('valid');
-          error.classList.remove('show');
-          check.classList.add('show');
-      } else {
-          input.classList.remove('error');
-          input.classList.remove('valid');
-          error.classList.remove('show');
-          check.classList.remove('show');
-      }
-  });
+        // ===== SUPABASE CONFIG =====
+        const SUPABASE_URL = "https://axllpuaybdzubfmsfkws.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4bGxwdWF5YmR6dWJmbXNma3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3NDMzODgsImV4cCI6MjA3NTMxOTM4OH0.KrjW79ZpnPxu_Lp9mETgKZU-kOLu3oMmWkABqOcDbco";
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ===== FORM SUBMIT =====
-  document.getElementById('placementForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+        let userRowId = null;
+        let testQuestions = [];
+        let userAnswers = {};
+        let currentQuestionIndex = 0;
+        let timerInterval = null;
 
-      const fullname = document.getElementById('fullname').value.trim();
-      const ageValue = document.getElementById('age').value.trim();
-      const phone = document.getElementById('phone').value;
-      const email = document.getElementById('email').value;
+        // ===== VALIDATION FUNCTIONS =====
+        function validatePhone(phone) {
+            const phoneRegex = /^[0-9]{10,11}$/;
+            return phoneRegex.test(phone);
+        }
 
-      let isValid = true;
+        function validateEmail(email) {
+            const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+            return emailRegex.test(email);
+        }
 
-      if (fullname.length < 3) {
-          document.getElementById('fullname').classList.add('error');
-          document.getElementById('fullnameError').classList.add('show');
-          isValid = false;
-      }
+        // ===== FORM VALIDATION =====
+        document.getElementById('fullname').addEventListener('blur', function() {
+            const input = this;
+            const error = document.getElementById('fullnameError');
+            const check = document.getElementById('fullnameCheck');
+            if (input.value.trim().length < 3) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                error.classList.add('show');
+                check.classList.remove('show');
+            } else {
+                input.classList.remove('error');
+                input.classList.add('valid');
+                error.classList.remove('show');
+                check.classList.add('show');
+            }
+        });
 
-      if (ageValue !== '') {
-          const age = parseInt(ageValue);
-          if (isNaN(age) || age < 1 || age > 120) {
-              document.getElementById('age').classList.add('error');
-              document.getElementById('ageError').classList.add('show');
-              isValid = false;
-          }
-      }
+        document.getElementById('age').addEventListener('blur', function() {
+            const input = this;
+            const error = document.getElementById('ageError');
+            const check = document.getElementById('ageCheck');
+            const value = input.value.trim();
 
-      if (!validatePhone(phone)) {
-          document.getElementById('phone').classList.add('error');
-          document.getElementById('phoneError').classList.add('show');
-          isValid = false;
-      }
+            if (value === '') {
+                input.classList.remove('error');
+                input.classList.add('valid');
+                error.classList.remove('show');
+                check.classList.add('show');
+                return;
+            }
 
-      if (!validateEmail(email)) {
-          document.getElementById('email').classList.add('error');
-          document.getElementById('emailError').classList.add('show');
-          isValid = false;
-      }
+            const age = parseInt(value);
+            if (isNaN(age) || age < 1 || age > 120) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                error.classList.add('show');
+                check.classList.remove('show');
+            } else {
+                input.classList.remove('error');
+                input.classList.add('valid');
+                error.classList.remove('show');
+                check.classList.add('show');
+            }
+        });
 
-      if (!isValid) {
-          alert('Vui lòng kiểm tra lại thông tin đã nhập!');
-          return;
-      }
+        document.getElementById('phone').addEventListener('input', function() {
+            const input = this;
+            const error = document.getElementById('phoneError');
+            const check = document.getElementById('phoneCheck');
+            if (input.value.length > 0 && !validatePhone(input.value)) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                error.classList.add('show');
+                check.classList.remove('show');
+            } else if (validatePhone(input.value)) {
+                input.classList.remove('error');
+                input.classList.add('valid');
+                error.classList.remove('show');
+                check.classList.add('show');
+            } else {
+                input.classList.remove('error');
+                input.classList.remove('valid');
+                error.classList.remove('show');
+                check.classList.remove('show');
+            }
+        });
 
-      document.getElementById('modalPhone').textContent = phone;
-      document.getElementById('modalOverlay').classList.add('show');
-  });
+        document.getElementById('email').addEventListener('input', function() {
+            const input = this;
+            const error = document.getElementById('emailError');
+            const check = document.getElementById('emailCheck');
+            if (input.value.length > 0 && !validateEmail(input.value)) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                error.classList.add('show');
+                check.classList.remove('show');
+            } else if (validateEmail(input.value)) {
+                input.classList.remove('error');
+                input.classList.add('valid');
+                error.classList.remove('show');
+                check.classList.add('show');
+            } else {
+                input.classList.remove('error');
+                input.classList.remove('valid');
+                error.classList.remove('show');
+                check.classList.remove('show');
+            }
+        });
 
-  // ===== MODAL HANDLERS =====
-  document.getElementById('modalClose').addEventListener('click', function() {
-      document.getElementById('modalOverlay').classList.remove('show');
-  });
+        // ===== FORM SUBMIT =====
+        document.getElementById('placementForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-  document.getElementById('btnChangePhone').addEventListener('click', function() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.getElementById('phone').focus();
-  });
+            const fullname = document.getElementById('fullname').value.trim();
+            const ageValue = document.getElementById('age').value.trim();
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
 
-  // ===== SUBMIT TO SUPABASE =====
-  document.getElementById('btnConfirm').addEventListener('click', async function() {
-      const btnConfirm = this;
-      const btnChangePhone = document.getElementById('btnChangePhone');
+            let isValid = true;
 
-      btnConfirm.disabled = true;
-      btnChangePhone.disabled = true;
-      btnConfirm.innerHTML = '<span class="loading-spinner"></span> Đang lưu...';
+            if (fullname.length < 3) {
+                document.getElementById('fullname').classList.add('error');
+                document.getElementById('fullnameError').classList.add('show');
+                isValid = false;
+            }
 
-      const fullname = document.getElementById('fullname').value.trim();
-      const ageValue = document.getElementById('age').value.trim();
-      const phone = document.getElementById('phone').value;
-      const email = document.getElementById('email').value;
+            if (ageValue !== '') {
+                const age = parseInt(ageValue);
+                if (isNaN(age) || age < 1 || age > 120) {
+                    document.getElementById('age').classList.add('error');
+                    document.getElementById('ageError').classList.add('show');
+                    isValid = false;
+                }
+            }
 
-      const { data, error } = await supabase
-        .from('placement')
-        .insert([{ fullname, age: ageValue ? parseInt(ageValue) : null, phone, email }])
-        .select();
+            if (!validatePhone(phone)) {
+                document.getElementById('phone').classList.add('error');
+                document.getElementById('phoneError').classList.add('show');
+                isValid = false;
+            }
 
-      if (error) {
-        alert('Không thể lưu dữ liệu: ' + error.message);
-        btnConfirm.disabled = false;
-        btnChangePhone.disabled = false;
-        btnConfirm.textContent = 'Xác nhận';
-        return;
-      }
+            if (!validateEmail(email)) {
+                document.getElementById('email').classList.add('error');
+                document.getElementById('emailError').classList.add('show');
+                isValid = false;
+            }
 
-      userRowId = data[0]?.id || Date.now();
+            if (!isValid) {
+                alert('Vui lòng kiểm tra lại thông tin đã nhập!');
+                return;
+            }
 
-      document.getElementById('modalOverlay').classList.remove('show');
-      setTimeout(() => {
-          document.getElementById('mainPage').classList.add('hide');
-          document.getElementById('instructionsPage').classList.add('show');
-      }, 300);
-  });
+            document.getElementById('modalPhone').textContent = phone;
+            document.getElementById('modalOverlay').classList.add('show');
+        });
 
-  // ===== START TEST =====
-  document.getElementById('startTestBtn').addEventListener('click', function() {
-      console.log('🚀 Bắt đầu làm bài test...');
-      console.log('User Row ID:', userRowId);
-      alert('Chuyển đến trang làm bài test...\n\nRow ID: ' + userRowId);
-  });
-</script>
+        // ===== MODAL HANDLERS =====
+        document.getElementById('modalClose').addEventListener('click', function() {
+            document.getElementById('modalOverlay').classList.remove('show');
+        });
 
+        document.getElementById('btnChangePhone').addEventListener('click', function() {
+            document.getElementById('modalOverlay').classList.remove('show');
+            document.getElementById('phone').focus();
+        });
+
+        // ===== SUBMIT TO SUPABASE =====
+        document.getElementById('btnConfirm').addEventListener('click', async function() {
+            const btnConfirm = this;
+            const btnChangePhone = document.getElementById('btnChangePhone');
+
+            btnConfirm.disabled = true;
+            btnChangePhone.disabled = true;
+            btnConfirm.innerHTML = '<span class="loading-spinner"></span> Đang lưu...';
+
+            const fullname = document.getElementById('fullname').value.trim();
+            const ageValue = document.getElementById('age').value.trim();
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+
+            const { data, error } = await supabase
+                .from('placement')
+                .insert([{ fullname, age: ageValue ? parseInt(ageValue) : null, phone, email }])
+                .select();
+
+            if (error) {
+                alert('Không thể lưu dữ liệu: ' + error.message);
+                btnConfirm.disabled = false;
+                btnChangePhone.disabled = false;
+                btnConfirm.textContent = 'Xác nhận';
+                return;
+            }
+
+            userRowId = data[0]?.id || Date.now();
+
+            document.getElementById('modalOverlay').classList.remove('show');
+            setTimeout(() => {
+                document.getElementById('mainPage').classList.add('hide');
+                document.getElementById('instructionsPage').classList.add('show');
+            }, 300);
+        });
+
+        // ===== START TEST =====
+        document.getElementById('startTestBtn').addEventListener('click', async function() {
+            if (!userRowId) {
+                alert('Lỗi: Không tìm thấy thông tin người dùng!');
+                return;
+            }
+
+            const btn = this;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> Đang tải câu hỏi...';
+
+            try {
+                const { data: questions, error } = await supabase
+                    .from('questions')
+                    .select('*')
+                    .order('order_number');
+
+                if (error) throw error;
+
+                if (!questions || questions.length === 0) {
+                    alert('Không tìm thấy câu hỏi. Vui lòng liên hệ quản trị viên.');
+                    btn.disabled = false;
+                    btn.textContent = 'BẮT ĐẦU';
+                    return;
+                }
+
+                testQuestions = questions;
+                userAnswers = {};
+                currentQuestionIndex = 0;
+
+                document.getElementById('instructionsPage').classList.remove('show');
+                document.getElementById('testPage').classList.add('show');
+
+                startTimer(20 * 60);
+                displayQuestion(0);
+            } catch (err) {
+                alert('Lỗi khi tải câu hỏi: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = 'BẮT ĐẦU';
+            }
+        });
+
+        // ===== TIMER FUNCTIONS =====
+        function startTimer(seconds) {
+            let remaining = seconds;
+            updateTimerDisplay(remaining);
+
+            timerInterval = setInterval(() => {
+                remaining--;
+                updateTimerDisplay(remaining);
+
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // ===== DISPLAY QUESTION =====
+        function displayQuestion(index) {
+            const question = testQuestions[index];
+            currentQuestionIndex = index;
+
+            document.getElementById('questionCounter').textContent = `${index + 1}/20`;
+            document.getElementById('questionHeader').textContent = `${index + 1}. Choose the correct answer`;
+            document.getElementById('questionText').textContent = question.question_text;
+
+            const audioPlayer = document.getElementById('audioPlayer');
+            if (question.question_type === 'audio' && question.audio_url) {
+                audioPlayer.innerHTML = `
+                    <audio controls>
+                        <source src="${question.audio_url}" type="audio/mpeg">
+                        Trình duyệt của bạn không hỗ trợ phát audio.
+                    </audio>
+                `;
+                audioPlayer.style.display = 'block';
+            } else {
+                audioPlayer.style.display = 'none';
+            }
+
+            document.getElementById('optionA').textContent = question.option_a;
+            document.getElementById('optionB').textContent = question.option_b;
+            document.getElementById('optionC').textContent = question.option_c;
+
+            const savedAnswer = userAnswers[index];
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('selected');
+                if (item.dataset.option === savedAnswer) {
+                    item.classList.add('selected');
+                }
+            });
+
+            updateProgressCircles();
+            updateNavButtons();
+        }
+
+        // ===== UPDATE PROGRESS CIRCLES =====
+        function updateProgressCircles() {
+            const circles = document.querySelectorAll('.circle');
+            circles.forEach((circle, i) => {
+                circle.classList.remove('active', 'answered');
+                if (i === currentQuestionIndex) {
+                    circle.classList.add('active');
+                }
+                if (userAnswers[i]) {
+                    circle.classList.add('answered');
+                }
+            });
+        }
+
+        // ===== UPDATE NAV BUTTONS =====
+        function updateNavButtons() {
+            document.getElementById('btnPrev').disabled = currentQuestionIndex === 0;
+            document.getElementById('btnNext').disabled = currentQuestionIndex === testQuestions.length - 1;
+        }
+
+        // ===== OPTION SELECTION =====
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.option-item').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                userAnswers[currentQuestionIndex] = this.dataset.option;
+                updateProgressCircles();
+            });
+        });
+
+        // ===== NAVIGATION BUTTONS =====
+        document.getElementById('btnPrev').addEventListener('click', function() {
+            if (currentQuestionIndex > 0) {
+                displayQuestion(currentQuestionIndex - 1);
+            }
+        });
+
+        document.getElementById('btnNext').addEventListener('click', function() {
+            if (currentQuestionIndex < testQuestions.length - 1) {
+                displayQuestion(currentQuestionIndex + 1);
+            }
+        });
+
+        document.getElementById('btnSubmit').addEventListener('click', function() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const totalQuestions = testQuestions.length;
+
+            if (answeredCount < totalQuestions) {
+                if (!confirm(`Bạn mới trả lời ${answeredCount}/${totalQuestions} câu.\nBạn có chắc chắn muốn nộp bài?`)) {
+                    return;
+                }
+            }
+
+            submitTest();
+        });
+
+        // ===== SUBMIT TEST =====
+        async function submitTest() {
+            clearInterval(timerInterval);
+
+            const submitBtn = document.getElementById('btnSubmit');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Đang chấm bài...';
+
+            let score = 0;
+            testQuestions.forEach((q, i) => {
+                if (userAnswers[i] === q.correct_answer) {
+                    score++;
+                }
+            });
+
+            try {
+                const { error } = await supabase
+                    .from('test_results')
+                    .insert([{
+                        placement_id: userRowId,
+                        answers: userAnswers,
+                        score: score,
+                        completed_at: new Date().toISOString()
+                    }]);
+
+                if (error) throw error;
+
+                document.getElementById('testPage').classList.remove('show');
+                document.getElementById('resultPage').classList.add('show');
+                displayResult(score);
+            } catch (err) {
+                alert('Lỗi khi lưu kết quả: ' + err.message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'NỘP BÀI';
+            }
+        }
+
+        // ===== DISPLAY RESULT =====
+        function displayResult(score) {
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('totalQuestions').textContent = testQuestions.length;
+
+            const percentage = (score / testQuestions.length) * 100;
+            let level = '';
+            let message = '';
+
+            if (percentage >= 90) {
+                level = 'HSK 5-6';
+                message = 'Xuất sắc! Bạn có trình độ tiếng Trung rất cao, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
+            } else if (percentage >= 75) {
+                level = 'HSK 4';
+                message = 'Rất tốt! Bạn có nền tảng tiếng Anh vững chắc, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
+            } else if (percentage >= 60) {
+                level = 'HSK 3';
+                message = 'Khá tốt! Bạn đang trên đà phát triển, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
+            } else if (percentage >= 40) {
+                level = 'HSK 2';
+                message = 'Tốt! Bạn đã có kiến thức cơ bản, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
+            } else {
+                level = 'HSK 1';
+                message = 'Bạn đang bắt đầu hành trình học tiếng Trung, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
+            }
+
+            document.getElementById('levelBadge').textContent = level;
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        // ===== FINISH BUTTON =====
+        document.getElementById('btnFinish').addEventListener('click', function() {
+            window.location.reload();
+        });
+    </script>
 </body>
 </html>
