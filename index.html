@@ -561,6 +561,21 @@
             gap: 15px;
             margin-bottom: 20px;
         }
+        
+        /* Responsive for mobile */
+        @media (max-width: 768px) {
+            .level-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .level-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
 
         .level-option {
             background: white;
@@ -570,6 +585,12 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+        }
+        
+        @media (max-width: 480px) {
+            .level-option {
+                padding: 15px;
+            }
         }
 
         .level-option:hover {
@@ -723,6 +744,14 @@
             justify-content: center;
             font-size: 11px;
             color: #999;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .circle:hover {
+            transform: scale(1.2);
+            border-color: #4caf50;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
             transition: all 0.3s;
         }
 
@@ -945,26 +974,32 @@
             color: #333;
         }
 
-        /* NEW: Text input for fill-in questions */
+        /* NEW: Text input for fill-in questions - MUST SHOW */
         .text-input-container {
-            margin-top: 30px;
-            display: none;
+            margin-top: 20px !important;
+            margin-bottom: 10px !important;
+            display: block !important;
+            width: 100% !important;
         }
 
         .text-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s;
-            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            width: 100% !important;
+            padding: 15px 20px !important;
+            border: 3px solid #e0e0e0 !important;
+            border-radius: 12px !important;
+            font-size: 16px !important;
+            transition: all 0.3s !important;
+            font-family: 'Nunito', 'Segoe UI', sans-serif !important;
+            background: white !important;
+            display: block !important;
+            box-sizing: border-box !important;
         }
 
         .text-input:focus {
-            outline: none;
-            border-color: #4caf50;
-            background: #f1f8e9;
+            outline: none !important;
+            border-color: #4caf50 !important;
+            background: #f1f8e9 !important;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1) !important;
         }
 
         /* NEW: Essay textarea */
@@ -1975,6 +2010,9 @@
             
             // Render questions for reading section (fill in the blank)
             if (sectionNum === 2) {
+                console.log('=== RENDERING SECTION 2 (FILL IN) ===');
+                console.log('Reading questions:', sectionQuestions);
+                
                 sectionQuestions.forEach((question, idx) => {
                     const globalIdx = startIdx + idx;
                     const questionDiv = document.createElement('div');
@@ -1984,7 +2022,7 @@
                     
                     let qHtml = `
                         <div class="question-header">${globalIdx + 1}. ${question.question_text}</div>
-                        <div class="text-input-container">
+                        <div class="text-input-container" style="display: block !important;">
                             <input type="text" 
                                    class="text-input" 
                                    data-question="${globalIdx}" 
@@ -1996,6 +2034,8 @@
                     questionDiv.innerHTML = qHtml;
                     container.appendChild(questionDiv);
                 });
+                
+                console.log('Input boxes created:', document.querySelectorAll('.text-input').length);
             }
             
             // Setup audio player event if in listening section
@@ -2135,12 +2175,48 @@
                 const circle = document.createElement('div');
                 circle.className = 'circle';
                 circle.textContent = questionIdx + 1;
+                circle.dataset.questionIndex = questionIdx;
                 
                 if (userAnswers[questionIdx]) {
                     circle.classList.add('answered');
                 }
                 
+                // Add click event to scroll to question
+                circle.addEventListener('click', function() {
+                    scrollToQuestion(questionIdx);
+                });
+                
                 progressRow.appendChild(circle);
+            }
+        }
+        
+        // ===== SCROLL TO QUESTION =====
+        function scrollToQuestion(questionIdx) {
+            const questionItems = document.querySelectorAll('.question-item');
+            
+            // Find the question item index in current section
+            let startIdx;
+            if (currentSection === 1) {
+                startIdx = 0;
+            } else if (currentSection === 2) {
+                startIdx = listeningQuestions.length;
+            } else {
+                startIdx = listeningQuestions.length + readingQuestions.length;
+            }
+            
+            const relativeIdx = questionIdx - startIdx;
+            
+            if (questionItems[relativeIdx]) {
+                questionItems[relativeIdx].scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+                // Add highlight effect
+                questionItems[relativeIdx].style.background = '#fff9c4';
+                setTimeout(() => {
+                    questionItems[relativeIdx].style.background = '';
+                }, 1000);
             }
         }
 
