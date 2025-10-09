@@ -19,9 +19,10 @@
 - **Tính điểm:** ✅ Có (mỗi câu 1 điểm)
 - **Progress:** Hiển thị 5 vòng tròn (1-5)
 
-### Phần 2: ĐỌC HIỂU (Reading) 📖
-- **Số câu:** 5 câu trắc nghiệm
+### Phần 2: ĐIỀN ĐÁP ÁN (Fill in the Blank) 📖
+- **Số câu:** 5 câu điền đáp án (text input)
 - **Đoạn văn:** 1 đoạn văn chung cho cả 5 câu
+- **Chấm điểm:** So sánh không phân biệt hoa/thường
 - **Tính điểm:** ✅ Có (mỗi câu 1 điểm)
 - **Progress:** Hiển thị 5 vòng tròn (6-10)
 
@@ -178,9 +179,9 @@ CREATE TABLE questions (
 **Cho mỗi HSK level:**
 - ✅ 1 file audio (.mp3)
 - ✅ 1 đoạn văn (text)
-- ✅ 5 câu Listening
-- ✅ 5 câu Reading
-- ✅ 1 câu Writing
+- ✅ 5 câu Listening (trắc nghiệm A/B/C)
+- ✅ 5 câu Fill-in-the-blank (điền text, không có options)
+- ✅ 1 câu Writing (tự luận)
 
 **Tổng cộng cho 6 level:**
 - 66 câu hỏi

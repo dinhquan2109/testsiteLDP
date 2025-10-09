@@ -36,22 +36,19 @@ INSERT INTO questions (question_text, option_a, option_b, option_c, correct_answ
 ('Câu hỏi 5...', 'Đáp án A', 'Đáp án B', 'Đáp án C', 'A', 27, 'listening')
 ON CONFLICT (order_number) DO NOTHING;
 
--- ========== PHẦN 2: ĐỌC HIỂU - Câu 28-32 ==========
+-- ========== PHẦN 2: ĐIỀN ĐÁP ÁN (FILL IN THE BLANK) - Câu 28-32 ==========
+-- ⚠️ PHẦN 2 KHÔNG CÓ OPTION A/B/C - CHỈ ĐIỀN ĐÁP ÁN TEXT
 
 -- Câu 28: CÓ READING_PASSAGE
 INSERT INTO questions (
   question_text, 
-  option_a, option_b, option_c, 
   correct_answer, 
   reading_passage,
   order_number, 
   section
 ) VALUES (
-  'Câu hỏi về đoạn văn...',  -- THAY ĐỔI
-  'Đáp án A',  -- THAY ĐỔI
-  'Đáp án B',  -- THAY ĐỔI
-  'Đáp án C',  -- THAY ĐỔI
-  'A',  -- THAY ĐỔI
+  'Câu hỏi yêu cầu điền đáp án... (gợi ý số từ)',  -- THAY ĐỔI
+  '正确答案',  -- THAY ĐỔI - Đáp án đúng bằng tiếng Trung hoặc số
   'Đoạn văn tiếng Trung ở đây...
 
 (Bản dịch tiếng Việt ở đây...)',  -- THAY ĐỔI
@@ -59,12 +56,12 @@ INSERT INTO questions (
   'reading'
 ) ON CONFLICT (order_number) DO NOTHING;
 
--- Câu 29-32: KHÔNG CÓ PASSAGE
-INSERT INTO questions (question_text, option_a, option_b, option_c, correct_answer, order_number, section) VALUES
-('Câu hỏi về đoạn văn 2...', 'Đáp án A', 'Đáp án B', 'Đáp án C', 'B', 29, 'reading'),
-('Câu hỏi về đoạn văn 3...', 'Đáp án A', 'Đáp án B', 'Đáp án C', 'A', 30, 'reading'),
-('Câu hỏi về đoạn văn 4...', 'Đáp án A', 'Đáp án B', 'Đáp án C', 'C', 31, 'reading'),
-('Câu hỏi về đoạn văn 5...', 'Đáp án A', 'Đáp án B', 'Đáp án C', 'B', 32, 'reading')
+-- Câu 29-32: KHÔNG CÓ PASSAGE (dùng chung từ câu 28)
+INSERT INTO questions (question_text, correct_answer, order_number, section) VALUES
+('Câu hỏi điền đáp án 2... (gợi ý)', '答案2', 29, 'reading'),
+('Câu hỏi điền đáp án 3... (gợi ý)', '答案3', 30, 'reading'),
+('Câu hỏi điền đáp án 4... (gợi ý)', '答案4', 31, 'reading'),
+('Câu hỏi điền đáp án 5... (gợi ý)', '答案5', 32, 'reading')
 ON CONFLICT (order_number) DO NOTHING;
 
 -- ========== PHẦN 3: VIẾT - Câu 33 ==========

@@ -130,22 +130,19 @@ INSERT INTO questions (question_text, option_a, option_b, option_c, correct_answ
 ('Ai là người đề xuất gặp mặt?', 'Người đàn ông', 'Người phụ nữ', 'Cả hai', 'A', 5, 'listening')
 ON CONFLICT (order_number) DO NOTHING;
 
--- ========== PHẦN 2: ĐỌC HIỂU (READING) - Câu 6-10 ==========
+-- ========== PHẦN 2: ĐIỀN ĐÁP ÁN (FILL IN THE BLANK) - Câu 6-10 ==========
+-- ⚠️ PHẦN 2 KHÔNG CÓ OPTION A/B/C - CHỈ ĐIỀN ĐÁP ÁN TEXT
 
 -- Câu 6: CÓ READING_PASSAGE (đoạn văn chung cho cả 5 câu)
 INSERT INTO questions (
   question_text, 
-  option_a, option_b, option_c, 
   correct_answer, 
   reading_passage,
   order_number, 
   section
 ) VALUES (
-  'Đoạn văn chủ yếu nói về gì?',
-  'Học tiếng Trung',
-  'Văn hóa Trung Quốc',
-  'Du lịch Trung Quốc',
-  'A',
+  'Theo đoạn văn, học tiếng Trung là một quá trình như thế nào? (1 từ)',
+  '有趣',
   '学习中文是一个很有趣的过程。刚开始的时候，很多人觉得中文很难，因为要学习汉字和声调。但是，如果你每天练习，你会发现中文其实不难。看电影、听音乐、和中国朋友聊天都是很好的学习方法。
 
 (Học tiếng Trung là một quá trình rất thú vị. Lúc mới bắt đầu, nhiều người thấy tiếng Trung khó vì phải học chữ Hán và thanh điệu. Nhưng nếu bạn luyện tập mỗi ngày, bạn sẽ thấy tiếng Trung thực ra không khó. Xem phim, nghe nhạc, trò chuyện với bạn Trung Quốc đều là phương pháp học tốt.)',
@@ -154,11 +151,11 @@ INSERT INTO questions (
 ) ON CONFLICT (order_number) DO NOTHING;
 
 -- Câu 7-10: KHÔNG CÓ PASSAGE (dùng chung từ câu 6)
-INSERT INTO questions (question_text, option_a, option_b, option_c, correct_answer, order_number, section) VALUES
-('Theo đoạn văn, điều gì khó nhất khi học tiếng Trung?', 'Ngữ pháp', 'Chữ Hán và thanh điệu', 'Từ vựng', 'B', 7, 'reading'),
-('Tác giả khuyên nên làm gì để học tốt?', 'Học nhiều giờ mỗi ngày', 'Luyện tập hàng ngày', 'Đi du lịch Trung Quốc', 'B', 8, 'reading'),
-('Phương pháp học nào KHÔNG được đề cập trong đoạn văn?', 'Xem phim', 'Đọc sách', 'Nghe nhạc', 'B', 9, 'reading'),
-('Thái độ của tác giả về việc học tiếng Trung là gì?', 'Bi quan', 'Tích cực', 'Trung lập', 'B', 10, 'reading')
+INSERT INTO questions (question_text, correct_answer, order_number, section) VALUES
+('Người mới học phải học 2 thứ gì? Viết bằng tiếng Trung (2 từ, ngăn cách bằng "和")', '汉字和声调', 7, 'reading'),
+('Nếu luyện tập hàng ngày, tiếng Trung sẽ như thế nào? (2 từ)', '不难', 8, 'reading'),
+('Kể tên 1 phương pháp học được đề cập (tiếng Trung, 2 từ)', '看电影', 9, 'reading'),
+('Mỗi ngày nên làm gì để học tốt? (tiếng Trung, 2 từ)', '练习', 10, 'reading')
 ON CONFLICT (order_number) DO NOTHING;
 
 -- ========== PHẦN 3: VIẾT (WRITING) - Câu 11 ==========
@@ -192,21 +189,21 @@ INSERT INTO questions (question_text, option_a, option_b, option_c, correct_answ
 ('Họ sẽ làm gì sau đó?', 'Về nhà', 'Đi xem phim', 'Đi dạo', 'B', 16, 'listening')
 ON CONFLICT (order_number) DO NOTHING;
 
--- ========== PHẦN 2: ĐỌC HIỂU (READING) - Câu 17-21 ==========
+-- ========== PHẦN 2: ĐIỀN ĐÁP ÁN (FILL IN THE BLANK) - Câu 17-21 ==========
 
-INSERT INTO questions (question_text, option_a, option_b, option_c, correct_answer, reading_passage, order_number, section) VALUES
-('Đoạn văn nói về chủ đề gì?', 'Gia đình', 'Bạn bè', 'Công việc', 'A',
+INSERT INTO questions (question_text, correct_answer, reading_passage, order_number, section) VALUES
+('Gia đình có mấy người? (1 chữ số)', '4',
 '我的家庭有四个人：爸爸、妈妈、妹妹和我。爸爸是医生，妈妈是老师。妹妹今年八岁，在小学上学。我们周末常常一起去公园玩。
 
 (Gia đình tôi có bốn người: bố, mẹ, em gái và tôi. Bố là bác sĩ, mẹ là giáo viên. Em gái năm nay 8 tuổi, đang học tiểu học. Cuối tuần chúng tôi thường cùng nhau đi công viên chơi.)',
 17, 'reading')
 ON CONFLICT (order_number) DO NOTHING;
 
-INSERT INTO questions (question_text, option_a, option_b, option_c, correct_answer, order_number, section) VALUES
-('Gia đình có bao nhiêu người?', '3 người', '4 người', '5 người', 'B', 18, 'reading'),
-('Nghề nghiệp của bố là gì?', 'Giáo viên', 'Bác sĩ', 'Kỹ sư', 'B', 19, 'reading'),
-('Em gái bao nhiêu tuổi?', '6 tuổi', '7 tuổi', '8 tuổi', 'C', 20, 'reading'),
-('Họ làm gì vào cuối tuần?', 'Đi công viên', 'Xem TV', 'Đi mua sắm', 'A', 21, 'reading')
+INSERT INTO questions (question_text, correct_answer, order_number, section) VALUES
+('Nghề của bố là gì? (tiếng Trung, 2 từ)', '医生', 18, 'reading'),
+('Nghề của mẹ là gì? (tiếng Trung, 2 từ)', '老师', 19, 'reading'),
+('Em gái bao nhiêu tuổi? (1 chữ số)', '8', 20, 'reading'),
+('Cuối tuần họ đi đâu? (tiếng Trung, 2 từ)', '公园', 21, 'reading')
 ON CONFLICT (order_number) DO NOTHING;
 
 -- ========== PHẦN 3: VIẾT (WRITING) - Câu 22 ==========
