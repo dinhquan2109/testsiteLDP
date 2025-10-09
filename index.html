@@ -1896,7 +1896,7 @@
 
         // ===== SUBMIT TO SUPABASE =====
         document.getElementById('btnConfirm').addEventListener('click', async function() {
-            console.log('btnConfirm clicked');
+            console.log('[DEBUG] btnConfirm clicked');
             const btnConfirm = this;
             const btnChangePhone = document.getElementById('btnChangePhone');
 
@@ -1909,7 +1909,7 @@
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
 
-            console.log('Submitting to Supabase:', { fullname, age: ageValue, phone, email });
+            console.log('[DEBUG] Data to submit:', { fullname, age: ageValue, phone, email });
 
             try {
                 const { data, error } = await supabase
@@ -1917,10 +1917,10 @@
                     .insert([{ fullname, age: ageValue ? parseInt(ageValue) : null, phone, email }])
                     .select();
 
-                console.log('Supabase response:', { data, error });
+                console.log('[DEBUG] Supabase response:', { data, error });
 
                 if (error) {
-                    console.error('Supabase error:', error);
+                    console.error('[ERROR] Supabase error:', error);
                     alert('Không thể lưu dữ liệu: ' + error.message);
                     btnConfirm.disabled = false;
                     btnChangePhone.disabled = false;
@@ -1929,16 +1929,16 @@
                 }
 
                 userRowId = data[0]?.id || Date.now();
-                console.log('User row ID:', userRowId);
+                console.log('[DEBUG] User saved with ID:', userRowId);
 
                 document.getElementById('modalOverlay').classList.remove('show');
                 setTimeout(() => {
-                    console.log('Navigating to instructions page');
+                    console.log('[DEBUG] Navigating to instructions page');
                     document.getElementById('mainPage').classList.add('hide');
                     document.getElementById('instructionsPage').classList.add('show');
                 }, 300);
             } catch (err) {
-                console.error('Exception in btnConfirm:', err);
+                console.error('[ERROR] Exception:', err);
                 alert('Lỗi: ' + err.message);
                 btnConfirm.disabled = false;
                 btnChangePhone.disabled = false;
@@ -1948,7 +1948,7 @@
 
         // ===== START TEST =====
         document.getElementById('startTestBtn').addEventListener('click', async function() {
-            console.log('startTestBtn clicked, userRowId:', userRowId);
+            console.log('[DEBUG] startTestBtn clicked, userRowId:', userRowId);
             
             if (!userRowId) {
                 alert('Lỗi: Không tìm thấy thông tin người dùng!');
@@ -1960,15 +1960,17 @@
             btn.innerHTML = '<span class="loading-spinner"></span> Đang tải câu hỏi...';
 
             try {
-                console.log('Loading questions from Supabase...');
+                console.log('[DEBUG] Loading questions from Supabase...');
                 const { data: questions, error } = await supabase
                     .from('questions')
                     .select('*')
                     .order('order_number');
 
-                console.log('Questions loaded:', { questions, error });
-
-                if (error) throw error;
+                console.log('[DEBUG] Questions loaded:', questions?.length || 0, 'questions');
+                if (error) {
+                    console.error('[ERROR] Error loading questions:', error);
+                    throw error;
+                }
 
                 if (!questions || questions.length === 0) {
                     alert('Không tìm thấy câu hỏi. Vui lòng liên hệ quản trị viên.');
@@ -1981,7 +1983,7 @@
                 userAnswers = {};
                 currentQuestionIndex = 0;
 
-                console.log('Starting test with', testQuestions.length, 'questions');
+                console.log('[DEBUG] Starting test with', testQuestions.length, 'questions');
 
                 document.getElementById('instructionsPage').classList.remove('show');
                 document.getElementById('testPage').classList.add('show');
@@ -1989,7 +1991,7 @@
                 startTimer(20 * 60);
                 displayQuestion(0);
             } catch (err) {
-                console.error('Error loading questions:', err);
+                console.error('[ERROR] Exception loading questions:', err);
                 alert('Lỗi khi tải câu hỏi: ' + err.message);
                 btn.disabled = false;
                 btn.textContent = 'BẮT ĐẦU';
