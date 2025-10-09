@@ -1828,12 +1828,12 @@
                     return;
                 }
 
-                // Separate questions by section
-                listeningQuestions = questions.filter(q => q.section === 'listening' || q.order_number <= 5);
-                readingQuestions = questions.filter(q => q.section === 'reading' || (q.order_number > 5 && q.order_number <= 10));
-                writingQuestions = questions.filter(q => q.section === 'writing' || q.order_number > 10);
+                // Separate questions by section (first 5 = listening, next 5 = reading, last 1 = writing)
+                listeningQuestions = questions.slice(0, 5);  // First 5 questions
+                readingQuestions = questions.slice(5, 10);   // Next 5 questions
+                writingQuestions = questions.slice(10, 11);  // Last 1 question
                 
-                testQuestions = [...listeningQuestions, ...readingQuestions, ...writingQuestions];
+                testQuestions = questions;
                 userAnswers = {};
                 currentSection = 1;
                 audioPlayCount = 0;
