@@ -539,10 +539,67 @@
             font-weight: bold;
         }
 
+        .level-selector {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .level-selector-title {
+            text-align: center;
+            color: #0d5943;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .level-option {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .level-option:hover {
+            border-color: #7cb342;
+            background: #f1f8e9;
+            transform: translateY(-3px);
+        }
+
+        .level-option.selected {
+            border-color: #4caf50;
+            background: #e8f5e9;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .level-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e7e5f;
+            margin-bottom: 5px;
+        }
+
+        .level-desc {
+            font-size: 13px;
+            color: #666;
+        }
+
         .start-test-btn {
             width: 100%;
             max-width: 300px;
-            margin: 40px auto 0;
+            margin: 20px auto 0;
             display: block;
             padding: 20px;
             background: linear-gradient(135deg, #7cb342 0%, #558b2f 100%);
@@ -558,9 +615,14 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        .start-test-btn:hover {
+        .start-test-btn:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .start-test-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .loading-spinner {
@@ -1287,11 +1349,41 @@
                 <div class="instruction-item">
                     <div class="instruction-icon">▶️</div>
                     <div class="instruction-text">
-                        Ấn "<strong>BẮT ĐẦU</strong>" để vào làm bài.
+                        Chọn trình độ muốn kiểm tra và ấn "<strong>BẮT ĐẦU</strong>" để vào làm bài.
                     </div>
                 </div>
 
-                <button class="start-test-btn" id="startTestBtn">BẮT ĐẦU</button>
+                <div class="level-selector">
+                    <h3 class="level-selector-title">Vui lòng chọn trình độ muốn test</h3>
+                    <div class="level-grid">
+                        <div class="level-option" data-level="1" data-range="1-20">
+                            <div class="level-name">HSK 1</div>
+                            <div class="level-desc">Cơ bản</div>
+                        </div>
+                        <div class="level-option" data-level="2" data-range="21-40">
+                            <div class="level-name">HSK 2</div>
+                            <div class="level-desc">Sơ cấp</div>
+                        </div>
+                        <div class="level-option" data-level="3" data-range="41-60">
+                            <div class="level-name">HSK 3</div>
+                            <div class="level-desc">Trung cấp thấp</div>
+                        </div>
+                        <div class="level-option" data-level="4" data-range="61-80">
+                            <div class="level-name">HSK 4</div>
+                            <div class="level-desc">Trung cấp</div>
+                        </div>
+                        <div class="level-option" data-level="5" data-range="81-100">
+                            <div class="level-name">HSK 5</div>
+                            <div class="level-desc">Trung cấp cao</div>
+                        </div>
+                        <div class="level-option" data-level="6" data-range="101-120">
+                            <div class="level-name">HSK 6</div>
+                            <div class="level-desc">Nâng cao</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="start-test-btn" id="startTestBtn" disabled>BẮT ĐẦU</button>
             </div>
         </div>
     </div>
@@ -1384,6 +1476,10 @@
         // NEW: Pagination variables
         let currentPage = 0;
         const QUESTIONS_PER_PAGE = 10;
+        
+        // NEW: Level selection
+        let selectedLevel = null;
+        let selectedRange = null;
 
         // ===== VALIDATION FUNCTIONS =====
         function validatePhone(phone) {
@@ -1579,10 +1675,33 @@
             }, 300);
         });
 
+        // ===== LEVEL SELECTION =====
+        document.querySelectorAll('.level-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected from all
+                document.querySelectorAll('.level-option').forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected to this
+                this.classList.add('selected');
+                
+                // Save selected level
+                selectedLevel = this.dataset.level;
+                selectedRange = this.dataset.range;
+                
+                // Enable start button
+                document.getElementById('startTestBtn').disabled = false;
+            });
+        });
+
         // ===== START TEST =====
         document.getElementById('startTestBtn').addEventListener('click', async function() {
             if (!userRowId) {
                 alert('Lỗi: Không tìm thấy thông tin người dùng!');
+                return;
+            }
+
+            if (!selectedLevel) {
+                alert('Vui lòng chọn trình độ muốn test!');
                 return;
             }
 
@@ -1591,15 +1710,20 @@
             btn.innerHTML = '<span class="loading-spinner"></span> Đang tải câu hỏi...';
 
             try {
+                // Parse range (e.g., "1-20" -> [1, 20])
+                const [startNum, endNum] = selectedRange.split('-').map(Number);
+                
                 const { data: questions, error } = await supabase
                     .from('questions')
                     .select('*')
+                    .gte('order_number', startNum)
+                    .lte('order_number', endNum)
                     .order('order_number');
 
                 if (error) throw error;
 
                 if (!questions || questions.length === 0) {
-                    alert('Không tìm thấy câu hỏi. Vui lòng liên hệ quản trị viên.');
+                    alert(`Không tìm thấy câu hỏi cho HSK ${selectedLevel}. Vui lòng liên hệ quản trị viên.`);
                     btn.disabled = false;
                     btn.textContent = 'BẮT ĐẦU';
                     return;
@@ -1941,20 +2065,20 @@
             let message = '';
 
             if (percentage >= 90) {
-                level = 'Advanced (C1-C2)';
-                message = 'Xuất sắc! Bạn có trình độ tiếng Anh rất cao, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
+                level = `HSK ${selectedLevel} - Xuất sắc`;
+                message = 'Xuất sắc! Bạn có trình độ tiếng Trung rất cao, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 75) {
-                level = 'Upper-Intermediate (B2)';
-                message = 'Rất tốt! Bạn có nền tảng tiếng Anh vững chắc, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
+                level = `HSK ${selectedLevel} - Rất tốt`;
+                message = 'Rất tốt! Bạn có nền tảng tiếng Trung vững chắc, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 60) {
-                level = 'Intermediate (B1)';
+                level = `HSK ${selectedLevel} - Khá`;
                 message = 'Khá tốt! Bạn đang trên đà phát triển, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 40) {
-                level = 'Pre-Intermediate (A2)';
+                level = `HSK ${selectedLevel} - Trung bình`;
                 message = 'Tốt! Bạn đã có kiến thức cơ bản, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else {
-                level = 'Beginner (A1)';
-                message = 'Bạn đang bắt đầu hành trình học tiếng Anh, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
+                level = `HSK ${selectedLevel} - Cần cải thiện`;
+                message = 'Bạn đang bắt đầu hành trình học tiếng Trung, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             }
 
             document.getElementById('levelBadge').textContent = level;
