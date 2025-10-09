@@ -771,6 +771,68 @@
             overflow-y: auto;
         }
 
+        .section-header {
+            background: linear-gradient(135deg, #1e7e5f 0%, #0d5943 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .section-description {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .audio-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .audio-section audio {
+            width: 100%;
+            max-width: 500px;
+            margin: 15px 0;
+        }
+
+        .audio-info {
+            font-size: 14px;
+            color: #1976d2;
+            font-weight: bold;
+        }
+
+        .reading-passage {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #2196f3;
+        }
+
+        .passage-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+
+        .passage-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            white-space: pre-wrap;
+        }
+
         .question-item {
             background: white;
             padding: 25px;
@@ -781,6 +843,27 @@
 
         .question-item:last-child {
             margin-bottom: 0;
+        }
+
+        .writing-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .writing-instruction {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff9800;
+        }
+
+        .word-count {
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
         }
 
         .question-header {
@@ -1314,21 +1397,31 @@
                 <div class="instruction-item">
                     <div class="instruction-icon">🌱</div>
                     <div class="instruction-text">
-                        Thí sinh làm lần lượt <strong>20 câu hỏi</strong> kiểm tra kiến thức về Từ vựng, Ngữ pháp, kỹ năng Nghe và Đọc trong thời gian <strong>20 phút</strong>. Bài test bao gồm câu trắc nghiệm, câu điền đáp án và câu tự luận.
+                        Bài test gồm <strong>3 phần</strong> trong thời gian <strong>20 phút</strong>:
+                        <br>• <strong>Phần 1 - Nghe:</strong> 5 câu (1 file audio, chỉ nghe 2 lần)
+                        <br>• <strong>Phần 2 - Đọc hiểu:</strong> 5 câu (1 đoạn văn)
+                        <br>• <strong>Phần 3 - Viết:</strong> 1 bài tự luận
                     </div>
                 </div>
 
                 <div class="instruction-item">
-                    <div class="instruction-icon">📄</div>
+                    <div class="instruction-icon">🎧</div>
                     <div class="instruction-text">
-                        Bài thi được chia thành <strong>nhiều trang</strong>, mỗi trang <strong>10 câu hỏi</strong>. Bạn phải hoàn thành tất cả câu hỏi ở trang hiện tại mới có thể chuyển sang trang tiếp theo.
+                        <strong>Phần Nghe:</strong> File audio chỉ được phát <strong>TỐI ĐA 2 LẦN</strong>. Hãy tập trung lắng nghe!
                     </div>
                 </div>
 
                 <div class="instruction-item">
-                    <div class="instruction-icon">📝</div>
+                    <div class="instruction-icon">📖</div>
                     <div class="instruction-text">
-                        Với mỗi câu trả lời đúng (trắc nghiệm và điền đáp án), thí sinh nhận được <strong>1 điểm</strong>. Câu tự luận không có điểm nhưng sẽ được giáo viên đánh giá.
+                        <strong>Phần Đọc:</strong> Đọc kỹ đoạn văn trước khi trả lời câu hỏi.
+                    </div>
+                </div>
+
+                <div class="instruction-item">
+                    <div class="instruction-icon">✍️</div>
+                    <div class="instruction-text">
+                        <strong>Phần Viết:</strong> Viết bài tự luận theo yêu cầu đề bài.
                     </div>
                 </div>
 
@@ -1432,9 +1525,9 @@
 
             <div class="question-nav">
                 <button class="nav-button btn-submit" id="btnSubmit" style="display: none;">NỘP BÀI</button>
-                <button class="nav-button btn-next-page" id="btnNextPage">Trang sau →</button>
+                <button class="nav-button btn-next-section" id="btnNextSection">Tiếp theo →</button>
             </div>
-            <div class="page-info" id="pageInfo">Trang 1</div>
+            <div class="page-info" id="pageInfo">Phần 1/3 - Nghe</div>
         </div>
     </div>
 
@@ -1473,13 +1566,19 @@
         let currentQuestionIndex = 0;
         let timerInterval = null;
         
-        // NEW: Pagination variables
-        let currentPage = 0;
-        const QUESTIONS_PER_PAGE = 10;
+        // NEW: Test structure - 3 sections
+        let currentSection = 1; // 1=Listening, 2=Reading, 3=Writing
+        let audioPlayCount = 0;
+        const MAX_AUDIO_PLAYS = 2;
         
         // NEW: Level selection
         let selectedLevel = null;
         let selectedRange = null;
+        
+        // Section data
+        let listeningQuestions = [];
+        let readingQuestions = [];
+        let writingQuestions = [];
 
         // ===== VALIDATION FUNCTIONS =====
         function validatePhone(phone) {
@@ -1729,15 +1828,21 @@
                     return;
                 }
 
-                testQuestions = questions;
+                // Separate questions by section
+                listeningQuestions = questions.filter(q => q.section === 'listening' || q.order_number <= 5);
+                readingQuestions = questions.filter(q => q.section === 'reading' || (q.order_number > 5 && q.order_number <= 10));
+                writingQuestions = questions.filter(q => q.section === 'writing' || q.order_number > 10);
+                
+                testQuestions = [...listeningQuestions, ...readingQuestions, ...writingQuestions];
                 userAnswers = {};
-                currentQuestionIndex = 0;
+                currentSection = 1;
+                audioPlayCount = 0;
 
                 document.getElementById('instructionsPage').classList.remove('show');
                 document.getElementById('testPage').classList.add('show');
 
                 startTimer(20 * 60);
-                displayPage(0);
+                displaySection(1);
             } catch (err) {
                 alert('Lỗi khi tải câu hỏi: ' + err.message);
                 btn.disabled = false;
@@ -1768,95 +1873,146 @@
                 `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
         }
 
-        // ===== DISPLAY PAGE OF QUESTIONS =====
-        function displayPage(pageNumber) {
-            currentPage = pageNumber;
-            const startIdx = pageNumber * QUESTIONS_PER_PAGE;
-            const endIdx = Math.min(startIdx + QUESTIONS_PER_PAGE, testQuestions.length);
-            
+        // ===== DISPLAY SECTION =====
+        function displaySection(sectionNum) {
+            currentSection = sectionNum;
             const container = document.getElementById('questionsContainer');
             container.innerHTML = '';
             
-            // Update counter
-            document.getElementById('questionCounter').textContent = `Câu ${startIdx + 1}-${endIdx}/${testQuestions.length}`;
+            let html = '';
+            let sectionQuestions = [];
+            let startIdx = 0;
             
-            // Render all questions in current page
-            for (let i = startIdx; i < endIdx; i++) {
-                const question = testQuestions[i];
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'question-item';
-                questionDiv.id = `question-${i}`;
+            if (sectionNum === 1) {
+                // LISTENING SECTION
+                sectionQuestions = listeningQuestions;
+                startIdx = 0;
                 
-                // Question header
-                let headerText = `${i + 1}. `;
-                if (question.question_type === 'essay') {
-                    headerText += 'Câu tự luận';
-                } else if (question.question_type === 'fill_in') {
-                    headerText += 'Điền đáp án';
-                } else {
-                    headerText += 'Choose the correct answer';
-                }
-                
-                let html = `
-                    <div class="question-header">${headerText}</div>
-                    <div class="question-text">${question.question_text}</div>
+                html += `
+                    <div class="section-header">
+                        <div class="section-title">🎧 PHẦN 1: NGHE (Listening)</div>
+                        <div class="section-description">Nghe file audio và trả lời 5 câu hỏi</div>
+                    </div>
+                    <div class="audio-section">
+                        <div class="audio-info">⚠️ File audio chỉ được nghe tối đa ${MAX_AUDIO_PLAYS} lần (Đã nghe: ${audioPlayCount}/${MAX_AUDIO_PLAYS})</div>
+                        <audio id="mainAudio" controls ${audioPlayCount >= MAX_AUDIO_PLAYS ? 'style="display:none;"' : ''}>
+                            <source src="${listeningQuestions[0]?.audio_url || ''}" type="audio/mpeg">
+                            Trình duyệt của bạn không hỗ trợ phát audio.
+                        </audio>
+                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px;">❌ Đã hết lượt nghe</div>' : ''}
+                    </div>
                 `;
                 
-                // Audio player if exists
-                if (question.audio_url) {
-                    html += `
-                        <div class="audio-player" style="display: block; margin: 20px 0;">
-                            <audio controls>
-                                <source src="${question.audio_url}" type="audio/mpeg">
-                                Trình duyệt của bạn không hỗ trợ phát audio.
-                            </audio>
-                        </div>
-                    `;
-                }
+                document.getElementById('questionCounter').textContent = `Câu 1-5/11`;
+                document.getElementById('pageInfo').textContent = 'Phần 1/3 - Nghe';
                 
-                // Render answer options based on type
-                if (question.question_type === 'essay') {
-                    html += `
-                        <div class="essay-input-container" style="display: block; margin-top: 20px;">
-                            <textarea class="essay-input" data-question="${i}" placeholder="Nhập câu trả lời của bạn...">${userAnswers[i] || ''}</textarea>
+            } else if (sectionNum === 2) {
+                // READING SECTION
+                sectionQuestions = readingQuestions;
+                startIdx = listeningQuestions.length;
+                
+                const passage = readingQuestions[0]?.reading_passage || 'Đoạn văn sẽ được hiển thị ở đây...';
+                
+                html += `
+                    <div class="section-header">
+                        <div class="section-title">📖 PHẦN 2: ĐỌC HIỂU (Reading)</div>
+                        <div class="section-description">Đọc đoạn văn và trả lời 5 câu hỏi</div>
+                    </div>
+                    <div class="reading-passage">
+                        <div class="passage-title">Đọc đoạn văn sau:</div>
+                        <div class="passage-text">${passage}</div>
+                    </div>
+                `;
+                
+                document.getElementById('questionCounter').textContent = `Câu 6-10/11`;
+                document.getElementById('pageInfo').textContent = 'Phần 2/3 - Đọc';
+                
+            } else if (sectionNum === 3) {
+                // WRITING SECTION
+                sectionQuestions = writingQuestions;
+                startIdx = listeningQuestions.length + readingQuestions.length;
+                
+                const writingQ = writingQuestions[0];
+                const wordCount = (userAnswers[startIdx] || '').split(/\s+/).filter(w => w.length > 0).length;
+                
+                html += `
+                    <div class="section-header">
+                        <div class="section-title">✍️ PHẦN 3: VIẾT (Writing)</div>
+                        <div class="section-description">Viết bài tự luận theo yêu cầu</div>
+                    </div>
+                    <div class="writing-section">
+                        <div class="writing-instruction">
+                            <strong>Đề bài:</strong>
+                            <div style="margin-top: 10px;">${writingQ?.question_text || ''}</div>
                         </div>
+                        <textarea class="essay-input" data-question="${startIdx}" placeholder="Nhập bài viết của bạn..." style="min-height: 300px;">${userAnswers[startIdx] || ''}</textarea>
+                        <div class="word-count">Số từ: <strong>${wordCount}</strong></div>
+                    </div>
+                `;
+                
+                document.getElementById('questionCounter').textContent = `Câu 11/11`;
+                document.getElementById('pageInfo').textContent = 'Phần 3/3 - Viết';
+            }
+            
+            container.innerHTML = html;
+            
+            // Render questions for listening and reading sections
+            if (sectionNum !== 3) {
+                sectionQuestions.forEach((question, idx) => {
+                    const globalIdx = startIdx + idx;
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question-item';
+                    
+                    let qHtml = `
+                        <div class="question-header">${globalIdx + 1}. ${question.question_text}</div>
                     `;
-                } else if (question.question_type === 'fill_in') {
-                    html += `
-                        <div class="text-input-container" style="display: block; margin-top: 20px;">
-                            <input type="text" class="text-input" data-question="${i}" placeholder="Nhập đáp án của bạn..." value="${userAnswers[i] || ''}">
-                        </div>
-                    `;
-                } else {
-                    // Multiple choice
-                    const savedAnswer = userAnswers[i];
-                    html += `
-                        <div class="options-list" style="display: flex; margin-top: 20px;">
-                            <div class="option-item ${savedAnswer === 'A' ? 'selected' : ''}" data-question="${i}" data-option="A">
+                    
+                    // Multiple choice options
+                    const savedAnswer = userAnswers[globalIdx];
+                    qHtml += `
+                        <div class="options-list" style="display: flex; margin-top: 15px;">
+                            <div class="option-item ${savedAnswer === 'A' ? 'selected' : ''}" data-question="${globalIdx}" data-option="A">
                                 <div class="option-label">A</div>
                                 <div class="option-text">${question.option_a}</div>
                             </div>
-                            <div class="option-item ${savedAnswer === 'B' ? 'selected' : ''}" data-question="${i}" data-option="B">
+                            <div class="option-item ${savedAnswer === 'B' ? 'selected' : ''}" data-question="${globalIdx}" data-option="B">
                                 <div class="option-label">B</div>
                                 <div class="option-text">${question.option_b}</div>
                             </div>
-                            <div class="option-item ${savedAnswer === 'C' ? 'selected' : ''}" data-question="${i}" data-option="C">
+                            <div class="option-item ${savedAnswer === 'C' ? 'selected' : ''}" data-question="${globalIdx}" data-option="C">
                                 <div class="option-label">C</div>
                                 <div class="option-text">${question.option_c}</div>
                             </div>
                         </div>
                     `;
+                    
+                    questionDiv.innerHTML = qHtml;
+                    container.appendChild(questionDiv);
+                });
+            }
+            
+            // Setup audio player event if in listening section
+            if (sectionNum === 1 && audioPlayCount < MAX_AUDIO_PLAYS) {
+                const audio = document.getElementById('mainAudio');
+                if (audio) {
+                    audio.addEventListener('play', function() {
+                        if (audioPlayCount < MAX_AUDIO_PLAYS) {
+                            audioPlayCount++;
+                            if (audioPlayCount >= MAX_AUDIO_PLAYS) {
+                                setTimeout(() => {
+                                    this.pause();
+                                    displaySection(1); // Refresh to show "no more plays"
+                                }, 100);
+                            }
+                        }
+                    });
                 }
-                
-                questionDiv.innerHTML = html;
-                container.appendChild(questionDiv);
             }
             
             // Attach event listeners
             attachAnswerEventListeners();
             updateProgressCircles();
             updateNavButtons();
-            updatePageInfo();
         }
         
         // ===== ATTACH EVENT LISTENERS TO ANSWERS =====
@@ -1906,22 +2062,36 @@
                     } else {
                         delete userAnswers[questionIdx];
                     }
+                    
+                    // Update word count for writing section
+                    if (currentSection === 3) {
+                        const wordCount = value.split(/\s+/).filter(w => w.length > 0).length;
+                        const wordCountEl = document.querySelector('.word-count strong');
+                        if (wordCountEl) {
+                            wordCountEl.textContent = wordCount;
+                        }
+                    }
+                    
                     updateProgressCircles();
                     updateNavButtons();
                 });
             });
         }
 
-        // NEW: Update page info
-        function updatePageInfo() {
-            const totalPages = Math.ceil(testQuestions.length / QUESTIONS_PER_PAGE);
-            document.getElementById('pageInfo').textContent = `Trang ${currentPage + 1}/${totalPages}`;
-        }
-
-        // NEW: Check if current page is complete
-        function isCurrentPageComplete() {
-            const startIdx = currentPage * QUESTIONS_PER_PAGE;
-            const endIdx = Math.min(startIdx + QUESTIONS_PER_PAGE, testQuestions.length);
+        // NEW: Check if current section is complete
+        function isSectionComplete() {
+            let startIdx, endIdx;
+            
+            if (currentSection === 1) {
+                startIdx = 0;
+                endIdx = listeningQuestions.length;
+            } else if (currentSection === 2) {
+                startIdx = listeningQuestions.length;
+                endIdx = startIdx + readingQuestions.length;
+            } else if (currentSection === 3) {
+                startIdx = listeningQuestions.length + readingQuestions.length;
+                endIdx = startIdx + writingQuestions.length;
+            }
             
             for (let i = startIdx; i < endIdx; i++) {
                 if (!userAnswers.hasOwnProperty(i)) {
@@ -1934,13 +2104,26 @@
         // ===== UPDATE PROGRESS CIRCLES =====
         function updateProgressCircles() {
             const circles = document.querySelectorAll('.circle');
-            const startIdx = currentPage * QUESTIONS_PER_PAGE;
+            
+            // Calculate based on section
+            let startIdx, displayCount;
+            
+            if (currentSection === 1) {
+                startIdx = 0;
+                displayCount = 5;
+            } else if (currentSection === 2) {
+                startIdx = 5;
+                displayCount = 5;
+            } else {
+                startIdx = 10;
+                displayCount = 1;
+            }
             
             circles.forEach((circle, i) => {
-                const questionIdx = startIdx + i;
                 circle.classList.remove('active', 'answered');
                 
-                if (i < QUESTIONS_PER_PAGE && questionIdx < testQuestions.length) {
+                if (i < displayCount) {
+                    const questionIdx = startIdx + i;
                     circle.style.display = 'flex';
                     circle.textContent = questionIdx + 1;
                     
@@ -1955,31 +2138,32 @@
 
         // ===== UPDATE NAV BUTTONS =====
         function updateNavButtons() {
-            const totalPages = Math.ceil(testQuestions.length / QUESTIONS_PER_PAGE);
-            const isLastPage = currentPage === totalPages - 1;
+            const btnNext = document.getElementById('btnNextSection');
+            const btnSubmit = document.getElementById('btnSubmit');
             
-            // Show/hide appropriate buttons
-            if (isLastPage) {
-                document.getElementById('btnNextPage').style.display = 'none';
-                document.getElementById('btnSubmit').style.display = 'block';
+            if (currentSection === 3) {
+                // Last section - show submit
+                btnNext.style.display = 'none';
+                btnSubmit.style.display = 'block';
             } else {
-                document.getElementById('btnNextPage').style.display = 'block';
-                document.getElementById('btnNextPage').disabled = !isCurrentPageComplete();
-                document.getElementById('btnSubmit').style.display = 'none';
+                // Show next section button
+                btnNext.style.display = 'block';
+                btnNext.disabled = !isSectionComplete();
+                btnSubmit.style.display = 'none';
             }
         }
 
         // ===== NAVIGATION BUTTONS =====
-        // NEW: Next page button
-        document.getElementById('btnNextPage').addEventListener('click', function() {
-            if (!isCurrentPageComplete()) {
-                alert('Vui lòng hoàn thành tất cả câu hỏi trong trang này trước khi chuyển sang trang tiếp theo!');
+        // NEW: Next section button
+        document.getElementById('btnNextSection').addEventListener('click', function() {
+            if (!isSectionComplete()) {
+                let sectionName = currentSection === 1 ? 'Nghe' : 'Đọc';
+                alert(`Vui lòng hoàn thành tất cả câu hỏi trong phần ${sectionName} trước khi chuyển sang phần tiếp theo!`);
                 return;
             }
             
-            const totalPages = Math.ceil(testQuestions.length / QUESTIONS_PER_PAGE);
-            if (currentPage < totalPages - 1) {
-                displayPage(currentPage + 1);
+            if (currentSection < 3) {
+                displaySection(currentSection + 1);
                 // Scroll to top
                 document.getElementById('questionsContainer').scrollTop = 0;
             }
