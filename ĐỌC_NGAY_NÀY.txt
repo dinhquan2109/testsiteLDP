@@ -1,0 +1,36 @@
+🔥 ĐÃ SỬA XONG 2 VẤN ĐỀ! 🔥
+
+═══════════════════════════════════════════════════════════
+
+1. ✅ HSK LEVELS ĐÃ ĐÚNG:
+   - HSK 1: câu 1-11  (11 câu)
+   - HSK 2: câu 12-22 (11 câu)
+   - HSK 3: câu 23-33 (11 câu)
+   - HSK 4: câu 34-44 (11 câu)
+   - HSK 5: câu 45-55 (11 câu)
+   - HSK 6: câu 56-66 (11 câu)
+
+2. ✅ PHẦN 2 ĐÃ CÓ Ô INPUT:
+   - Đã xóa "display: none" trong CSS
+   - Bây giờ sẽ hiển thị ô để điền đáp án
+
+═══════════════════════════════════════════════════════════
+
+🚀 LÀM NGAY:
+
+1. HARD REFRESH:
+   Windows: Ctrl + Shift + R
+   Mac: Cmd + Shift + R
+
+2. TEST:
+   - Chọn HSK 1
+   - Phần 1: Thấy options A/B/C ✅
+   - Phần 2: Thấy ô input text ✅ (QUAN TRỌNG!)
+   - Phần 3: Thấy textarea ✅
+
+═══════════════════════════════════════════════════════════
+
+📖 ĐỌC CHI TIẾT:
+   → Mở file: SỬA_LẦN_CUỐI.md
+
+═══════════════════════════════════════════════════════════

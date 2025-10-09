@@ -38,14 +38,14 @@
 
 User phải **chọn 1 trong 6 trình độ** trước khi bắt đầu:
 
-| Level | Tên | Order Number | Số câu |
-|-------|-----|--------------|--------|
-| **HSK 1** | Cơ bản | 1-11 | 11 câu |
-| **HSK 2** | Sơ cấp | 12-22 | 11 câu |
-| **HSK 3** | Trung cấp thấp | 23-33 | 11 câu |
-| **HSK 4** | Trung cấp | 34-44 | 11 câu |
-| **HSK 5** | Trung cấp cao | 45-55 | 11 câu |
-| **HSK 6** | Nâng cao | 56-66 | 11 câu |
+| Level | Tên | Order Number | Số câu | Chi tiết |
+|-------|-----|--------------|--------|----------|
+| **HSK 1** | Cơ bản | 1-11 | 11 câu | Nghe 1-5, Điền 6-10, Viết 11 |
+| **HSK 2** | Sơ cấp | 12-22 | 11 câu | Nghe 12-16, Điền 17-21, Viết 22 |
+| **HSK 3** | Trung cấp thấp | 23-33 | 11 câu | Nghe 23-27, Điền 28-32, Viết 33 |
+| **HSK 4** | Trung cấp | 34-44 | 11 câu | Nghe 34-38, Điền 39-43, Viết 44 |
+| **HSK 5** | Trung cấp cao | 45-55 | 11 câu | Nghe 45-49, Điền 50-54, Viết 55 |
+| **HSK 6** | Nâng cao | 56-66 | 11 câu | Nghe 56-60, Điền 61-65, Viết 66 |
 
 **Mỗi level có cấu trúc giống nhau:**
 - Listening: 5 câu (order x+0 đến x+4)
