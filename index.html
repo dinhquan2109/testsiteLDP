@@ -1485,7 +1485,7 @@
         <div class="test-container">
             <div class="test-header">
                 <div class="question-progress">
-                    <div class="progress-counter" id="questionCounter">0/20</div>
+                    <div class="progress-counter" id="questionCounter">Phần 1: Nghe</div>
                     <div class="progress-circles">
                         <div class="progress-row">
                             <div class="circle">1</div>
@@ -1493,23 +1493,6 @@
                             <div class="circle">3</div>
                             <div class="circle">4</div>
                             <div class="circle">5</div>
-                            <div class="circle">6</div>
-                            <div class="circle">7</div>
-                            <div class="circle">8</div>
-                            <div class="circle">9</div>
-                            <div class="circle">10</div>
-                        </div>
-                        <div class="progress-row">
-                            <div class="circle">11</div>
-                            <div class="circle">12</div>
-                            <div class="circle">13</div>
-                            <div class="circle">14</div>
-                            <div class="circle">15</div>
-                            <div class="circle">16</div>
-                            <div class="circle">17</div>
-                            <div class="circle">18</div>
-                            <div class="circle">19</div>
-                            <div class="circle">20</div>
                         </div>
                     </div>
                 </div>
@@ -1903,7 +1886,7 @@
                     </div>
                 `;
                 
-                document.getElementById('questionCounter').textContent = `Câu 1-5/11`;
+                document.getElementById('questionCounter').textContent = `Phần 1: Nghe (5 câu)`;
                 document.getElementById('pageInfo').textContent = 'Phần 1/3 - Nghe';
                 
             } else if (sectionNum === 2) {
@@ -1924,7 +1907,7 @@
                     </div>
                 `;
                 
-                document.getElementById('questionCounter').textContent = `Câu 6-10/11`;
+                document.getElementById('questionCounter').textContent = `Phần 2: Đọc (5 câu)`;
                 document.getElementById('pageInfo').textContent = 'Phần 2/3 - Đọc';
                 
             } else if (sectionNum === 3) {
@@ -1938,7 +1921,7 @@
                 html += `
                     <div class="section-header">
                         <div class="section-title">✍️ PHẦN 3: VIẾT (Writing)</div>
-                        <div class="section-description">Viết bài tự luận theo yêu cầu</div>
+                        <div class="section-description">Viết bài tự luận theo yêu cầu (không tính điểm)</div>
                     </div>
                     <div class="writing-section">
                         <div class="writing-instruction">
@@ -1950,7 +1933,7 @@
                     </div>
                 `;
                 
-                document.getElementById('questionCounter').textContent = `Câu 11/11`;
+                document.getElementById('questionCounter').textContent = `Phần 3: Viết (tự luận)`;
                 document.getElementById('pageInfo').textContent = 'Phần 3/3 - Viết';
             }
             
@@ -2103,37 +2086,38 @@
 
         // ===== UPDATE PROGRESS CIRCLES =====
         function updateProgressCircles() {
-            const circles = document.querySelectorAll('.circle');
+            const progressRow = document.querySelector('.progress-row');
+            if (!progressRow) return;
             
-            // Calculate based on section
-            let startIdx, displayCount;
+            // Clear existing circles
+            progressRow.innerHTML = '';
+            
+            let startIdx, count;
             
             if (currentSection === 1) {
                 startIdx = 0;
-                displayCount = 5;
+                count = listeningQuestions.length; // 5
             } else if (currentSection === 2) {
-                startIdx = 5;
-                displayCount = 5;
+                startIdx = listeningQuestions.length; // 5
+                count = readingQuestions.length; // 5
             } else {
-                startIdx = 10;
-                displayCount = 1;
+                startIdx = listeningQuestions.length + readingQuestions.length; // 10
+                count = writingQuestions.length; // 1
             }
             
-            circles.forEach((circle, i) => {
-                circle.classList.remove('active', 'answered');
+            // Create circles for current section
+            for (let i = 0; i < count; i++) {
+                const questionIdx = startIdx + i;
+                const circle = document.createElement('div');
+                circle.className = 'circle';
+                circle.textContent = questionIdx + 1;
                 
-                if (i < displayCount) {
-                    const questionIdx = startIdx + i;
-                    circle.style.display = 'flex';
-                    circle.textContent = questionIdx + 1;
-                    
-                    if (userAnswers[questionIdx]) {
-                        circle.classList.add('answered');
-                    }
-                } else {
-                    circle.style.display = 'none';
+                if (userAnswers[questionIdx]) {
+                    circle.classList.add('answered');
                 }
-            });
+                
+                progressRow.appendChild(circle);
+            }
         }
 
         // ===== UPDATE NAV BUTTONS =====
@@ -2171,7 +2155,8 @@
 
         document.getElementById('btnSubmit').addEventListener('click', function() {
             const answeredCount = Object.keys(userAnswers).length;
-            const totalQuestions = testQuestions.length;
+            const totalQuestions = testQuestions.length; // Should be 11
+            const totalScorableQuestions = listeningQuestions.length + readingQuestions.length; // 10 questions
 
             if (answeredCount < totalQuestions) {
                 if (!confirm(`Bạn mới trả lời ${answeredCount}/${totalQuestions} câu.\nBạn có chắc chắn muốn nộp bài?`)) {
@@ -2191,26 +2176,20 @@
             submitBtn.innerHTML = '<span class="loading-spinner"></span> Đang chấm bài...';
 
             let score = 0;
-            testQuestions.forEach((q, i) => {
-                // Skip essay questions - they don't have correct answers
-                if (q.question_type === 'essay') {
-                    return;
+            
+            // Score listening questions (index 0-4)
+            listeningQuestions.forEach((q, i) => {
+                if (userAnswers[i] === q.correct_answer) {
+                    score++;
                 }
-                
-                const userAnswer = userAnswers[i];
-                const correctAnswer = q.correct_answer;
-                
-                // For fill-in questions, compare case-insensitively
-                if (q.question_type === 'fill_in') {
-                    if (userAnswer && correctAnswer && 
-                        userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
-                        score++;
-                    }
-                } else {
-                    // For multiple choice
-                    if (userAnswer === correctAnswer) {
-                        score++;
-                    }
+            });
+            
+            // Score reading questions (index 5-9)
+            const readingStartIdx = listeningQuestions.length;
+            readingQuestions.forEach((q, i) => {
+                const globalIdx = readingStartIdx + i;
+                if (userAnswers[globalIdx] === q.correct_answer) {
+                    score++;
                 }
             });
 
@@ -2221,6 +2200,7 @@
                         placement_id: userRowId,
                         answers: userAnswers,
                         score: score,
+                        selected_level: selectedLevel,
                         completed_at: new Date().toISOString()
                     }]);
 
@@ -2238,8 +2218,9 @@
 
         // ===== DISPLAY RESULT =====
         function displayResult(score) {
-            // Count only non-essay questions for scoring
-            const scorableQuestions = testQuestions.filter(q => q.question_type !== 'essay').length;
+            // Total scorable questions = listening (5) + reading (5) = 10
+            // Writing section (1 essay) is not scored
+            const scorableQuestions = listeningQuestions.length + readingQuestions.length;
             
             document.getElementById('finalScore').textContent = score;
             document.getElementById('totalQuestions').textContent = scorableQuestions;
