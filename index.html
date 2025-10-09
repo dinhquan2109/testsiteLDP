@@ -786,6 +786,67 @@
             color: #333;
         }
 
+        .text-input-container {
+            margin-top: 30px;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #4caf50;
+            background: #f1f8e9;
+        }
+
+        .essay-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            resize: vertical;
+        }
+
+        .essay-input:focus {
+            outline: none;
+            border-color: #4caf50;
+            background: #f1f8e9;
+        }
+
+        .page-info {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #0d5943;
+            font-weight: bold;
+        }
+
+        .btn-next-page {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-next-page:hover:not(:disabled) {
+            background: #f57c00;
+        }
+
+        .correct-answer-format {
+            font-weight: bold;
+            color: #4caf50;
+            text-decoration: underline;
+        }
+
         .question-nav {
             background: #fef8e6;
             border-radius: 0 0 15px 15px;
@@ -1200,6 +1261,49 @@
             color: white;
         }
 
+        .answer-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .answer-label {
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .user-answer {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .user-answer.correct {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+        }
+
+        .user-answer.incorrect {
+            background: #ffebee;
+            border: 2px solid #f44336;
+        }
+
+        .user-answer.essay {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+        }
+
+        .correct-answer-display {
+            padding: 10px;
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
         .popup-nav {
             display: flex;
             gap: 10px;
@@ -1469,14 +1573,21 @@
                 <div class="instruction-item">
                     <div class="instruction-icon">🌱</div>
                     <div class="instruction-text">
-                        Thí sinh làm lần lượt <strong>20 câu hỏi</strong> kiểm tra kiến thức về Từ vựng, Ngữ pháp, kỹ năng Nghe và Đọc trong thời gian <strong>20 phút</strong>.
+                        Thí sinh làm lần lượt <strong>20 câu hỏi</strong> kiểm tra kiến thức về Từ vựng, Ngữ pháp, kỹ năng Nghe và Đọc trong thời gian <strong>20 phút</strong>. Các câu hỏi bao gồm: trắc nghiệm, điền đáp án và tự luận.
                     </div>
                 </div>
 
                 <div class="instruction-item">
                     <div class="instruction-icon">📝</div>
                     <div class="instruction-text">
-                        Với mỗi câu trả lời đúng, thí sinh nhận được <strong>1 điểm</strong>. Trả lời sai không bị trừ điểm. Tổng điểm tối đa thí sinh có thể đạt được là <strong>20 điểm</strong>.
+                        Bài thi được chia thành <strong>2 trang</strong>, mỗi trang <strong>10 câu hỏi</strong>. Bạn phải hoàn thành tất cả câu hỏi ở trang hiện tại mới có thể chuyển sang trang tiếp theo.
+                    </div>
+                </div>
+
+                <div class="instruction-item">
+                    <div class="instruction-icon">✅</div>
+                    <div class="instruction-text">
+                        Với mỗi câu trả lời đúng (trắc nghiệm và điền đáp án), thí sinh nhận được <strong>1 điểm</strong>. Câu tự luận không có điểm nhưng sẽ được giáo viên đánh giá.
                     </div>
                 </div>
 
@@ -1554,7 +1665,7 @@
                     <!-- Audio will be inserted here -->
                 </div>
 
-                <div class="options-list">
+                <div class="options-list" id="optionsList">
                     <div class="option-item" data-option="A">
                         <div class="option-label">A</div>
                         <div class="option-text" id="optionA">coat</div>
@@ -1568,13 +1679,23 @@
                         <div class="option-text" id="optionC">T-shirt</div>
                     </div>
                 </div>
+
+                <div class="text-input-container" id="textInputContainer" style="display: none;">
+                    <input type="text" class="text-input" id="textInput" placeholder="Nhập đáp án của bạn...">
+                </div>
+
+                <div class="text-input-container" id="essayInputContainer" style="display: none;">
+                    <textarea class="essay-input" id="essayInput" placeholder="Nhập câu trả lời của bạn..."></textarea>
+                </div>
             </div>
 
             <div class="question-nav">
                 <button class="nav-button btn-prev" id="btnPrev">← Câu trước</button>
-                <button class="nav-button btn-submit" id="btnSubmit">NỘP BÀI</button>
+                <button class="nav-button btn-submit" id="btnSubmit" style="display: none;">NỘP BÀI</button>
+                <button class="nav-button btn-next-page" id="btnNextPage" style="display: none;">Trang sau →</button>
                 <button class="nav-button btn-next" id="btnNext">Câu sau →</button>
             </div>
+            <div class="page-info" id="pageInfo">Trang 1/2</div>
         </div>
     </div>
 
@@ -1612,6 +1733,8 @@
         let userAnswers = {};
         let currentQuestionIndex = 0;
         let timerInterval = null;
+        let currentPage = 0;
+        const QUESTIONS_PER_PAGE = 10;
 
         // ===== VALIDATION FUNCTIONS =====
         function validatePhone(phone) {
@@ -1877,12 +2000,12 @@
             const question = testQuestions[index];
             currentQuestionIndex = index;
 
-            document.getElementById('questionCounter').textContent = `${index + 1}/20`;
-            document.getElementById('questionHeader').textContent = `${index + 1}. Choose the correct answer`;
+            document.getElementById('questionCounter').textContent = `${index + 1}/${testQuestions.length}`;
+            document.getElementById('questionHeader').textContent = `${index + 1}. ${question.question_type === 'essay' ? 'Câu tự luận' : question.question_type === 'fill_in' ? 'Điền đáp án' : 'Chọn đáp án đúng'}`;
             document.getElementById('questionText').textContent = question.question_text;
 
             const audioPlayer = document.getElementById('audioPlayer');
-            if (question.question_type === 'audio' && question.audio_url) {
+            if (question.audio_url) {
                 audioPlayer.innerHTML = `
                     <audio controls>
                         <source src="${question.audio_url}" type="audio/mpeg">
@@ -1894,40 +2017,119 @@
                 audioPlayer.style.display = 'none';
             }
 
-            document.getElementById('optionA').textContent = question.option_a;
-            document.getElementById('optionB').textContent = question.option_b;
-            document.getElementById('optionC').textContent = question.option_c;
+            const optionsList = document.getElementById('optionsList');
+            const textInputContainer = document.getElementById('textInputContainer');
+            const essayInputContainer = document.getElementById('essayInputContainer');
+            const textInput = document.getElementById('textInput');
+            const essayInput = document.getElementById('essayInput');
 
-            const savedAnswer = userAnswers[index];
-            document.querySelectorAll('.option-item').forEach(item => {
-                item.classList.remove('selected');
-                if (item.dataset.option === savedAnswer) {
-                    item.classList.add('selected');
-                }
-            });
+            // Hide all input types first
+            optionsList.style.display = 'none';
+            textInputContainer.style.display = 'none';
+            essayInputContainer.style.display = 'none';
+
+            // Show appropriate input type based on question type
+            if (question.question_type === 'essay') {
+                essayInputContainer.style.display = 'block';
+                essayInput.value = userAnswers[index] || '';
+            } else if (question.question_type === 'fill_in') {
+                textInputContainer.style.display = 'block';
+                textInput.value = userAnswers[index] || '';
+            } else {
+                // Multiple choice
+                optionsList.style.display = 'flex';
+                document.getElementById('optionA').textContent = question.option_a;
+                document.getElementById('optionB').textContent = question.option_b;
+                document.getElementById('optionC').textContent = question.option_c;
+
+                const savedAnswer = userAnswers[index];
+                document.querySelectorAll('.option-item').forEach(item => {
+                    item.classList.remove('selected');
+                    if (item.dataset.option === savedAnswer) {
+                        item.classList.add('selected');
+                    }
+                });
+            }
 
             updateProgressCircles();
             updateNavButtons();
+            updatePageInfo();
         }
 
         // ===== UPDATE PROGRESS CIRCLES =====
         function updateProgressCircles() {
             const circles = document.querySelectorAll('.circle');
+            const startIdx = currentPage * QUESTIONS_PER_PAGE;
+            const endIdx = Math.min(startIdx + QUESTIONS_PER_PAGE, testQuestions.length);
+            
             circles.forEach((circle, i) => {
+                const questionIdx = startIdx + i;
                 circle.classList.remove('active', 'answered');
-                if (i === currentQuestionIndex) {
-                    circle.classList.add('active');
-                }
-                if (userAnswers[i]) {
-                    circle.classList.add('answered');
+                
+                // Only show circles for current page
+                if (i < QUESTIONS_PER_PAGE && questionIdx < testQuestions.length) {
+                    circle.style.display = 'flex';
+                    circle.textContent = questionIdx + 1;
+                    
+                    if (questionIdx === currentQuestionIndex) {
+                        circle.classList.add('active');
+                    }
+                    if (userAnswers[questionIdx]) {
+                        circle.classList.add('answered');
+                    }
+                } else {
+                    circle.style.display = 'none';
                 }
             });
         }
 
+        // ===== UPDATE PAGE INFO =====
+        function updatePageInfo() {
+            const totalPages = Math.ceil(testQuestions.length / QUESTIONS_PER_PAGE);
+            currentPage = Math.floor(currentQuestionIndex / QUESTIONS_PER_PAGE);
+            document.getElementById('pageInfo').textContent = `Trang ${currentPage + 1}/${totalPages}`;
+        }
+
+        // ===== CHECK IF CURRENT PAGE IS COMPLETE =====
+        function isCurrentPageComplete() {
+            const startIdx = currentPage * QUESTIONS_PER_PAGE;
+            const endIdx = Math.min(startIdx + QUESTIONS_PER_PAGE, testQuestions.length);
+            
+            for (let i = startIdx; i < endIdx; i++) {
+                if (!userAnswers.hasOwnProperty(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         // ===== UPDATE NAV BUTTONS =====
         function updateNavButtons() {
+            const isLastQuestionInPage = (currentQuestionIndex + 1) % QUESTIONS_PER_PAGE === 0;
+            const isLastPage = currentPage === Math.floor((testQuestions.length - 1) / QUESTIONS_PER_PAGE);
+            const isLastQuestion = currentQuestionIndex === testQuestions.length - 1;
+            
             document.getElementById('btnPrev').disabled = currentQuestionIndex === 0;
-            document.getElementById('btnNext').disabled = currentQuestionIndex === testQuestions.length - 1;
+            
+            // Show/hide appropriate buttons
+            if (isLastQuestion) {
+                // Last question overall - show submit button
+                document.getElementById('btnNext').style.display = 'none';
+                document.getElementById('btnNextPage').style.display = 'none';
+                document.getElementById('btnSubmit').style.display = 'block';
+            } else if (isLastQuestionInPage && !isLastPage) {
+                // Last question of page but not last page - show next page button
+                document.getElementById('btnNext').style.display = 'none';
+                document.getElementById('btnSubmit').style.display = 'none';
+                document.getElementById('btnNextPage').style.display = 'block';
+                document.getElementById('btnNextPage').disabled = !isCurrentPageComplete();
+            } else {
+                // Regular question - show next button
+                document.getElementById('btnNext').style.display = 'block';
+                document.getElementById('btnNextPage').style.display = 'none';
+                document.getElementById('btnSubmit').style.display = 'none';
+                document.getElementById('btnNext').disabled = false;
+            }
         }
 
         // ===== OPTION SELECTION =====
@@ -1937,7 +2139,32 @@
                 this.classList.add('selected');
                 userAnswers[currentQuestionIndex] = this.dataset.option;
                 updateProgressCircles();
+                updateNavButtons();
             });
+        });
+
+        // ===== TEXT INPUT HANDLER =====
+        document.getElementById('textInput').addEventListener('input', function() {
+            const value = this.value.trim();
+            if (value) {
+                userAnswers[currentQuestionIndex] = value;
+            } else {
+                delete userAnswers[currentQuestionIndex];
+            }
+            updateProgressCircles();
+            updateNavButtons();
+        });
+
+        // ===== ESSAY INPUT HANDLER =====
+        document.getElementById('essayInput').addEventListener('input', function() {
+            const value = this.value.trim();
+            if (value) {
+                userAnswers[currentQuestionIndex] = value;
+            } else {
+                delete userAnswers[currentQuestionIndex];
+            }
+            updateProgressCircles();
+            updateNavButtons();
         });
 
         // ===== NAVIGATION BUTTONS =====
@@ -1950,6 +2177,18 @@
         document.getElementById('btnNext').addEventListener('click', function() {
             if (currentQuestionIndex < testQuestions.length - 1) {
                 displayQuestion(currentQuestionIndex + 1);
+            }
+        });
+
+        document.getElementById('btnNextPage').addEventListener('click', function() {
+            if (!isCurrentPageComplete()) {
+                alert('Vui lòng hoàn thành tất cả câu hỏi trong trang này trước khi chuyển sang trang tiếp theo!');
+                return;
+            }
+            
+            const nextPageStart = (currentPage + 1) * QUESTIONS_PER_PAGE;
+            if (nextPageStart < testQuestions.length) {
+                displayQuestion(nextPageStart);
             }
         });
 
@@ -1976,8 +2215,25 @@
 
             let score = 0;
             testQuestions.forEach((q, i) => {
-                if (userAnswers[i] === q.correct_answer) {
-                    score++;
+                // Skip essay questions - they don't have correct answers
+                if (q.question_type === 'essay') {
+                    return;
+                }
+                
+                const userAnswer = userAnswers[i];
+                const correctAnswer = q.correct_answer;
+                
+                // For fill-in questions, compare case-insensitively and trim whitespace
+                if (q.question_type === 'fill_in') {
+                    if (userAnswer && correctAnswer && 
+                        userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                        score++;
+                    }
+                } else {
+                    // For multiple choice, exact match
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                    }
                 }
             });
 
@@ -2005,10 +2261,14 @@
 
         // ===== DISPLAY RESULT =====
         function displayResult(score) {
+            // Count only non-essay questions for scoring
+            const scorableQuestions = testQuestions.filter(q => q.question_type !== 'essay').length;
+            
             document.getElementById('finalScore').textContent = score;
-            document.getElementById('totalQuestions').textContent = testQuestions.length;
+            document.getElementById('totalQuestions').textContent = scorableQuestions;
 
-            const percentage = (score / testQuestions.length) * 100;
+            const scorableQuestions = testQuestions.filter(q => q.question_type !== 'essay').length;
+            const percentage = scorableQuestions > 0 ? (score / scorableQuestions) * 100 : 0;
             let level = '';
             let message = '';
 
