@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Test</title>
+</head>
+<body>
+    <h1>Debug Console</h1>
+    <button id="testBtn">Test Supabase Connection</button>
+    <div id="output"></div>
+
+    <script type="module">
+        import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+        const SUPABASE_URL = "https://axllpuaybdzubfmsfkws.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4bGxwdWF5YmR6dWJmbXNma3dzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3NDMzODgsImV4cCI6MjA3NTMxOTM4OH0.KrjW79ZpnPxu_Lp9mETgKZU-kOLu3oMmWkABqOcDbco";
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        document.getElementById('testBtn').addEventListener('click', async function() {
+            const output = document.getElementById('output');
+            output.innerHTML = 'Testing connection...<br>';
+
+            try {
+                // Test questions table
+                const { data: questions, error: qError } = await supabase
+                    .from('questions')
+                    .select('*')
+                    .limit(5);
+
+                if (qError) {
+                    output.innerHTML += 'Error loading questions: ' + qError.message + '<br>';
+                } else {
+                    output.innerHTML += 'Questions loaded: ' + questions.length + '<br>';
+                    output.innerHTML += '<pre>' + JSON.stringify(questions, null, 2) + '</pre>';
+                }
+
+                // Test placement table
+                const { data: placement, error: pError } = await supabase
+                    .from('placement')
+                    .select('*')
+                    .limit(1);
+
+                if (pError) {
+                    output.innerHTML += 'Error accessing placement: ' + pError.message + '<br>';
+                } else {
+                    output.innerHTML += 'Placement table accessible<br>';
+                }
+
+            } catch (err) {
+                output.innerHTML += 'Exception: ' + err.message + '<br>';
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>
