@@ -1981,18 +1981,18 @@
                     </div>
                     <div class="audio-section">
                         <div class="audio-info">⚠️ File audio phải nghe HẾT mới tính 1 lượt. Tối đa 2 lượt (Đã nghe hết: ${audioPlayCount}/${MAX_AUDIO_PLAYS})</div>
-                        <audio id="mainAudio" controlsList="nodownload noplaybackrate" ${audioPlayCount >= MAX_AUDIO_PLAYS ? 'style="display:none;"' : ''}>
+                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px; font-weight: bold; font-size: 16px;">❌ Đã hết lượt nghe (đã nghe hết 2 lần)</div>' : `
+                        <audio id="mainAudio" controlsList="nodownload noplaybackrate" style="display: none;">
                             <source src="${listeningQuestions[0]?.audio_url || ''}" type="audio/mpeg">
-                            Trình duyệt của bạn không hỗ trợ phát audio.
                         </audio>
-                        <div id="audioControls" ${audioPlayCount >= MAX_AUDIO_PLAYS ? 'style="display:none;"' : ''}>
+                        <div id="audioControls" style="margin-top: 15px;">
                             <button id="playBtn" class="audio-play-btn">▶️ Phát Audio</button>
-                            <div id="audioProgress">
+                            <div id="audioProgress" style="margin: 15px 0;">
                                 <div id="audioProgressBar"></div>
                             </div>
                             <div id="audioTime">00:00 / 00:00</div>
                         </div>
-                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px;">❌ Đã hết lượt nghe (đã nghe hết 2 lần)</div>' : ''}
+                        `}
                     </div>
                 `;
                 
@@ -2140,34 +2140,51 @@
         
         // ===== SETUP AUDIO PLAYER WITH RESTRICTIONS =====
         function setupAudioPlayer() {
+            console.log('=== setupAudioPlayer() CALLED ===');
+            
             const audio = document.getElementById('mainAudio');
             const playBtn = document.getElementById('playBtn');
             const progressBar = document.getElementById('audioProgressBar');
             const timeDisplay = document.getElementById('audioTime');
             
-            if (!audio || !playBtn) {
-                console.error('Audio elements not found!');
+            console.log('Elements found:', {
+                audio: !!audio,
+                playBtn: !!playBtn,
+                progressBar: !!progressBar,
+                timeDisplay: !!timeDisplay
+            });
+            
+            if (!audio) {
+                console.error('❌ Audio element not found!');
+                alert('Lỗi: Không tìm thấy audio player. Vui lòng refresh trang.');
                 return;
             }
             
-            console.log('Audio setup:', {
-                audio: audio,
-                src: audio.src,
-                playBtn: playBtn
-            });
+            if (!playBtn) {
+                console.error('❌ Play button not found!');
+                alert('Lỗi: Không tìm thấy nút phát. Vui lòng refresh trang.');
+                return;
+            }
+            
+            console.log('Audio src:', audio.src);
+            console.log('Audio currentSrc:', audio.currentSrc);
             
             let isPlaying = false;
             let hasStartedPlaying = false;
             
             // Load audio first
             audio.load();
+            console.log('Audio.load() called');
             
             // Play/Pause button
             playBtn.addEventListener('click', async function() {
-                console.log('Play button clicked. isPlaying:', isPlaying);
+                console.log('=== PLAY BUTTON CLICKED ===');
+                console.log('isPlaying:', isPlaying);
+                console.log('Audio ready state:', audio.readyState);
+                console.log('Audio src:', audio.currentSrc);
                 
                 if (isPlaying) {
-                    // KHÔNG CHO PAUSE - bỏ qua click
+                    console.log('Already playing, ignoring click');
                     return;
                 }
                 
@@ -2175,21 +2192,33 @@
                     playBtn.textContent = '⏳ Đang tải...';
                     playBtn.disabled = true;
                     
-                    await audio.play();
+                    console.log('Calling audio.play()...');
+                    const playPromise = audio.play();
+                    
+                    if (playPromise !== undefined) {
+                        await playPromise;
+                        console.log('✅ Audio.play() SUCCESS');
+                    }
                     
                     isPlaying = true;
                     hasStartedPlaying = true;
                     playBtn.textContent = '⏸️ Đang phát...';
                     playBtn.classList.add('playing');
                     
-                    console.log('Audio started playing');
                 } catch (error) {
-                    console.error('Error playing audio:', error);
-                    playBtn.textContent = '❌ Lỗi phát audio';
+                    console.error('❌ Error playing audio:', error);
+                    console.error('Error name:', error.name);
+                    console.error('Error message:', error.message);
+                    
+                    playBtn.textContent = '❌ Lỗi - Thử lại';
                     playBtn.disabled = false;
-                    alert('Không thể phát audio. Vui lòng thử lại!\n\nLỗi: ' + error.message);
+                    playBtn.classList.remove('playing');
+                    
+                    alert('Không thể phát audio!\n\nLỗi: ' + error.message + '\n\nVui lòng:\n1. Kiểm tra link audio\n2. Thử lại\n3. Xem Console (F12) để biết chi tiết');
                 }
             });
+            
+            console.log('✅ Play button event listener added');
             
             // Audio loaded
             audio.addEventListener('loadedmetadata', function() {
