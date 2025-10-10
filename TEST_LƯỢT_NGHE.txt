@@ -1,0 +1,111 @@
+🧪 TEST LƯỢT NGHE - QUAN TRỌNG!
+
+════════════════════════════════════════════════════════
+
+✅ ĐÃ SỬA:
+   - Clear audio.onended trước khi set
+   - Thêm log Before/After count
+   - Dễ debug hơn
+
+════════════════════════════════════════════════════════
+
+🚀 TEST NGAY (3 PHÚT):
+
+BƯỚC 1: Upload & Refresh
+────────────────────────────────
+1. Upload index.html MỚI
+2. Ctrl + Shift + R
+
+BƯỚC 2: Check Count Ban Đầu
+────────────────────────────────
+1. F12 → Console
+2. Paste: checkAudioCount()
+3. Kết quả phải: audioPlayCount: 0
+
+BƯỚC 3: Play Lần 1
+────────────────────────────────
+1. Click "▶️ Phát Audio"
+2. Đợi audio chạy HẾT (đừng tắt)
+3. XEM CONSOLE
+
+════════════════════════════════════════════════════════
+
+📊 PHẢI THẤY KHI ENDED LẦN 1:
+
+🎵 === AUDIO ENDED EVENT ===
+📊 Before: audioPlayCount = 0
+📊 After: audioPlayCount = 1 (MAX: 2)
+🟢 CÒN LƯỢT! Resetting for play #2
+
+════════════════════════════════════════════════════════
+
+🎯 ĐỒNG THỜI:
+
+   ✅ Button: "▶️ Phát Audio (Lượt 2)"
+   ✅ Button enabled (màu xanh)
+   ✅ Progress bar reset về 0%
+   ✅ Time: 00:00 / 02:25
+   ✅ CÓ THỂ CLICK LẠI
+
+════════════════════════════════════════════════════════
+
+BƯỚC 4: Check Count Sau Lần 1
+────────────────────────────────
+Paste vào Console:
+checkAudioCount()
+
+Kết quả phải: audioPlayCount: 1
+
+════════════════════════════════════════════════════════
+
+BƯỚC 5: Play Lần 2
+────────────────────────────────
+1. Click "▶️ Phát Audio (Lượt 2)"
+2. Đợi audio chạy HẾT
+3. XEM CONSOLE
+
+════════════════════════════════════════════════════════
+
+📊 PHẢI THẤY KHI ENDED LẦN 2:
+
+🎵 === AUDIO ENDED EVENT ===
+📊 Before: audioPlayCount = 1
+📊 After: audioPlayCount = 2 (MAX: 2)
+🔴 MAX REACHED! Hiding audio in 0.5s...
+
+════════════════════════════════════════════════════════
+
+🎯 ĐỒNG THỜI:
+
+   ✅ Audio player BIẾN MẤT
+   ✅ Hiển thị: "❌ Đã hết lượt nghe"
+   ✅ KHÔNG CÓ button nữa
+
+════════════════════════════════════════════════════════
+
+❌ NẾU SAI:
+
+Trường hợp 1: Lần 1 đã thấy "MAX REACHED"
+────────────────────────────────
+→ Count tăng từ 0 → 2 (không qua 1)
+→ Onended gọi 2 lần liên tiếp
+→ GỬI SCREENSHOT CONSOLE cho tôi
+
+Trường hợp 2: Không thấy log "AUDIO ENDED EVENT"
+────────────────────────────────
+→ Onended không được set
+→ File cũ vẫn cache
+→ Thử Incognito
+
+════════════════════════════════════════════════════════
+
+✅ NẾU ĐÚNG:
+
+   Lần 1: 0 → 1, còn lượt ✅
+   Lần 2: 1 → 2, hết lượt ✅
+   
+   → HOÀN THÀNH! 🎉
+
+════════════════════════════════════════════════════════
+
+UPLOAD VÀ TEST THEO TỪNG BƯỚC! 🚀

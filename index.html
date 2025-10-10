@@ -1657,6 +1657,12 @@
         let audioPlayCount = 0;
         const MAX_AUDIO_PLAYS = 2;
         
+        // Debug function
+        window.checkAudioCount = function() {
+            console.log('Current audioPlayCount:', audioPlayCount);
+            console.log('MAX_AUDIO_PLAYS:', MAX_AUDIO_PLAYS);
+        };
+        
         // NEW: Level selection
         let selectedLevel = null;
         let selectedRange = null;
