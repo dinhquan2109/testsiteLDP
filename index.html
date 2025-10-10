@@ -1986,7 +1986,7 @@
                             <source src="${listeningQuestions[0]?.audio_url || ''}" type="audio/mpeg">
                         </audio>
                         <div id="audioControls" style="margin-top: 15px;">
-                            <button id="playBtn" class="audio-play-btn">▶️ Phát Audio</button>
+                            <button id="playBtn" class="audio-play-btn" onclick="window.handleAudioPlay()">▶️ Phát Audio</button>
                             <div id="audioProgress" style="margin: 15px 0;">
                                 <div id="audioProgressBar"></div>
                             </div>
@@ -2138,6 +2138,58 @@
             updateNavButtons();
         }
         
+        // Global audio state
+        let audioIsPlaying = false;
+        let audioStartedPlaying = false;
+        let audioLastTime = 0;
+        
+        // ===== GLOBAL AUDIO PLAY HANDLER =====
+        window.handleAudioPlay = async function() {
+            console.log('=== handleAudioPlay() CALLED ===');
+            
+            const audio = document.getElementById('mainAudio');
+            const playBtn = document.getElementById('playBtn');
+            const progressBar = document.getElementById('audioProgressBar');
+            
+            console.log('Audio:', audio);
+            console.log('Button:', playBtn);
+            
+            if (!audio || !playBtn) {
+                console.error('❌ Elements not found!');
+                alert('Lỗi: Không tìm thấy audio player!');
+                return;
+            }
+            
+            console.log('isPlaying:', audioIsPlaying);
+            console.log('Audio src:', audio.currentSrc);
+            
+            if (audioIsPlaying) {
+                console.log('Already playing, ignored');
+                return;
+            }
+            
+            try {
+                playBtn.textContent = '⏳ Đang tải...';
+                playBtn.disabled = true;
+                
+                console.log('Calling audio.play()...');
+                await audio.play();
+                console.log('✅ Audio.play() SUCCESS!');
+                
+                audioIsPlaying = true;
+                audioStartedPlaying = true;
+                playBtn.textContent = '⏸️ Đang phát...';
+                playBtn.classList.add('playing');
+                
+            } catch (error) {
+                console.error('❌ Play error:', error);
+                playBtn.textContent = '❌ Lỗi - Thử lại';
+                playBtn.disabled = false;
+                playBtn.classList.remove('playing');
+                alert('Lỗi phát audio: ' + error.message);
+            }
+        };
+        
         // ===== SETUP AUDIO PLAYER WITH RESTRICTIONS =====
         function setupAudioPlayer() {
             console.log('=== setupAudioPlayer() START ===');
@@ -2147,126 +2199,71 @@
             const progressBar = document.getElementById('audioProgressBar');
             const timeDisplay = document.getElementById('audioTime');
             
-            console.log('Finding elements...');
-            console.log('Audio:', audio);
-            console.log('PlayBtn:', playBtn);
-            
             if (!audio) {
-                console.error('❌ Audio element #mainAudio NOT FOUND');
+                console.error('❌ Audio NOT FOUND');
                 return;
             }
             
-            if (!playBtn) {
-                console.error('❌ Play button #playBtn NOT FOUND');
-                return;
-            }
-            
-            console.log('✅ Elements found!');
+            console.log('✅ Audio element found');
             console.log('Audio src:', audio.currentSrc);
-            
-            let isPlaying = false;
-            let hasStartedPlaying = false;
-            let lastTime = 0;
             
             // Load audio
             audio.load();
-            
-            // Play/Pause button
-            playBtn.addEventListener('click', async function() {
-                console.log('=== PLAY BUTTON CLICKED ===');
-                console.log('isPlaying:', isPlaying);
-                
-                if (isPlaying) {
-                    console.log('Already playing, ignoring');
-                    return;
-                }
-                
-                try {
-                    playBtn.textContent = '⏳ Đang tải...';
-                    playBtn.disabled = true;
-                    
-                    console.log('Calling audio.play()...');
-                    await audio.play();
-                    console.log('✅ Audio.play() SUCCESS');
-                    
-                    isPlaying = true;
-                    hasStartedPlaying = true;
-                    playBtn.textContent = '⏸️ Đang phát...';
-                    playBtn.classList.add('playing');
-                    
-                } catch (error) {
-                    console.error('❌ Error:', error.message);
-                    playBtn.textContent = '❌ Lỗi - Thử lại';
-                    playBtn.disabled = false;
-                    alert('Không thể phát audio!\n\n' + error.message);
-                }
-            });
-            
-            console.log('✅ Event listener added');
             
             // Audio loaded
             audio.addEventListener('loadedmetadata', function() {
                 console.log('✅ Audio loaded. Duration:', audio.duration);
                 if (timeDisplay) {
-                    const durationMin = Math.floor(audio.duration / 60) || 0;
-                    const durationSec = Math.floor(audio.duration % 60) || 0;
-                    timeDisplay.textContent = `00:00 / ${String(durationMin).padStart(2, '0')}:${String(durationSec).padStart(2, '0')}`;
+                    const min = Math.floor(audio.duration / 60) || 0;
+                    const sec = Math.floor(audio.duration % 60) || 0;
+                    timeDisplay.textContent = `00:00 / ${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
                 }
             });
             
             // Audio error
-            audio.addEventListener('error', function(e) {
-                console.error('❌ Audio error:', audio.error);
-                if (playBtn) {
-                    playBtn.textContent = '❌ Lỗi audio';
-                    playBtn.disabled = false;
-                }
-                alert('Không thể tải audio!\nKiểm tra link: ' + audio.currentSrc);
+            audio.addEventListener('error', function() {
+                console.error('❌ Audio load error');
+                if (playBtn) playBtn.textContent = '❌ Lỗi audio';
             });
             
-            // Time update & prevent seeking
+            // Time update
             audio.addEventListener('timeupdate', function() {
                 // Prevent seeking
-                if (hasStartedPlaying && Math.abs(audio.currentTime - lastTime) > 1) {
-                    if (audio.currentTime < lastTime) {
-                        audio.currentTime = lastTime;
+                if (audioStartedPlaying && Math.abs(audio.currentTime - audioLastTime) > 1) {
+                    if (audio.currentTime < audioLastTime) {
+                        audio.currentTime = audioLastTime;
                     }
                 }
-                lastTime = audio.currentTime;
+                audioLastTime = audio.currentTime;
                 
-                // Update progress bar
+                // Update UI
                 if (progressBar && audio.duration > 0) {
-                    const progress = (audio.currentTime / audio.duration) * 100;
-                    progressBar.style.width = progress + '%';
+                    progressBar.style.width = ((audio.currentTime / audio.duration) * 100) + '%';
                 }
                 
-                // Update time display
                 if (timeDisplay && audio.duration > 0) {
-                    const currentMin = Math.floor(audio.currentTime / 60);
-                    const currentSec = Math.floor(audio.currentTime % 60);
-                    const durationMin = Math.floor(audio.duration / 60);
-                    const durationSec = Math.floor(audio.duration % 60);
-                    
+                    const cm = Math.floor(audio.currentTime / 60);
+                    const cs = Math.floor(audio.currentTime % 60);
+                    const dm = Math.floor(audio.duration / 60);
+                    const ds = Math.floor(audio.duration % 60);
                     timeDisplay.textContent = 
-                        `${String(currentMin).padStart(2, '0')}:${String(currentSec).padStart(2, '0')} / ` +
-                        `${String(durationMin).padStart(2, '0')}:${String(durationSec).padStart(2, '0')}`;
+                        `${String(cm).padStart(2, '0')}:${String(cs).padStart(2, '0')} / ${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
                 }
             });
             
             // Prevent pause
             audio.addEventListener('pause', function() {
-                if (isPlaying && !audio.ended) {
-                    console.log('Pause prevented, auto-resume');
+                if (audioIsPlaying && !audio.ended) {
                     audio.play();
                 }
             });
             
-            // Count when audio ENDS
+            // Audio ended
             audio.addEventListener('ended', function() {
                 audioPlayCount++;
-                isPlaying = false;
-                hasStartedPlaying = false;
-                lastTime = 0;
+                audioIsPlaying = false;
+                audioStartedPlaying = false;
+                audioLastTime = 0;
                 
                 console.log(`✅ Audio ended. Count: ${audioPlayCount}/${MAX_AUDIO_PLAYS}`);
                 
