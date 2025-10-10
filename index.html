@@ -2145,24 +2145,68 @@
             const progressBar = document.getElementById('audioProgressBar');
             const timeDisplay = document.getElementById('audioTime');
             
-            if (!audio || !playBtn) return;
+            if (!audio || !playBtn) {
+                console.error('Audio elements not found!');
+                return;
+            }
+            
+            console.log('Audio setup:', {
+                audio: audio,
+                src: audio.src,
+                playBtn: playBtn
+            });
             
             let isPlaying = false;
             let hasStartedPlaying = false;
             
+            // Load audio first
+            audio.load();
+            
             // Play/Pause button
-            playBtn.addEventListener('click', function() {
+            playBtn.addEventListener('click', async function() {
+                console.log('Play button clicked. isPlaying:', isPlaying);
+                
                 if (isPlaying) {
                     // KHÔNG CHO PAUSE - bỏ qua click
                     return;
-                } else {
-                    audio.play();
+                }
+                
+                try {
+                    playBtn.textContent = '⏳ Đang tải...';
+                    playBtn.disabled = true;
+                    
+                    await audio.play();
+                    
                     isPlaying = true;
                     hasStartedPlaying = true;
                     playBtn.textContent = '⏸️ Đang phát...';
                     playBtn.classList.add('playing');
-                    playBtn.disabled = true; // Disable button khi đang phát
+                    
+                    console.log('Audio started playing');
+                } catch (error) {
+                    console.error('Error playing audio:', error);
+                    playBtn.textContent = '❌ Lỗi phát audio';
+                    playBtn.disabled = false;
+                    alert('Không thể phát audio. Vui lòng thử lại!\n\nLỗi: ' + error.message);
                 }
+            });
+            
+            // Audio loaded
+            audio.addEventListener('loadedmetadata', function() {
+                console.log('Audio loaded. Duration:', audio.duration);
+                const durationMin = Math.floor(audio.duration / 60) || 0;
+                const durationSec = Math.floor(audio.duration % 60) || 0;
+                timeDisplay.textContent = `00:00 / ${String(durationMin).padStart(2, '0')}:${String(durationSec).padStart(2, '0')}`;
+            });
+            
+            // Audio error
+            audio.addEventListener('error', function(e) {
+                console.error('Audio error:', e);
+                console.error('Audio error code:', audio.error?.code);
+                console.error('Audio error message:', audio.error?.message);
+                playBtn.textContent = '❌ Lỗi audio';
+                playBtn.disabled = false;
+                alert('Không thể tải audio. Vui lòng kiểm tra:\n1. Link audio có đúng không?\n2. File audio có tồn tại không?\n3. Kết nối internet');
             });
             
             // Prevent seeking - không cho tua
@@ -2178,8 +2222,10 @@
                 lastTime = audio.currentTime;
                 
                 // Update progress bar
-                const progress = (audio.currentTime / audio.duration) * 100;
-                progressBar.style.width = progress + '%';
+                if (audio.duration > 0) {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    progressBar.style.width = progress + '%';
+                }
                 
                 // Update time display
                 const currentMin = Math.floor(audio.currentTime / 60);

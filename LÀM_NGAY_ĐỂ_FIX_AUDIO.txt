@@ -1,0 +1,135 @@
+🔥 AUDIO KHÔNG PHÁT - LÀM NGAY ĐỂ FIX!
+
+════════════════════════════════════════════════════════
+
+⚡ LÀM TUẦN TỰ (5 PHÚT):
+
+════════════════════════════════════════════════════════
+
+BƯỚC 1: HARD REFRESH (30 giây)
+────────────────────────────────
+1. Ctrl + Shift + R (Windows)
+   hoặc Cmd + Shift + R (Mac)
+
+2. Reload lại trang
+
+════════════════════════════════════════════════════════
+
+BƯỚC 2: MỞ CONSOLE (10 giây)
+────────────────────────────────
+1. Nhấn F12
+2. Chọn tab "Console"
+3. Để Console mở
+
+════════════════════════════════════════════════════════
+
+BƯỚC 3: VÀO PHẦN NGHE (30 giây)
+────────────────────────────────
+1. Chọn HSK 1-2
+2. Click "BẮT ĐẦU"
+3. Vào Phần 1 (Nghe)
+4. Xem Console có log gì không
+
+════════════════════════════════════════════════════════
+
+BƯỚC 4: CLICK "PHÁT AUDIO" (10 giây)
+────────────────────────────────
+1. Click button "▶️ Phát Audio"
+2. XEM CONSOLE CÓ LỖI MÀU ĐỎ KHÔNG?
+
+════════════════════════════════════════════════════════
+
+📊 KẾT QUẢ:
+
+✅ NẾU THẤY LOG: "Audio started playing"
+   → OK! Audio đang phát!
+   → Nếu không nghe thấy → Tắt tiếng rồi
+
+❌ NẾU THẤY: "Audio elements not found"
+   → File cũ vẫn cache
+   → Làm: Ctrl + Shift + N (Incognito) và test
+
+❌ NẾU THẤY: "Error playing audio"
+   → Audio URL sai hoặc không tồn tại
+   → Làm: BƯỚC 5 (kiểm tra database)
+
+❌ NẾU KHÔNG THẤY LOG GÌ
+   → JavaScript không chạy
+   → Làm: Upload lại index.html
+
+════════════════════════════════════════════════════════
+
+BƯỚC 5: KIỂM TRA DATABASE (2 phút)
+────────────────────────────────
+Mở Supabase SQL Editor, chạy:
+
+SELECT order_number, audio_url 
+FROM questions 
+WHERE order_number = 1;
+
+KẾT QUẢ:
+
+✅ NẾU audio_url CÓ GIÁ TRỊ:
+   → Copy URL đó
+   → Paste vào tab browser mới
+   → Nếu nghe được → URL OK
+   → Nếu không nghe được → URL sai
+
+❌ NẾU audio_url = NULL hoặc rỗng:
+   → Chưa upload audio!
+   → Làm: BƯỚC 6
+
+════════════════════════════════════════════════════════
+
+BƯỚC 6: FIX AUDIO URL (2 phút)
+────────────────────────────────
+
+CÁCH NHANH NHẤT - Dùng audio mẫu:
+
+UPDATE questions 
+SET audio_url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' 
+WHERE order_number = 1;
+
+Chạy SQL này → Refresh website → Test lại
+
+════════════════════════════════════════════════════════
+
+🧪 DEBUG SCRIPT:
+
+Paste vào Console (F12):
+
+────────────────────────────────
+const audio = document.getElementById('mainAudio');
+const playBtn = document.getElementById('playBtn');
+console.log('Audio:', audio);
+console.log('Button:', playBtn);
+console.log('Audio src:', audio?.src);
+console.log('Audio URL:', audio?.currentSrc);
+
+if (audio) {
+    audio.play()
+        .then(() => console.log('✅ CAN PLAY'))
+        .catch(err => console.error('❌ CANNOT PLAY:', err));
+}
+────────────────────────────────
+
+════════════════════════════════════════════════════════
+
+📞 SAU KHI LÀM XONG, GỬI CHO TÔI:
+
+1. Screenshot Console (toàn bộ log)
+2. Kết quả SQL query (audio_url)
+3. Thông báo lỗi (nếu có)
+
+════════════════════════════════════════════════════════
+
+💡 CÓ THỂ:
+   - 99% là do audio URL chưa có trong database
+   - Hoặc browser cache
+   
+🚀 FIX NHANH:
+   - Update audio URL mẫu (BƯỚC 6)
+   - Hard refresh
+   - Test lại
+
+════════════════════════════════════════════════════════
