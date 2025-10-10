@@ -2003,17 +2003,17 @@
                         <div class="level-option" data-level="beginner" data-range="1-22" data-hsk="1-2">
                             <div class="level-name">HSK 1-2</div>
                             <div class="level-desc">Cơ Bản</div>
-                            <div class="level-range">初级 • Beginner</div>
+                            <div class="level-range">初级</div>
                         </div>
                         <div class="level-option" data-level="intermediate" data-range="23-44" data-hsk="3-4">
                             <div class="level-name">HSK 3-4</div>
                             <div class="level-desc">Trung Cấp</div>
-                            <div class="level-range">中级 • Intermediate</div>
+                            <div class="level-range">中级</div>
                         </div>
                         <div class="level-option" data-level="advanced" data-range="45-66" data-hsk="5-6">
                             <div class="level-name">HSK 5-6</div>
                             <div class="level-desc">Nâng Cao</div>
-                            <div class="level-range">高级 • Advanced</div>
+                            <div class="level-range">高级</div>
                         </div>
                     </div>
                 </div>
@@ -2513,13 +2513,13 @@
                         <div class="section-description">Nghe file audio và trả lời 5 câu hỏi</div>
                     </div>
                     <div class="audio-section">
-                        <div class="audio-info">⚠️ 音频必须听完才算一次 Audio phải nghe HẾT mới tính 1 lượt. 最多2次 Tối đa 2 lượt (已听完 Đã nghe: ${audioPlayCount}/${MAX_AUDIO_PLAYS})</div>
-                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px; font-weight: bold; font-size: 16px;">❌ 听力次数已用完 Đã hết lượt nghe (2/2)</div>' : `
+                        <div class="audio-info">⚠️ Chú ý phần nghe Audio chỉ nghe tối đa 2 lượt</div>
+                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px; font-weight: bold; font-size: 16px;"></div>' : `
                         <audio id="mainAudio" controlsList="nodownload noplaybackrate" style="display: none;">
                             <source src="${listeningQuestions[0]?.audio_url || ''}" type="audio/mpeg">
                         </audio>
                         <div id="audioControls" style="margin-top: 15px;">
-                            <button id="playBtn" class="audio-play-btn" onclick="window.handleAudioPlay()">▶️ 播放音频 Phát Audio</button>
+                            <button id="playBtn" class="audio-play-btn" onclick="window.handleAudioPlay()">▶️ Phát Audio</button>
                             <div id="audioProgress" style="margin: 15px 0;">
                                 <div id="audioProgressBar"></div>
                             </div>
@@ -2529,8 +2529,8 @@
                     </div>
                 `;
                 
-                document.getElementById('questionCounter').textContent = `听力 Listening (5题)`;
-                document.getElementById('pageInfo').textContent = '第1部分/3 - 听力 Listening';
+                document.getElementById('questionCounter').textContent = `Phần nghe (5 câu)`;
+                document.getElementById('pageInfo').textContent = '1/3 phần nghe';
                 
             } else if (sectionNum === 2) {
                 // READING SECTION - FILL IN THE BLANK
@@ -2541,17 +2541,17 @@
                 
                 html += `
                     <div class="section-header">
-                        <div class="section-title">📖 PHẦN 2: ĐIỀN ĐÁP ÁN (Fill in the Blank)</div>
+                        <div class="section-title">📖 PHẦN 2: ĐIỀN ĐÁP ÁN (điền đáp án bằng tiếng trung)</div>
                         <div class="section-description">Đọc đoạn văn và điền đáp án đúng cho 5 câu hỏi</div>
                     </div>
                     <div class="reading-passage">
-                        <div class="passage-title">📖 阅读文章 Đọc văn:</div>
+                        <div class="passage-title">📖  Đọc văn:</div>
                         <div class="passage-text">${passage}</div>
                     </div>
                 `;
                 
                 document.getElementById('questionCounter').textContent = `Phần 2: Điền đáp án (5 câu)`;
-                document.getElementById('pageInfo').textContent = 'Phần 2/3 - Điền đáp án';
+                document.getElementById('pageInfo').textContent = '2/3 - Điền đáp án';
                 
             } else if (sectionNum === 3) {
                 // WRITING SECTION
@@ -2576,8 +2576,8 @@
                     </div>
                 `;
                 
-                document.getElementById('questionCounter').textContent = `写作 Writing (作文)`;
-                document.getElementById('pageInfo').textContent = '第3部分/3 - 写作 Writing';
+                document.getElementById('questionCounter').textContent = `Phần viết`;
+                document.getElementById('pageInfo').textContent = '3/3 - Phần viết';
             }
             
             container.innerHTML = html;
@@ -3055,15 +3055,17 @@
             }
             
             // Update UI
+            console.log('Updating UI with:', {fullname, level, score, scorableQuestions});
+            
             document.getElementById('resultName').textContent = fullname;
             document.getElementById('resultLevel').textContent = `HSK ${selectedHSK}`;
             document.getElementById('completionTime').textContent = `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
             document.getElementById('finalScore').textContent = score;
             document.getElementById('totalQuestions').textContent = scorableQuestions;
-            document.getElementById('correctCount').textContent = score;
-            document.getElementById('totalAnswers').textContent = scorableQuestions;
             document.getElementById('levelBadge').textContent = level;
             document.getElementById('resultMessage').textContent = message;
+            
+            console.log('✅ UI updated');
             
             // Render answers grid
             renderAnswersGrid(score, scorableQuestions);
@@ -3080,8 +3082,21 @@
         
         // ===== RENDER ANSWERS GRID - SEPARATE SECTIONS =====
         function renderAnswersGrid(score, total) {
+            console.log('🎯 === RENDERING ANSWERS GRID ===');
+            console.log('Score:', score, 'Total:', total);
+            
             const listeningGrid = document.getElementById('listeningGrid');
             const readingGrid = document.getElementById('readingGrid');
+            
+            console.log('Grids found:', {
+                listening: !!listeningGrid,
+                reading: !!readingGrid
+            });
+            
+            if (!listeningGrid || !readingGrid) {
+                console.error('❌ Grids not found!');
+                return;
+            }
             
             let listeningCorrect = 0;
             let readingCorrect = 0;
@@ -3089,6 +3104,7 @@
             // Clear grids
             listeningGrid.innerHTML = '';
             readingGrid.innerHTML = '';
+            console.log('Grids cleared');
             
             // Render Listening (0-4)
             listeningQuestions.forEach((q, i) => {
@@ -3142,15 +3158,31 @@
         
         // ===== GET AI FEEDBACK USING GEMINI =====
         async function getAIFeedback(essay, prompt) {
+            console.log('🤖 === GET AI FEEDBACK CALLED ===');
+            console.log('Essay:', essay.substring(0, 50) + '...');
+            console.log('Prompt:', prompt);
+            
             const feedbackSection = document.getElementById('aiFeedbackSection');
             const feedbackContent = document.getElementById('aiFeedbackContent');
             
+            console.log('Elements found:', {
+                section: !!feedbackSection,
+                content: !!feedbackContent
+            });
+            
+            if (!feedbackSection || !feedbackContent) {
+                console.error('❌ AI feedback elements not found!');
+                return;
+            }
+            
             // Show section with loading
             feedbackSection.style.display = 'block';
+            console.log('✅ AI section displayed');
+            
             feedbackContent.innerHTML = `
                 <div class="ai-loading">
                     <div class="ai-loading-spinner"></div>
-                    <div>Đang phân tích bài viết của bạn...</div>
+                    <div>正在分析您的作文... Đang phân tích bài viết...</div>
                 </div>
             `;
             
@@ -3161,27 +3193,27 @@
                 console.log('🤖 Starting AI feedback...');
                 console.log('Essay length:', essay.length);
                 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
                 
                 const requestBody = {
                     contents: [{
                         parts: [{
-                            text: `你是一位专业的中文老师。请评价学生的作文。
+                            text: `Bạn là giáo viên tiếng Trung chuyên nghiệp. Vui lòng đánh giá bài luận của học sinh.。
 
-题目：${prompt}
+chủ đề: Viết đoạn văn 20–30 từ theo chủ đề “Người bạn của tôi – 我的朋友”
 
-学生作文：
+Bài luận của sinh viên:
 ${essay}
 
-请用越南语简短评价（200-300字），包括：
-1. 内容：是否符合题目要求？
-2. 语法：有语法错误吗？（如果有，请指出并改正）
-3. 词汇：词汇使用是否恰当和丰富？
-4. 句子结构：句子是否清晰有逻辑？
-5. 优点和需要改进的地方
-6. 改进建议
+Cần có các thông tin cơ bản:
+Tên
+Tuổi
+Nghề nghiệp / Học vấn
+Sở thích
+Nhận xét, đánh giá ngắn
 
-请用友好和鼓励的语气回答。`
+
+Xin hãy trả lời bằng giọng điệu thân thiện và khích lệ。`
                         }]
                     }]
                 };
@@ -3246,6 +3278,4 @@ ${essay}
         });
     </script>
 </body>
-</html>
-/body>
 </html>
