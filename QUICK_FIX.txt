@@ -1,0 +1,64 @@
+🔥 QUICK FIX - 3 PHÚT
+
+════════════════════════════════════════════════════════
+
+BƯỚC 1: UPDATE URL (1 phút)
+────────────────────────────────
+Supabase SQL Editor:
+
+UPDATE questions 
+SET audio_url = 'https://axllpuaybdzubfmsfkws.supabase.co/storage/v1/object/public/testsiteaudio_HSK1_2/audio_HSK_1_2.mp3'
+WHERE order_number = 1;
+
+Click RUN
+
+════════════════════════════════════════════════════════
+
+BƯỚC 2: UPLOAD & REFRESH (1 phút)
+────────────────────────────────
+1. Upload index.html mới
+2. Ctrl + Shift + Delete → Clear ALL
+3. Đóng browser
+4. Mở lại
+
+════════════════════════════════════════════════════════
+
+BƯỚC 3: TEST (1 phút)
+────────────────────────────────
+1. Ctrl + Shift + N (Incognito)
+2. F12 → Console
+3. Vào website
+4. HSK 1-2 → Phần 1
+5. Click "Phát Audio"
+6. XEM CONSOLE
+
+════════════════════════════════════════════════════════
+
+📊 KẾT QUẢ:
+
+✅ THẤY LOG: "PLAY BUTTON CLICKED"
+   → OK! Nếu không phát → URL sai
+
+❌ KHÔNG THẤY LOG:
+   → File cũ cache
+   → Test: TEST_BUTTON_NGAY.html
+
+════════════════════════════════════════════════════════
+
+🧪 TEST FILE ĐƠN GIẢN:
+
+Mở: TEST_BUTTON_NGAY.html
+→ Click button
+→ Thấy log trong màn hình?
+→ Có → Button OK, cache vấn đề
+→ Không → Browser vấn đề
+
+════════════════════════════════════════════════════════
+
+📞 GỬI CHO TÔI:
+
+1. Screenshot Console (toàn bộ)
+2. TEST_BUTTON_NGAY.html có hoạt động không?
+3. URL https://...public/... có nghe được không?
+
+════════════════════════════════════════════════════════

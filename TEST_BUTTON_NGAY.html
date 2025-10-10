@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Button Audio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        .audio-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .audio-play-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .audio-play-btn:hover {
+            transform: scale(1.05);
+        }
+        .audio-play-btn.playing {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+        #audioProgress {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        #audioProgressBar {
+            height: 100%;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        .log {
+            background: #333;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Audio Button</h1>
+        <p>File này để test xem button có hoạt động không</p>
+        
+        <div class="audio-section">
+            <div class="audio-info">⚠️ Click button bên dưới để test</div>
+            
+            <audio id="mainAudio" style="display: none;">
+                <source src="https://axllpuaybdzubfmsfkws.supabase.co/storage/v1/object/public/testsiteaudio_HSK1_2/audio_HSK_1_2.mp3" type="audio/mpeg">
+            </audio>
+            
+            <button id="playBtn" class="audio-play-btn">▶️ Phát Audio</button>
+            
+            <div id="audioProgress">
+                <div id="audioProgressBar"></div>
+            </div>
+            
+            <div id="audioTime">00:00 / 00:00</div>
+        </div>
+        
+        <div class="log" id="logOutput">
+            === LOG OUTPUT ===<br>
+        </div>
+    </div>
+
+    <script>
+        const logEl = document.getElementById('logOutput');
+        function log(msg) {
+            console.log(msg);
+            logEl.innerHTML += msg + '<br>';
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        log('=== SCRIPT STARTED ===');
+        
+        const audio = document.getElementById('mainAudio');
+        const playBtn = document.getElementById('playBtn');
+        const progressBar = document.getElementById('audioProgressBar');
+        const timeDisplay = document.getElementById('audioTime');
+        
+        log('Audio element: ' + (audio ? 'FOUND ✅' : 'NOT FOUND ❌'));
+        log('Button element: ' + (playBtn ? 'FOUND ✅' : 'NOT FOUND ❌'));
+        log('Audio src: ' + (audio?.currentSrc || 'EMPTY'));
+        
+        if (!audio || !playBtn) {
+            log('❌ Elements missing!');
+        } else {
+            log('✅ All elements OK');
+            
+            // Load audio
+            audio.load();
+            log('Audio.load() called');
+            
+            // Add click event
+            playBtn.addEventListener('click', async function() {
+                log('=== BUTTON CLICKED ===');
+                log('Audio ready state: ' + audio.readyState);
+                
+                playBtn.textContent = '⏳ Đang tải...';
+                playBtn.disabled = true;
+                
+                try {
+                    log('Calling audio.play()...');
+                    await audio.play();
+                    log('✅ Audio.play() SUCCESS!');
+                    
+                    playBtn.textContent = '⏸️ Đang phát...';
+                    playBtn.classList.add('playing');
+                    
+                } catch (error) {
+                    log('❌ Error: ' + error.message);
+                    playBtn.textContent = '❌ Lỗi - Thử lại';
+                    playBtn.disabled = false;
+                    alert('Lỗi: ' + error.message);
+                }
+            });
+            
+            log('✅ Event listener added');
+            
+            // Time update
+            audio.addEventListener('timeupdate', function() {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = progress + '%';
+                
+                const currentMin = Math.floor(audio.currentTime / 60);
+                const currentSec = Math.floor(audio.currentTime % 60);
+                const durationMin = Math.floor(audio.duration / 60) || 0;
+                const durationSec = Math.floor(audio.duration % 60) || 0;
+                
+                timeDisplay.textContent = 
+                    `${String(currentMin).padStart(2, '0')}:${String(currentSec).padStart(2, '0')} / ` +
+                    `${String(durationMin).padStart(2, '0')}:${String(durationSec).padStart(2, '0')}`;
+            });
+            
+            // Ended
+            audio.addEventListener('ended', function() {
+                log('✅ Audio ENDED');
+                playBtn.textContent = '▶️ Phát lại';
+                playBtn.disabled = false;
+                playBtn.classList.remove('playing');
+                progressBar.style.width = '0%';
+            });
+            
+            // Error
+            audio.addEventListener('error', function() {
+                log('❌ Audio ERROR: ' + (audio.error?.message || 'Unknown'));
+            });
+            
+            // Loaded
+            audio.addEventListener('loadedmetadata', function() {
+                log('✅ Audio loaded. Duration: ' + audio.duration + 's');
+            });
+        }
+        
+        log('=== SCRIPT COMPLETE ===');
+        log('');
+        log('📋 HÀNH ĐỘNG:');
+        log('1. Click button "Phát Audio"');
+        log('2. Xem log ở đây');
+        log('3. Nếu không có log "BUTTON CLICKED" → Event listener không add');
+        log('4. Nếu có log nhưng audio không phát → URL sai');
+    </script>
+</body>
+</html>
