@@ -1,0 +1,76 @@
+🔍 XEM CONSOLE LOG - QUAN TRỌNG!
+
+════════════════════════════════════════════════════════
+
+🚀 LÀM NGAY:
+
+1. Upload index.html MỚI
+
+2. Hard refresh: Ctrl + Shift + R
+
+3. F12 → Console (để Console mở)
+
+4. Chọn HSK 1-2 → Phần 1
+
+5. Click "Phát Audio"
+
+6. XEM CONSOLE CÓ NHỮNG LOG NÀY KHÔNG:
+
+════════════════════════════════════════════════════════
+
+📊 PHẢI THẤY:
+
+✅ setupAudioPlayer() START
+✅ Audio found
+✅ ProgressBar: <div>...
+✅ TimeDisplay: <div>...
+✅ Audio metadata loaded. Duration: 145  ← SỐ NÀY
+✅ Timeupdate - Current: 1.5 Duration: 145
+✅ Progress: 1.0%
+✅ Timeupdate - Current: 2.0 Duration: 145
+✅ Progress: 1.4%
+...
+
+════════════════════════════════════════════════════════
+
+❌ NẾU THẤY:
+
+Duration: NaN
+Duration: 0
+Duration: Infinity
+
+→ File audio có vấn đề
+→ Thử file khác
+
+════════════════════════════════════════════════════════
+
+❌ NẾU KHÔNG THẤY LOG "Timeupdate":
+
+→ Event listener không add
+→ Upload lại file
+→ Hard refresh
+
+════════════════════════════════════════════════════════
+
+📞 GỬI CHO TÔI:
+
+1. Screenshot toàn bộ Console
+2. Số Duration là bao nhiêu?
+3. Có thấy log "Timeupdate" không?
+4. Có thấy log "Progress: X%" không?
+
+════════════════════════════════════════════════════════
+
+🧪 HOẶC PASTE VÀO CONSOLE:
+
+const audio = document.getElementById('mainAudio');
+console.log('Duration:', audio.duration);
+console.log('Current:', audio.currentTime);
+console.log('ReadyState:', audio.readyState);
+
+const pb = document.getElementById('audioProgressBar');
+const td = document.getElementById('audioTime');
+console.log('ProgressBar element:', pb);
+console.log('TimeDisplay element:', td);
+
+════════════════════════════════════════════════════════

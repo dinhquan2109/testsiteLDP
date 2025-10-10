@@ -2175,11 +2175,21 @@
                 console.log('Calling audio.play()...');
                 await audio.play();
                 console.log('✅ Audio.play() SUCCESS!');
+                console.log('Audio duration:', audio.duration);
+                console.log('Audio readyState:', audio.readyState);
                 
                 audioIsPlaying = true;
                 audioStartedPlaying = true;
                 playBtn.textContent = '⏸️ Đang phát...';
                 playBtn.classList.add('playing');
+                
+                // Force check duration
+                if (!audio.duration || audio.duration === 0) {
+                    console.warn('⚠️ Duration not available yet, waiting...');
+                    setTimeout(() => {
+                        console.log('Duration after delay:', audio.duration);
+                    }, 1000);
+                }
                 
             } catch (error) {
                 console.error('❌ Play error:', error);
@@ -2204,20 +2214,26 @@
                 return;
             }
             
-            console.log('✅ Audio element found');
-            console.log('Audio src:', audio.currentSrc);
+            console.log('✅ Audio found');
+            console.log('ProgressBar:', progressBar);
+            console.log('TimeDisplay:', timeDisplay);
             
             // Load audio
             audio.load();
             
             // Audio loaded
             audio.addEventListener('loadedmetadata', function() {
-                console.log('✅ Audio loaded. Duration:', audio.duration);
-                if (timeDisplay) {
-                    const min = Math.floor(audio.duration / 60) || 0;
-                    const sec = Math.floor(audio.duration % 60) || 0;
+                console.log('✅ Audio metadata loaded. Duration:', audio.duration);
+                if (timeDisplay && audio.duration > 0) {
+                    const min = Math.floor(audio.duration / 60);
+                    const sec = Math.floor(audio.duration % 60);
                     timeDisplay.textContent = `00:00 / ${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+                    console.log('Time display updated:', timeDisplay.textContent);
                 }
+            });
+            
+            audio.addEventListener('canplay', function() {
+                console.log('Audio can play. Duration:', audio.duration);
             });
             
             // Audio error
@@ -2226,8 +2242,10 @@
                 if (playBtn) playBtn.textContent = '❌ Lỗi audio';
             });
             
-            // Time update
+            // Time update - QUAN TRỌNG!
             audio.addEventListener('timeupdate', function() {
+                console.log('Timeupdate - Current:', audio.currentTime, 'Duration:', audio.duration);
+                
                 // Prevent seeking
                 if (audioStartedPlaying && Math.abs(audio.currentTime - audioLastTime) > 1) {
                     if (audio.currentTime < audioLastTime) {
@@ -2236,20 +2254,31 @@
                 }
                 audioLastTime = audio.currentTime;
                 
-                // Update UI
-                if (progressBar && audio.duration > 0) {
-                    progressBar.style.width = ((audio.currentTime / audio.duration) * 100) + '%';
+                // Update progress bar
+                if (progressBar) {
+                    if (audio.duration && audio.duration > 0) {
+                        const progress = (audio.currentTime / audio.duration) * 100;
+                        progressBar.style.width = progress + '%';
+                        console.log('Progress:', progress.toFixed(1) + '%');
+                    }
                 }
                 
-                if (timeDisplay && audio.duration > 0) {
-                    const cm = Math.floor(audio.currentTime / 60);
-                    const cs = Math.floor(audio.currentTime % 60);
-                    const dm = Math.floor(audio.duration / 60);
-                    const ds = Math.floor(audio.duration % 60);
-                    timeDisplay.textContent = 
-                        `${String(cm).padStart(2, '0')}:${String(cs).padStart(2, '0')} / ${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
+                // Update time display
+                if (timeDisplay) {
+                    const duration = audio.duration || 0;
+                    if (duration > 0) {
+                        const cm = Math.floor(audio.currentTime / 60);
+                        const cs = Math.floor(audio.currentTime % 60);
+                        const dm = Math.floor(duration / 60);
+                        const ds = Math.floor(duration % 60);
+                        
+                        const timeText = `${String(cm).padStart(2, '0')}:${String(cs).padStart(2, '0')} / ${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
+                        timeDisplay.textContent = timeText;
+                    }
                 }
             });
+            
+            console.log('✅ Timeupdate listener added');
             
             // Prevent pause
             audio.addEventListener('pause', function() {
