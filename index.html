@@ -1177,7 +1177,7 @@
             transform: translateY(-2px);
         }
 
-        /* RESULT PAGE STYLES */
+        /* RESULT PAGE STYLES - NEW DESIGN */
         .result-page {
             display: none;
             position: fixed;
@@ -1185,11 +1185,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, #1e7e5f 0%, #0d5943 100%);
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
             z-index: 3000;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow-y: auto;
         }
 
         .result-page.show {
@@ -1197,13 +1198,14 @@
         }
 
         .result-container {
-            max-width: 600px;
+            max-width: 900px;
             width: 100%;
-            background: white;
-            border-radius: 20px;
-            padding: 50px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            background: #fffef5;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            margin: 20px auto;
             animation: resultSlideIn 0.5s ease-out;
         }
 
@@ -1619,22 +1621,78 @@
 
     <div class="result-page" id="resultPage">
         <div class="result-container">
-            <div class="result-icon">🎉</div>
-            <h1 class="result-title">Hoàn thành bài test!</h1>
-            
-            <div class="score-display">
-                <span id="finalScore">0</span>/<span id="totalQuestions">10</span>
+            <!-- Spiral Binding -->
+            <div class="spiral-binding">
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
             </div>
 
-            <div class="level-badge" id="levelBadge">
-                Beginner (A1)
+            <div class="result-logo">IC</div>
+
+            <div class="result-content">
+                <h1 class="result-title-new">CHÚC MỪNG BẠN ĐÃ HOÀN THÀNH BÀI THI</h1>
+
+                <div class="result-card">
+                    <div class="result-info">
+                        <strong>Họ và tên:</strong> <span id="resultName"></span>
+                    </div>
+                    <div class="result-info">
+                        <strong>Trình độ:</strong> <span id="resultLevel"></span>
+                    </div>
+                    <div class="result-info">
+                        <strong>Thời gian hoàn thành:</strong> <span id="completionTime"></span>
+                    </div>
+                </div>
+
+                <div class="completion-message">
+                    <p style="margin-bottom: 15px;">
+                        Chúc mừng bạn đã hoàn thành bài thi <strong>HSK Placement Test</strong> cùng với ICANCONNECT.
+                    </p>
+                    <p style="margin-bottom: 15px;">
+                        Bạn đã nhận được <strong><span id="finalScore">0</span> điểm</strong> trên tổng <strong><span id="totalQuestions">10</span> điểm</strong>, 
+                        tương đương với trình độ <strong id="levelBadge"></strong>.
+                    </p>
+                    <p id="resultMessage">
+                        Chúc mừng bạn đã hoàn thành bài kiểm tra!
+                    </p>
+                </div>
+
+                <div class="score-badge-new">
+                    Số đáp án đúng: <span id="correctCount">0</span>/<span id="totalAnswers">10</span>
+                </div>
+
+                <div class="answers-grid" id="answersGrid"></div>
+
+                <!-- AI Feedback Section -->
+                <div id="aiFeedbackSection" style="display: none;" class="ai-feedback-section">
+                    <div class="ai-feedback-title">
+                        🤖 Nhận xét AI cho bài viết của bạn
+                    </div>
+                    <div id="aiFeedbackContent" class="ai-feedback-content">
+                        <div class="ai-loading">
+                            <div class="ai-loading-spinner"></div>
+                            <div>Đang phân tích bài viết của bạn...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-buttons">
+                    <button class="btn-result home" id="btnFinish">Hoàn tất</button>
+                </div>
             </div>
-
-            <p class="result-message" id="resultMessage">
-                Chúc mừng bạn đã hoàn thành bài kiểm tra!
-            </p>
-
-            <button class="finish-button" id="btnFinish">Hoàn tất</button>
         </div>
     </div>
 
@@ -1852,6 +1910,9 @@
             const ageValue = document.getElementById('age').value.trim();
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
+            
+            // Save to localStorage for result page
+            localStorage.setItem('fullname', fullname);
 
             const { data, error } = await supabase
                 .from('placement')
@@ -2505,18 +2566,23 @@
         }
 
         // ===== DISPLAY RESULT =====
-        function displayResult(score) {
-            // Total scorable questions = listening (5) + reading (5) = 10
-            // Writing section (1 essay) is not scored
-            const scorableQuestions = listeningQuestions.length + readingQuestions.length;
+        async function displayResult(score) {
+            console.log('=== DISPLAYING RESULT ===');
             
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('totalQuestions').textContent = scorableQuestions;
-
+            // Get user info
+            const fullname = localStorage.getItem('fullname') || 'Học viên';
+            const elapsedTime = 20 * 60 - (parseInt(document.getElementById('timerDisplay').textContent.split(':')[0]) * 60 + 
+                                           parseInt(document.getElementById('timerDisplay').textContent.split(':')[1]));
+            const minutes = Math.floor(elapsedTime / 60);
+            const seconds = elapsedTime % 60;
+            
+            // Total scorable questions = listening (5) + reading (5) = 10
+            const scorableQuestions = listeningQuestions.length + readingQuestions.length;
             const percentage = scorableQuestions > 0 ? (score / scorableQuestions) * 100 : 0;
+            
+            // Determine level
             let level = '';
             let message = '';
-
             if (percentage >= 90) {
                 level = `HSK ${selectedHSK} - Xuất sắc`;
                 message = 'Xuất sắc! Bạn có trình độ tiếng Trung rất cao, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
@@ -2533,9 +2599,148 @@
                 level = `HSK ${selectedHSK} - Cần cải thiện`;
                 message = 'Bạn đang bắt đầu hành trình học tiếng Trung, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             }
-
+            
+            // Update UI
+            document.getElementById('resultName').textContent = fullname;
+            document.getElementById('resultLevel').textContent = `HSK ${selectedHSK}`;
+            document.getElementById('completionTime').textContent = `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('totalQuestions').textContent = scorableQuestions;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('totalAnswers').textContent = scorableQuestions;
             document.getElementById('levelBadge').textContent = level;
             document.getElementById('resultMessage').textContent = message;
+            
+            // Render answers grid
+            renderAnswersGrid(score, scorableQuestions);
+            
+            // Get AI feedback for writing (if exists)
+            const writingIndex = listeningQuestions.length + readingQuestions.length;
+            const writingAnswer = userAnswers[writingIndex];
+            
+            if (writingAnswer && writingAnswer.trim().length > 0) {
+                console.log('Getting AI feedback for writing...');
+                await getAIFeedback(writingAnswer, writingQuestions[0]?.question_text || '');
+            }
+        }
+        
+        // ===== RENDER ANSWERS GRID =====
+        function renderAnswersGrid(score, total) {
+            const grid = document.getElementById('answersGrid');
+            grid.innerHTML = '';
+            
+            // Create result array for 10 questions
+            const results = [];
+            
+            // Listening questions (0-4)
+            listeningQuestions.forEach((q, i) => {
+                const correct = userAnswers[i] === q.correct_answer;
+                results.push({ question: i + 1, correct: correct });
+            });
+            
+            // Reading questions (5-9)
+            const readingStartIdx = listeningQuestions.length;
+            readingQuestions.forEach((q, i) => {
+                const globalIdx = readingStartIdx + i;
+                const userAnswer = userAnswers[globalIdx];
+                const correctAnswer = q.correct_answer;
+                const correct = userAnswer && correctAnswer && 
+                    userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+                results.push({ question: globalIdx + 1, correct: correct });
+            });
+            
+            // Render grid
+            results.forEach(result => {
+                const item = document.createElement('div');
+                item.className = `answer-item ${result.correct ? 'correct' : 'incorrect'}`;
+                
+                const questionNum = document.createElement('span');
+                questionNum.textContent = result.question;
+                
+                const icon = document.createElement('div');
+                icon.className = `check-icon ${result.correct ? 'correct' : 'incorrect'}`;
+                icon.textContent = result.correct ? '✓' : '✕';
+                
+                item.appendChild(questionNum);
+                item.appendChild(icon);
+                grid.appendChild(item);
+            });
+        }
+        
+        // ===== GET AI FEEDBACK USING GEMINI =====
+        async function getAIFeedback(essay, prompt) {
+            const feedbackSection = document.getElementById('aiFeedbackSection');
+            const feedbackContent = document.getElementById('aiFeedbackContent');
+            
+            // Show section with loading
+            feedbackSection.style.display = 'block';
+            feedbackContent.innerHTML = `
+                <div class="ai-loading">
+                    <div class="ai-loading-spinner"></div>
+                    <div>Đang phân tích bài viết của bạn...</div>
+                </div>
+            `;
+            
+            try {
+                // Gemini API key - THAY ĐỔI KEY NÀY
+                const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE';
+                
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+                
+                const requestBody = {
+                    contents: [{
+                        parts: [{
+                            text: `Bạn là một giáo viên tiếng Trung chuyên nghiệp. Hãy đánh giá bài viết tự luận của học viên dưới đây.
+
+Đề bài: ${prompt}
+
+Bài viết của học viên:
+${essay}
+
+Hãy đưa ra nhận xét chi tiết về:
+1. Nội dung: Có trả lời đúng yêu cầu đề bài không?
+2. Ngữ pháp: Có lỗi ngữ pháp nào không? (Nếu có, chỉ ra và sửa)
+3. Từ vựng: Từ vựng có phù hợp và đa dạng không?
+4. Cấu trúc câu: Cấu trúc câu có rõ ràng và logic không?
+5. Điểm mạnh và điểm cần cải thiện
+6. Gợi ý để cải thiện bài viết
+
+Hãy trả lời bằng tiếng Việt, ngắn gọn (200-300 từ), thân thiện và khích lệ học viên.`
+                        }]
+                    }]
+                };
+                
+                console.log('Calling Gemini API...');
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('AI Response:', data);
+                
+                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Không thể tạo nhận xét.';
+                
+                feedbackContent.innerHTML = `<div style="white-space: pre-wrap;">${aiText}</div>`;
+                
+            } catch (error) {
+                console.error('AI Feedback error:', error);
+                feedbackContent.innerHTML = `
+                    <div style="color: #f56565;">
+                        ⚠️ Không thể lấy nhận xét AI. Vui lòng liên hệ giáo viên để được đánh giá chi tiết.
+                        <br><br>
+                        <small>Lỗi: ${error.message}</small>
+                    </div>
+                `;
+            }
         }
 
         // ===== FINISH BUTTON =====
