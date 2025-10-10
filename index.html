@@ -1656,11 +1656,19 @@
         let currentSection = 1; // 1=Listening, 2=Reading, 3=Writing
         let audioPlayCount = 0;
         const MAX_AUDIO_PLAYS = 2;
+        let audioEndedFlag = false; // Prevent double trigger
         
         // Debug function
         window.checkAudioCount = function() {
-            console.log('Current audioPlayCount:', audioPlayCount);
-            console.log('MAX_AUDIO_PLAYS:', MAX_AUDIO_PLAYS);
+            console.log('📊 audioPlayCount:', audioPlayCount);
+            console.log('📊 MAX_AUDIO_PLAYS:', MAX_AUDIO_PLAYS);
+            console.log('🚩 audioEndedFlag:', audioEndedFlag);
+        };
+        
+        window.resetAudioCount = function() {
+            audioPlayCount = 0;
+            audioEndedFlag = false;
+            console.log('✅ Reset to 0');
         };
         
         // NEW: Level selection

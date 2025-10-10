@@ -1,0 +1,78 @@
+🔍 PASTE SCRIPT NÀY VÀO CONSOLE
+
+════════════════════════════════════════════════════════
+
+📋 HƯỚNG DẪN:
+
+1. Upload index.html MỚI
+
+2. Ctrl + Shift + R (refresh)
+
+3. F12 → Console
+
+4. Chọn HSK 1-2 → Vào Phần 1
+
+5. PASTE SCRIPT NÀY VÀO CONSOLE:
+
+════════════════════════════════════════════════════════
+
+checkAudioCount()
+
+════════════════════════════════════════════════════════
+
+6. Xem kết quả (phải là 0)
+
+7. Click "Phát Audio"
+
+8. Đợi audio chạy HẾT
+
+9. XEM CONSOLE LOG GÌ
+
+════════════════════════════════════════════════════════
+
+📊 PHẢI THẤY:
+
+🎵 === AUDIO ENDED EVENT (flag: false) ===
+📊 BEFORE increment: audioPlayCount = 0
+📊 AFTER increment: audioPlayCount = 1 (MAX: 2)
+🟢 CÒN LƯỢT (1 < 2)! Resetting for play #2
+
+════════════════════════════════════════════════════════
+
+❌ NẾU THẤY:
+
+📊 BEFORE: 0
+📊 AFTER: 2  ← Count nhảy từ 0 → 2!
+
+HOẶC:
+
+🎵 AUDIO ENDED EVENT (flag: false)
+📊 BEFORE: 0
+📊 AFTER: 1
+🎵 AUDIO ENDED EVENT (flag: true)  ← Gọi lần 2!
+⚠️ Already processed, IGNORING
+
+════════════════════════════════════════════════════════
+
+📞 GỬI CHO TÔI:
+
+Screenshot Console với:
+1. Log khi audio ended
+2. Before/After count
+3. Có bị gọi 2 lần không
+
+════════════════════════════════════════════════════════
+
+🧪 HOẶC PASTE SCRIPT ĐẦY ĐỦ:
+
+────────────────────────────────
+console.log('=== CHECK ===');
+console.log('Count:', audioPlayCount);
+console.log('Flag:', audioEndedFlag);
+
+const audio = document.getElementById('mainAudio');
+console.log('Audio duration:', audio?.duration);
+console.log('Audio ended:', audio?.ended);
+────────────────────────────────
+
+════════════════════════════════════════════════════════
