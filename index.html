@@ -2157,7 +2157,7 @@
                         <div class="section-description">Đọc đoạn văn và điền đáp án đúng cho 5 câu hỏi</div>
                     </div>
                     <div class="reading-passage">
-                        <div class="passage-title">Đọc đoạn văn sau:</div>
+                        <div class="passage-title">📖 阅读文章 Đọc văn:</div>
                         <div class="passage-text">${passage}</div>
                     </div>
                 `;
@@ -2767,35 +2767,38 @@
             `;
             
             try {
-                // Gemini API key - THAY ĐỔI KEY NÀY
-                const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE';
+                // Gemini API key
+                const GEMINI_API_KEY = 'AIzaSyA0KtdYeuXgVA33SgZHpfYZLrsJN1uouSQ';
+                
+                console.log('🤖 Starting AI feedback...');
+                console.log('Essay length:', essay.length);
                 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
                 
                 const requestBody = {
                     contents: [{
                         parts: [{
-                            text: `Bạn là một giáo viên tiếng Trung chuyên nghiệp. Hãy đánh giá bài viết tự luận của học viên dưới đây.
+                            text: `你是一位专业的中文老师。请评价学生的作文。
 
-Đề bài: ${prompt}
+题目：${prompt}
 
-Bài viết của học viên:
+学生作文：
 ${essay}
 
-Hãy đưa ra nhận xét chi tiết về:
-1. Nội dung: Có trả lời đúng yêu cầu đề bài không?
-2. Ngữ pháp: Có lỗi ngữ pháp nào không? (Nếu có, chỉ ra và sửa)
-3. Từ vựng: Từ vựng có phù hợp và đa dạng không?
-4. Cấu trúc câu: Cấu trúc câu có rõ ràng và logic không?
-5. Điểm mạnh và điểm cần cải thiện
-6. Gợi ý để cải thiện bài viết
+请用越南语简短评价（200-300字），包括：
+1. 内容：是否符合题目要求？
+2. 语法：有语法错误吗？（如果有，请指出并改正）
+3. 词汇：词汇使用是否恰当和丰富？
+4. 句子结构：句子是否清晰有逻辑？
+5. 优点和需要改进的地方
+6. 改进建议
 
-Hãy trả lời bằng tiếng Việt, ngắn gọn (200-300 từ), thân thiện và khích lệ học viên.`
+请用友好和鼓励的语气回答。`
                         }]
                     }]
                 };
                 
-                console.log('Calling Gemini API...');
+                console.log('📡 Calling Gemini API...');
                 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -2805,32 +2808,46 @@ Hãy trả lời bằng tiếng Việt, ngắn gọn (200-300 từ), thân thi�
                     body: JSON.stringify(requestBody)
                 });
                 
+                console.log('Response status:', response.status);
+                
                 if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('API Error response:', errorText);
+                    throw new Error(`API Error ${response.status}: ${errorText}`);
                 }
                 
                 const data = await response.json();
-                console.log('AI Response:', data);
+                console.log('✅ AI Response received:', data);
                 
-                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Không thể tạo nhận xét.';
+                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Không nhận được phản hồi từ AI.';
+                console.log('AI Text length:', aiText.length);
                 
                 // Format AI feedback into paragraphs
                 const paragraphs = aiText.split('\n\n').filter(p => p.trim());
                 let formattedHTML = '';
-                paragraphs.forEach(para => {
-                    formattedHTML += `<p>${para.trim()}</p>`;
-                });
                 
-                feedbackContent.innerHTML = formattedHTML || `<p>${aiText}</p>`;
+                if (paragraphs.length > 0) {
+                    paragraphs.forEach(para => {
+                        const cleaned = para.trim().replace(/\n/g, '<br>');
+                        formattedHTML += `<p>${cleaned}</p>`;
+                    });
+                } else {
+                    formattedHTML = `<p>${aiText.replace(/\n/g, '<br>')}</p>`;
+                }
+                
+                feedbackContent.innerHTML = formattedHTML;
+                console.log('✅ AI feedback displayed');
                 
             } catch (error) {
-                console.error('AI Feedback error:', error);
+                console.error('❌ AI Feedback error:', error);
+                console.error('Error stack:', error.stack);
+                
                 feedbackContent.innerHTML = `
-                    <div style="color: #f56565;">
-                        ⚠️ Không thể lấy nhận xét AI. Vui lòng liên hệ giáo viên để được đánh giá chi tiết.
-                        <br><br>
-                        <small>Lỗi: ${error.message}</small>
-                    </div>
+                    <p style="color: #f56565;">
+                        <strong>⚠️ Không thể lấy nhận xét AI</strong><br><br>
+                        Lỗi: ${error.message}<br><br>
+                        Vui lòng liên hệ giáo viên để được đánh giá chi tiết.
+                    </p>
                 `;
             }
         }
