@@ -581,41 +581,66 @@
             background: white;
             border: 3px solid #e0e0e0;
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         
         @media (max-width: 480px) {
             .level-option {
-                padding: 15px;
+                padding: 20px;
             }
+        }
+        
+        /* Level colors - từ dễ đến khó */
+        .level-option[data-level="beginner"] {
+            background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+            border-color: #56ab2f;
+            color: white;
+        }
+        
+        .level-option[data-level="intermediate"] {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-color: #f5576c;
+            color: white;
+        }
+        
+        .level-option[data-level="advanced"] {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-color: #00f2fe;
+            color: white;
         }
 
         .level-option:hover {
-            border-color: #7cb342;
-            background: #f1f8e9;
-            transform: translateY(-3px);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .level-option.selected {
-            border-color: #4caf50;
-            background: #e8f5e9;
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
         }
-
-        .level-name {
-            font-size: 24px;
+        
+        .level-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            color: #4caf50;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
-            color: #1e7e5f;
-            margin-bottom: 5px;
+            font-size: 18px;
         }
 
-        .level-desc {
-            font-size: 13px;
-            color: #666;
-        }
 
         .start-test-btn {
             width: 100%;
@@ -829,14 +854,67 @@
         }
 
         .audio-section audio {
-            width: 100%;
-            max-width: 500px;
-            margin: 15px 0;
+            display: none; /* Hide default audio player */
         }
 
         .audio-info {
             font-size: 14px;
             color: #1976d2;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        #audioControls {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .audio-play-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .audio-play-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .audio-play-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .audio-play-btn.playing {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+        
+        #audioProgress {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        #audioProgressBar {
+            height: 100%;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        #audioTime {
+            font-size: 14px;
+            color: #666;
             font-weight: bold;
         }
 
@@ -1099,7 +1177,7 @@
             transform: translateY(-2px);
         }
 
-        /* RESULT PAGE STYLES */
+        /* RESULT PAGE STYLES - PREMIUM DESIGN */
         .result-page {
             display: none;
             position: fixed;
@@ -1107,11 +1185,53 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, #1e7e5f 0%, #0d5943 100%);
+            background: linear-gradient(135deg, #1e7d5a 0%, #2d8f67 50%, #1a6b4d 100%);
             z-index: 3000;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 30px 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .result-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(76, 175, 80, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(46, 125, 50, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(27, 94, 32, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .result-page::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 100px,
+                    rgba(255, 255, 255, 0.01) 100px,
+                    rgba(255, 255, 255, 0.01) 200px
+                );
+            pointer-events: none;
+            z-index: 0;
+            animation: backgroundShift 60s linear infinite;
+        }
+        
+        @keyframes backgroundShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
 
         .result-page.show {
@@ -1119,20 +1239,22 @@
         }
 
         .result-container {
-            max-width: 600px;
+            max-width: 750px;
             width: 100%;
-            background: white;
-            border-radius: 20px;
-            padding: 50px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            animation: resultSlideIn 0.5s ease-out;
+            background: #fffef9;
+            border-radius: 2px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            margin: 20px auto;
+            animation: fadeInUp 0.6s ease-out;
         }
-
-        @keyframes resultSlideIn {
+        
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(-50px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -1140,62 +1262,461 @@
             }
         }
 
-        .result-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
+        /* NEW RESULT PAGE CSS */
+        .spiral-binding {
+            height: 40px;
+            background: linear-gradient(180deg, #2e7d4e 0%, #1b5e3a 50%, #145030 100%);
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
         }
-
-        .result-title {
-            font-size: 32px;
-            font-weight: bold;
-            color: #0d5943;
+        
+        .spiral-binding::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+        }
+        
+        .spiral-hole {
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 35% 35%, #ffffff, #e8e8e0 60%, #c0c0b8);
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 2px 5px rgba(0, 0, 0, 0.5),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.3),
+                0 2px 3px rgba(255, 255, 255, 0.4);
+            border: 2.5px solid #0d3520;
+            position: relative;
+        }
+        
+        .spiral-hole::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #666 0%, #333 100%);
+            border-radius: 50%;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .result-logo {
+            position: absolute;
+            top: 55px;
+            left: 35px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00a8cc 0%, #0077a3 100%);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 5px 15px rgba(0, 120, 163, 0.4),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.2),
+                inset 0 2px 5px rgba(255, 255, 255, 0.2);
+            transform: rotate(-5deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .result-logo:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+        
+        .logo-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .logo-line {
+            width: 28px;
+            height: 3.5px;
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .result-content {
+            padding: 45px 35px 40px 35px;
+            background: linear-gradient(to bottom, #fffef9 0%, #fffdf5 100%);
+        }
+        
+        .result-title-new {
+            text-align: center;
+            color: #1a202c;
+            font-size: 17px;
+            font-weight: 700;
             margin-bottom: 30px;
-        }
-
-        .score-display {
-            font-size: 64px;
-            font-weight: 900;
-            color: #4caf50;
-            margin-bottom: 20px;
-        }
-
-        .level-badge {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1e7e5f;
-            margin-bottom: 20px;
-            padding: 15px 30px;
-            background: #e8f5e9;
-            border-radius: 50px;
-            display: inline-block;
-        }
-
-        .result-message {
-            font-size: 18px;
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-
-        .finish-button {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #7cb342 0%, #558b2f 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            padding-bottom: 12px;
         }
-
-        .finish-button:hover {
+        
+        .result-title-new::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #8dc563, transparent);
+            border-radius: 2px;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #b8e986 0%, #8dc563 50%, #7ab856 100%);
+            border-radius: 15px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 
+                0 5px 20px rgba(141, 197, 99, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .result-info {
+            margin-bottom: 10px;
+            color: #1a4d2e;
+            font-size: 15px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .result-info:last-child {
+            margin-bottom: 0;
+        }
+        
+        .result-info strong {
+            font-weight: 800;
+        }
+        
+        .completion-message {
+            background: white;
+            padding: 22px 25px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            line-height: 1.7;
+            color: #2d3748;
+            font-size: 14px;
+            border: 1px solid #e8e8e3;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        
+        .completion-message::before {
+            content: '🎓';
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            font-size: 28px;
+            background: white;
+            padding: 0 8px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .completion-message p {
+            margin-bottom: 12px;
+        }
+        
+        .completion-message p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .completion-message a {
+            color: #0077b6;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            padding-bottom: 1px;
+        }
+        
+        .completion-message a:hover {
+            border-bottom-color: #0077b6;
+            color: #005f8f;
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffefc1 100%);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #8b5a00;
+            font-size: 14px;
+            display: inline-block;
+            border: 2px solid #f4e4b8;
+            box-shadow: 0 3px 10px rgba(251, 191, 36, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .section-title:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+        
+        .answers-section {
+            margin-bottom: 28px;
+        }
+        
+        .answers-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .answer-item {
+            background: white;
+            border: 2.5px solid #cbd5e0;
+            border-radius: 30px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .answer-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transition: left 0.5s;
+        }
+        
+        .answer-item:hover::before {
+            left: 100%;
+        }
+        
+        .answer-item:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .answer-item.correct {
+            border-color: #48bb78;
+            background: linear-gradient(135deg, #f0fff4 0%, #e6ffed 100%);
+            box-shadow: 0 3px 10px rgba(72, 187, 120, 0.2);
+        }
+        
+        .answer-item.incorrect {
+            border-color: #fc8181;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            box-shadow: 0 3px 10px rgba(252, 129, 129, 0.2);
+        }
+        
+        .check-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .check-icon.correct {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+        
+        .check-icon.incorrect {
+            background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+            color: white;
+        }
+        
+        .writing-section {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 2.5px solid #fbbf24;
+            border-radius: 12px;
+            padding: 22px 26px;
+            margin-bottom: 28px;
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .writing-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .writing-title {
+            font-weight: 800;
+            color: #92400e;
+            margin-bottom: 14px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .writing-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            box-shadow: 0 3px 10px rgba(251, 191, 36, 0.4);
+        }
+        
+        .writing-content {
+            color: #78350f;
+            line-height: 1.7;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .writing-content p {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #fbbf24;
+        }
+        
+        .writing-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .ai-loading {
+            text-align: center;
+            padding: 20px;
+            color: #92400e;
+        }
+        
+        .ai-loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #fef3c7;
+            border-top-color: #f59e0b;
+            border-right-color: #f59e0b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 10px;
+        }
+        
+        .result-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-result {
+            padding: 14px 36px;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-result::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-result:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-result span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-result.review {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #78350f;
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.4);
+        }
+        
+        .btn-result.review:hover {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.5);
+        }
+        
+        .btn-result.home {
+            background: linear-gradient(135deg, #8dc563 0%, #6aa34f 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(124, 184, 98, 0.4);
+        }
+        
+        .btn-result.home:hover {
+            background: linear-gradient(135deg, #6aa34f 0%, #5a8e42 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124, 184, 98, 0.5);
         }
 
         @media (max-width: 768px) {
@@ -1297,11 +1818,7 @@
             }
 
             .result-container {
-                padding: 30px 20px;
-            }
-
-            .score-display {
-                font-size: 48px;
+                padding: 20px;
             }
         }
     </style>
@@ -1483,29 +2000,20 @@
                 <div class="level-selector">
                     <h3 class="level-selector-title">Vui lòng chọn trình độ muốn test</h3>
                     <div class="level-grid">
-                        <div class="level-option" data-level="1" data-range="1-11">
-                            <div class="level-name">HSK 1</div>
-                            <div class="level-desc">Cơ bản</div>
+                        <div class="level-option" data-level="beginner" data-range="1-22" data-hsk="1-2">
+                            <div class="level-name">HSK 1-2</div>
+                            <div class="level-desc">Cơ Bản</div>
+                            <div class="level-range">初级 • Beginner</div>
                         </div>
-                        <div class="level-option" data-level="2" data-range="12-22">
-                            <div class="level-name">HSK 2</div>
-                            <div class="level-desc">Sơ cấp</div>
+                        <div class="level-option" data-level="intermediate" data-range="23-44" data-hsk="3-4">
+                            <div class="level-name">HSK 3-4</div>
+                            <div class="level-desc">Trung Cấp</div>
+                            <div class="level-range">中级 • Intermediate</div>
                         </div>
-                        <div class="level-option" data-level="3" data-range="23-33">
-                            <div class="level-name">HSK 3</div>
-                            <div class="level-desc">Trung cấp thấp</div>
-                        </div>
-                        <div class="level-option" data-level="4" data-range="34-44">
-                            <div class="level-name">HSK 4</div>
-                            <div class="level-desc">Trung cấp</div>
-                        </div>
-                        <div class="level-option" data-level="5" data-range="45-55">
-                            <div class="level-name">HSK 5</div>
-                            <div class="level-desc">Trung cấp cao</div>
-                        </div>
-                        <div class="level-option" data-level="6" data-range="56-66">
-                            <div class="level-name">HSK 6</div>
-                            <div class="level-desc">Nâng cao</div>
+                        <div class="level-option" data-level="advanced" data-range="45-66" data-hsk="5-6">
+                            <div class="level-name">HSK 5-6</div>
+                            <div class="level-desc">Nâng Cao</div>
+                            <div class="level-range">高级 • Advanced</div>
                         </div>
                     </div>
                 </div>
@@ -1550,22 +2058,95 @@
 
     <div class="result-page" id="resultPage">
         <div class="result-container">
-            <div class="result-icon">🎉</div>
-            <h1 class="result-title">Hoàn thành bài test!</h1>
-            
-            <div class="score-display">
-                <span id="finalScore">0</span>/<span id="totalQuestions">10</span>
+            <!-- Spiral Binding -->
+            <div class="spiral-binding">
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
+                <div class="spiral-hole"></div>
             </div>
 
-            <div class="level-badge" id="levelBadge">
-                Beginner (A1)
+            <div class="result-logo">
+                <div class="logo-lines">
+                    <div class="logo-line"></div>
+                    <div class="logo-line"></div>
+                    <div class="logo-line"></div>
+                </div>
             </div>
 
-            <p class="result-message" id="resultMessage">
-                Chúc mừng bạn đã hoàn thành bài kiểm tra!
-            </p>
+            <div class="result-content">
+                <h1 class="result-title-new">CHÚC MỪNG BẠN ĐÃ HOÀN THÀNH BÀI THI</h1>
 
-            <button class="finish-button" id="btnFinish">Hoàn tất</button>
+                <div class="result-card">
+                    <div class="result-info">
+                        <strong>Họ và tên:</strong> <span id="resultName"></span>
+                    </div>
+                    <div class="result-info">
+                        <strong>Trình độ:</strong> <span id="resultLevel"></span>
+                    </div>
+                    <div class="result-info">
+                        <strong>Thời gian hoàn thành:</strong> <span id="completionTime"></span>
+                    </div>
+                </div>
+
+                <div class="completion-message">
+                    <p>
+                        Chúc mừng bạn đã hoàn thành bài thi <strong>HSK Placement Test</strong> cùng với ICANCONNECT.
+                    </p>
+                    <p>
+                        Bạn đã nhận được <strong><span id="finalScore">0</span> điểm</strong> trên tổng <strong><span id="totalQuestions">10</span> điểm</strong>, 
+                        tương đương với trình độ <strong id="levelBadge"></strong>.
+                    </p>
+                    <p id="resultMessage">
+                        Chúc mừng bạn đã hoàn thành bài kiểm tra!
+                    </p>
+                </div>
+
+                <!-- Phần Nghe -->
+                <div class="answers-section">
+                    <div class="section-title">
+                        📻 Phần Nghe: <span id="listeningScore">0</span>/5 đúng
+                    </div>
+                    <div class="answers-grid" id="listeningGrid"></div>
+                </div>
+
+                <!-- Phần Đọc -->
+                <div class="answers-section">
+                    <div class="section-title">
+                        📖 Phần Điền Đáp Án: <span id="readingScore">0</span>/5 đúng
+                    </div>
+                    <div class="answers-grid" id="readingGrid"></div>
+                </div>
+
+                <!-- AI Feedback cho Phần Viết -->
+                <div id="aiFeedbackSection" style="display: none;" class="writing-section">
+                    <div class="writing-title">
+                        <span class="writing-icon">✍️</span>
+                        Nhận xét AI cho Phần Viết
+                    </div>
+                    <div id="aiFeedbackContent" class="writing-content">
+                        <div class="ai-loading">
+                            <div class="ai-loading-spinner"></div>
+                            <div>Đang phân tích bài viết của bạn...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-buttons">
+                    <button class="btn-result home" id="btnFinish"><span>Hoàn tất</span></button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1587,10 +2168,25 @@
         let currentSection = 1; // 1=Listening, 2=Reading, 3=Writing
         let audioPlayCount = 0;
         const MAX_AUDIO_PLAYS = 2;
+        let audioEndedFlag = false; // Prevent double trigger
+        
+        // Debug function
+        window.checkAudioCount = function() {
+            console.log('📊 audioPlayCount:', audioPlayCount);
+            console.log('📊 MAX_AUDIO_PLAYS:', MAX_AUDIO_PLAYS);
+            console.log('🚩 audioEndedFlag:', audioEndedFlag);
+        };
+        
+        window.resetAudioCount = function() {
+            audioPlayCount = 0;
+            audioEndedFlag = false;
+            console.log('✅ Reset to 0');
+        };
         
         // NEW: Level selection
         let selectedLevel = null;
         let selectedRange = null;
+        let selectedHSK = null; // "1-2", "3-4", hoặc "5-6"
         
         // Section data
         let listeningQuestions = [];
@@ -1768,6 +2364,9 @@
             const ageValue = document.getElementById('age').value.trim();
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
+            
+            // Save to localStorage for result page
+            localStorage.setItem('fullname', fullname);
 
             const { data, error } = await supabase
                 .from('placement')
@@ -1803,6 +2402,9 @@
                 // Save selected level
                 selectedLevel = this.dataset.level;
                 selectedRange = this.dataset.range;
+                selectedHSK = this.dataset.hsk; // "1-2", "3-4", hoặc "5-6"
+                
+                console.log('Selected:', {level: selectedLevel, range: selectedRange, hsk: selectedHSK});
                 
                 // Enable start button
                 document.getElementById('startTestBtn').disabled = false;
@@ -1839,7 +2441,7 @@
                 if (error) throw error;
 
                 if (!questions || questions.length === 0) {
-                    alert(`Không tìm thấy câu hỏi cho HSK ${selectedLevel}. Vui lòng liên hệ quản trị viên.`);
+                    alert(`Không tìm thấy câu hỏi cho HSK ${selectedHSK}. Vui lòng liên hệ quản trị viên.`);
                     btn.disabled = false;
                     btn.textContent = 'BẮT ĐẦU';
                     return;
@@ -1911,17 +2513,24 @@
                         <div class="section-description">Nghe file audio và trả lời 5 câu hỏi</div>
                     </div>
                     <div class="audio-section">
-                        <div class="audio-info">⚠️ File audio chỉ được nghe tối đa ${MAX_AUDIO_PLAYS} lần (Đã nghe: ${audioPlayCount}/${MAX_AUDIO_PLAYS})</div>
-                        <audio id="mainAudio" controls ${audioPlayCount >= MAX_AUDIO_PLAYS ? 'style="display:none;"' : ''}>
+                        <div class="audio-info">⚠️ 音频必须听完才算一次 Audio phải nghe HẾT mới tính 1 lượt. 最多2次 Tối đa 2 lượt (已听完 Đã nghe: ${audioPlayCount}/${MAX_AUDIO_PLAYS})</div>
+                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px; font-weight: bold; font-size: 16px;">❌ 听力次数已用完 Đã hết lượt nghe (2/2)</div>' : `
+                        <audio id="mainAudio" controlsList="nodownload noplaybackrate" style="display: none;">
                             <source src="${listeningQuestions[0]?.audio_url || ''}" type="audio/mpeg">
-                            Trình duyệt của bạn không hỗ trợ phát audio.
                         </audio>
-                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px;">❌ Đã hết lượt nghe</div>' : ''}
+                        <div id="audioControls" style="margin-top: 15px;">
+                            <button id="playBtn" class="audio-play-btn" onclick="window.handleAudioPlay()">▶️ 播放音频 Phát Audio</button>
+                            <div id="audioProgress" style="margin: 15px 0;">
+                                <div id="audioProgressBar"></div>
+                            </div>
+                            <div id="audioTime">00:00 / 00:00</div>
+                        </div>
+                        `}
                     </div>
                 `;
                 
-                document.getElementById('questionCounter').textContent = `Phần 1: Nghe (5 câu)`;
-                document.getElementById('pageInfo').textContent = 'Phần 1/3 - Nghe';
+                document.getElementById('questionCounter').textContent = `听力 Listening (5题)`;
+                document.getElementById('pageInfo').textContent = '第1部分/3 - 听力 Listening';
                 
             } else if (sectionNum === 2) {
                 // READING SECTION - FILL IN THE BLANK
@@ -1936,7 +2545,7 @@
                         <div class="section-description">Đọc đoạn văn và điền đáp án đúng cho 5 câu hỏi</div>
                     </div>
                     <div class="reading-passage">
-                        <div class="passage-title">Đọc đoạn văn sau:</div>
+                        <div class="passage-title">📖 阅读文章 Đọc văn:</div>
                         <div class="passage-text">${passage}</div>
                     </div>
                 `;
@@ -1967,8 +2576,8 @@
                     </div>
                 `;
                 
-                document.getElementById('questionCounter').textContent = `Phần 3: Viết (tự luận)`;
-                document.getElementById('pageInfo').textContent = 'Phần 3/3 - Viết';
+                document.getElementById('questionCounter').textContent = `写作 Writing (作文)`;
+                document.getElementById('pageInfo').textContent = '第3部分/3 - 写作 Writing';
             }
             
             container.innerHTML = html;
@@ -2038,29 +2647,119 @@
                 console.log('Input boxes created:', document.querySelectorAll('.text-input').length);
             }
             
-            // Setup audio player event if in listening section
-            if (sectionNum === 1 && audioPlayCount < MAX_AUDIO_PLAYS) {
-                const audio = document.getElementById('mainAudio');
-                if (audio) {
-                    audio.addEventListener('play', function() {
-                        if (audioPlayCount < MAX_AUDIO_PLAYS) {
-                            audioPlayCount++;
-                            if (audioPlayCount >= MAX_AUDIO_PLAYS) {
-                                setTimeout(() => {
-                                    this.pause();
-                                    displaySection(1); // Refresh to show "no more plays"
-                                }, 100);
-                            }
-                        }
-                    });
-                }
-            }
-            
             // Attach event listeners
             attachAnswerEventListeners();
             updateProgressCircles();
             updateNavButtons();
+            
+            // Audio setup - CHỈ LOAD, KHÔNG addEventListener
+            if (sectionNum === 1 && audioPlayCount < MAX_AUDIO_PLAYS) {
+                console.log('📻 Audio section ready, count:', audioPlayCount);
+                const audio = document.getElementById('mainAudio');
+                if (audio) {
+                    audio.load();
+                    console.log('✅ Audio loaded');
+                }
+            }
         }
+        
+        // Global audio state - MUST BE WINDOW LEVEL
+        window.audioIsPlaying = false;
+        window.audioStartedPlaying = false;
+        window.audioLastTime = 0;
+        
+        // ===== GLOBAL AUDIO PLAY HANDLER - INLINE ALL LOGIC =====
+        window.handleAudioPlay = async function() {
+            console.log('🔊 === PLAY BUTTON CLICKED ===');
+            
+            const audio = document.getElementById('mainAudio');
+            const playBtn = document.getElementById('playBtn');
+            const progressBar = document.getElementById('audioProgressBar');
+            const timeDisplay = document.getElementById('audioTime');
+            
+            console.log('Elements:', {audio: !!audio, btn: !!playBtn, pb: !!progressBar, td: !!timeDisplay});
+            
+            if (!audio || !playBtn) {
+                alert('Lỗi: Elements không tìm thấy!');
+                return;
+            }
+            
+            if (window.audioIsPlaying) {
+                console.log('Already playing');
+                return;
+            }
+            
+            try {
+                playBtn.textContent = '⏳ Đang tải...';
+                playBtn.disabled = true;
+                
+                console.log('▶️ Calling audio.play()...');
+                await audio.play();
+                console.log('✅ Playing! Duration:', audio.duration);
+                
+                window.audioIsPlaying = true;
+                window.audioStartedPlaying = true;
+                playBtn.textContent = '⏸️ Đang phát...';
+                playBtn.classList.add('playing');
+                
+                // UPDATE TIME & PROGRESS - INLINE
+                const updateInterval = setInterval(() => {
+                    if (audio.paused || audio.ended) {
+                        clearInterval(updateInterval);
+                        return;
+                    }
+                    
+                    const current = audio.currentTime;
+                    const duration = audio.duration;
+                    
+                    console.log(`⏱️ ${current.toFixed(1)}s / ${duration.toFixed(1)}s`);
+                    
+                    // Update progress bar
+                    if (progressBar && duration > 0) {
+                        const progress = (current / duration) * 100;
+                        progressBar.style.width = progress + '%';
+                    }
+                    
+                    // Update time display
+                    if (timeDisplay && duration > 0) {
+                        const cm = Math.floor(current / 60);
+                        const cs = Math.floor(current % 60);
+                        const dm = Math.floor(duration / 60);
+                        const ds = Math.floor(duration % 60);
+                        timeDisplay.textContent = 
+                            `${String(cm).padStart(2,'0')}:${String(cs).padStart(2,'0')} / ` +
+                            `${String(dm).padStart(2,'0')}:${String(ds).padStart(2,'0')}`;
+                    }
+                }, 200); // Update every 200ms
+                
+                // WHEN ENDED
+                audio.onended = function() {
+                    clearInterval(updateInterval);
+                    audioPlayCount++;
+                    window.audioIsPlaying = false;
+                    window.audioStartedPlaying = false;
+                    
+                    console.log(`✅ Audio ended! Count: ${audioPlayCount}/${MAX_AUDIO_PLAYS}`);
+                    
+                    if (audioPlayCount >= MAX_AUDIO_PLAYS) {
+                        setTimeout(() => displaySection(1), 500);
+                    } else {
+                        audio.currentTime = 0;
+                        playBtn.textContent = `▶️ Phát Audio (Lượt ${audioPlayCount + 1})`;
+                        playBtn.classList.remove('playing');
+                        playBtn.disabled = false;
+                        if (progressBar) progressBar.style.width = '0%';
+                    }
+                };
+                
+            } catch (error) {
+                console.error('❌ Error:', error.message);
+                playBtn.textContent = '❌ Lỗi - Thử lại';
+                playBtn.disabled = false;
+                alert('Lỗi: ' + error.message);
+            }
+        };
+        
         
         // ===== ATTACH EVENT LISTENERS TO ANSWERS =====
         function attachAnswerEventListeners() {
@@ -2304,7 +3003,7 @@
                         placement_id: userRowId,
                         answers: userAnswers,
                         score: score,
-                        selected_level: selectedLevel,
+                        selected_level: selectedHSK, // Lưu "1-2", "3-4", hoặc "5-6"
                         completed_at: new Date().toISOString()
                     }]);
 
@@ -2321,37 +3020,224 @@
         }
 
         // ===== DISPLAY RESULT =====
-        function displayResult(score) {
-            // Total scorable questions = listening (5) + reading (5) = 10
-            // Writing section (1 essay) is not scored
-            const scorableQuestions = listeningQuestions.length + readingQuestions.length;
+        async function displayResult(score) {
+            console.log('=== DISPLAYING RESULT ===');
             
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('totalQuestions').textContent = scorableQuestions;
-
+            // Get user info
+            const fullname = localStorage.getItem('fullname') || 'Học viên';
+            const elapsedTime = 20 * 60 - (parseInt(document.getElementById('timerDisplay').textContent.split(':')[0]) * 60 + 
+                                           parseInt(document.getElementById('timerDisplay').textContent.split(':')[1]));
+            const minutes = Math.floor(elapsedTime / 60);
+            const seconds = elapsedTime % 60;
+            
+            // Total scorable questions = listening (5) + reading (5) = 10
+            const scorableQuestions = listeningQuestions.length + readingQuestions.length;
             const percentage = scorableQuestions > 0 ? (score / scorableQuestions) * 100 : 0;
+            
+            // Determine level
             let level = '';
             let message = '';
-
             if (percentage >= 90) {
-                level = `HSK ${selectedLevel} - Xuất sắc`;
+                level = `HSK ${selectedHSK} - Xuất sắc`;
                 message = 'Xuất sắc! Bạn có trình độ tiếng Trung rất cao, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 75) {
-                level = `HSK ${selectedLevel} - Rất tốt`;
+                level = `HSK ${selectedHSK} - Rất tốt`;
                 message = 'Rất tốt! Bạn có nền tảng tiếng Trung vững chắc, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 60) {
-                level = `HSK ${selectedLevel} - Khá`;
+                level = `HSK ${selectedHSK} - Khá`;
                 message = 'Khá tốt! Bạn đang trên đà phát triển, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 40) {
-                level = `HSK ${selectedLevel} - Trung bình`;
+                level = `HSK ${selectedHSK} - Trung bình`;
                 message = 'Tốt! Bạn đã có kiến thức cơ bản, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else {
-                level = `HSK ${selectedLevel} - Cần cải thiện`;
+                level = `HSK ${selectedHSK} - Cần cải thiện`;
                 message = 'Bạn đang bắt đầu hành trình học tiếng Trung, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             }
-
+            
+            // Update UI
+            document.getElementById('resultName').textContent = fullname;
+            document.getElementById('resultLevel').textContent = `HSK ${selectedHSK}`;
+            document.getElementById('completionTime').textContent = `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('totalQuestions').textContent = scorableQuestions;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('totalAnswers').textContent = scorableQuestions;
             document.getElementById('levelBadge').textContent = level;
             document.getElementById('resultMessage').textContent = message;
+            
+            // Render answers grid
+            renderAnswersGrid(score, scorableQuestions);
+            
+            // Get AI feedback for writing (if exists)
+            const writingIndex = listeningQuestions.length + readingQuestions.length;
+            const writingAnswer = userAnswers[writingIndex];
+            
+            if (writingAnswer && writingAnswer.trim().length > 0) {
+                console.log('Getting AI feedback for writing...');
+                await getAIFeedback(writingAnswer, writingQuestions[0]?.question_text || '');
+            }
+        }
+        
+        // ===== RENDER ANSWERS GRID - SEPARATE SECTIONS =====
+        function renderAnswersGrid(score, total) {
+            const listeningGrid = document.getElementById('listeningGrid');
+            const readingGrid = document.getElementById('readingGrid');
+            
+            let listeningCorrect = 0;
+            let readingCorrect = 0;
+            
+            // Clear grids
+            listeningGrid.innerHTML = '';
+            readingGrid.innerHTML = '';
+            
+            // Render Listening (0-4)
+            listeningQuestions.forEach((q, i) => {
+                const correct = userAnswers[i] === q.correct_answer;
+                if (correct) listeningCorrect++;
+                
+                const item = document.createElement('div');
+                item.className = `answer-item ${correct ? 'correct' : 'incorrect'}`;
+                
+                const questionNum = document.createElement('span');
+                questionNum.textContent = i + 1;
+                
+                const icon = document.createElement('div');
+                icon.className = `check-icon ${correct ? 'correct' : 'incorrect'}`;
+                icon.textContent = correct ? '✓' : '✕';
+                
+                item.appendChild(questionNum);
+                item.appendChild(icon);
+                listeningGrid.appendChild(item);
+            });
+            
+            // Render Reading (5-9)
+            const readingStartIdx = listeningQuestions.length;
+            readingQuestions.forEach((q, i) => {
+                const globalIdx = readingStartIdx + i;
+                const userAnswer = userAnswers[globalIdx];
+                const correctAnswer = q.correct_answer;
+                const correct = userAnswer && correctAnswer && 
+                    userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+                if (correct) readingCorrect++;
+                
+                const item = document.createElement('div');
+                item.className = `answer-item ${correct ? 'correct' : 'incorrect'}`;
+                
+                const questionNum = document.createElement('span');
+                questionNum.textContent = globalIdx + 1;
+                
+                const icon = document.createElement('div');
+                icon.className = `check-icon ${correct ? 'correct' : 'incorrect'}`;
+                icon.textContent = correct ? '✓' : '✕';
+                
+                item.appendChild(questionNum);
+                item.appendChild(icon);
+                readingGrid.appendChild(item);
+            });
+            
+            // Update scores
+            document.getElementById('listeningScore').textContent = listeningCorrect;
+            document.getElementById('readingScore').textContent = readingCorrect;
+        }
+        
+        // ===== GET AI FEEDBACK USING GEMINI =====
+        async function getAIFeedback(essay, prompt) {
+            const feedbackSection = document.getElementById('aiFeedbackSection');
+            const feedbackContent = document.getElementById('aiFeedbackContent');
+            
+            // Show section with loading
+            feedbackSection.style.display = 'block';
+            feedbackContent.innerHTML = `
+                <div class="ai-loading">
+                    <div class="ai-loading-spinner"></div>
+                    <div>Đang phân tích bài viết của bạn...</div>
+                </div>
+            `;
+            
+            try {
+                // Gemini API key
+                const GEMINI_API_KEY = 'AIzaSyA0KtdYeuXgVA33SgZHpfYZLrsJN1uouSQ';
+                
+                console.log('🤖 Starting AI feedback...');
+                console.log('Essay length:', essay.length);
+                
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+                
+                const requestBody = {
+                    contents: [{
+                        parts: [{
+                            text: `你是一位专业的中文老师。请评价学生的作文。
+
+题目：${prompt}
+
+学生作文：
+${essay}
+
+请用越南语简短评价（200-300字），包括：
+1. 内容：是否符合题目要求？
+2. 语法：有语法错误吗？（如果有，请指出并改正）
+3. 词汇：词汇使用是否恰当和丰富？
+4. 句子结构：句子是否清晰有逻辑？
+5. 优点和需要改进的地方
+6. 改进建议
+
+请用友好和鼓励的语气回答。`
+                        }]
+                    }]
+                };
+                
+                console.log('📡 Calling Gemini API...');
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Error response:', errorText);
+                    throw new Error(`API Error ${response.status}: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ AI Response received:', data);
+                
+                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Không nhận được phản hồi từ AI.';
+                console.log('AI Text length:', aiText.length);
+                
+                // Format AI feedback into paragraphs
+                const paragraphs = aiText.split('\n\n').filter(p => p.trim());
+                let formattedHTML = '';
+                
+                if (paragraphs.length > 0) {
+                    paragraphs.forEach(para => {
+                        const cleaned = para.trim().replace(/\n/g, '<br>');
+                        formattedHTML += `<p>${cleaned}</p>`;
+                    });
+                } else {
+                    formattedHTML = `<p>${aiText.replace(/\n/g, '<br>')}</p>`;
+                }
+                
+                feedbackContent.innerHTML = formattedHTML;
+                console.log('✅ AI feedback displayed');
+                
+            } catch (error) {
+                console.error('❌ AI Feedback error:', error);
+                console.error('Error stack:', error.stack);
+                
+                feedbackContent.innerHTML = `
+                    <p style="color: #f56565;">
+                        <strong>⚠️ Không thể lấy nhận xét AI</strong><br><br>
+                        Lỗi: ${error.message}<br><br>
+                        Vui lòng liên hệ giáo viên để được đánh giá chi tiết.
+                    </p>
+                `;
+            }
         }
 
         // ===== FINISH BUTTON =====
@@ -2360,4 +3246,6 @@
         });
     </script>
 </body>
+</html>
+/body>
 </html>
