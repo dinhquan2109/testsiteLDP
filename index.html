@@ -1674,6 +1674,7 @@
         // NEW: Level selection
         let selectedLevel = null;
         let selectedRange = null;
+        let selectedHSK = null; // "1-2", "3-4", hoặc "5-6"
         
         // Section data
         let listeningQuestions = [];
@@ -1886,6 +1887,9 @@
                 // Save selected level
                 selectedLevel = this.dataset.level;
                 selectedRange = this.dataset.range;
+                selectedHSK = this.dataset.hsk; // "1-2", "3-4", hoặc "5-6"
+                
+                console.log('Selected:', {level: selectedLevel, range: selectedRange, hsk: selectedHSK});
                 
                 // Enable start button
                 document.getElementById('startTestBtn').disabled = false;
