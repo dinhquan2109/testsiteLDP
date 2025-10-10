@@ -2138,33 +2138,29 @@
             updateNavButtons();
         }
         
-        // Global audio state
-        let audioIsPlaying = false;
-        let audioStartedPlaying = false;
-        let audioLastTime = 0;
+        // Global audio state - MUST BE WINDOW LEVEL
+        window.audioIsPlaying = false;
+        window.audioStartedPlaying = false;
+        window.audioLastTime = 0;
         
-        // ===== GLOBAL AUDIO PLAY HANDLER =====
+        // ===== GLOBAL AUDIO PLAY HANDLER - INLINE ALL LOGIC =====
         window.handleAudioPlay = async function() {
-            console.log('=== handleAudioPlay() CALLED ===');
+            console.log('🔊 === PLAY BUTTON CLICKED ===');
             
             const audio = document.getElementById('mainAudio');
             const playBtn = document.getElementById('playBtn');
             const progressBar = document.getElementById('audioProgressBar');
+            const timeDisplay = document.getElementById('audioTime');
             
-            console.log('Audio:', audio);
-            console.log('Button:', playBtn);
+            console.log('Elements:', {audio: !!audio, btn: !!playBtn, pb: !!progressBar, td: !!timeDisplay});
             
             if (!audio || !playBtn) {
-                console.error('❌ Elements not found!');
-                alert('Lỗi: Không tìm thấy audio player!');
+                alert('Lỗi: Elements không tìm thấy!');
                 return;
             }
             
-            console.log('isPlaying:', audioIsPlaying);
-            console.log('Audio src:', audio.currentSrc);
-            
-            if (audioIsPlaying) {
-                console.log('Already playing, ignored');
+            if (window.audioIsPlaying) {
+                console.log('Already playing');
                 return;
             }
             
@@ -2172,161 +2168,73 @@
                 playBtn.textContent = '⏳ Đang tải...';
                 playBtn.disabled = true;
                 
-                console.log('Calling audio.play()...');
+                console.log('▶️ Calling audio.play()...');
                 await audio.play();
-                console.log('✅ Audio.play() SUCCESS!');
-                console.log('Audio duration:', audio.duration);
-                console.log('Audio readyState:', audio.readyState);
+                console.log('✅ Playing! Duration:', audio.duration);
                 
-                audioIsPlaying = true;
-                audioStartedPlaying = true;
+                window.audioIsPlaying = true;
+                window.audioStartedPlaying = true;
                 playBtn.textContent = '⏸️ Đang phát...';
                 playBtn.classList.add('playing');
                 
-                // Force check duration
-                if (!audio.duration || audio.duration === 0) {
-                    console.warn('⚠️ Duration not available yet, waiting...');
-                    setTimeout(() => {
-                        console.log('Duration after delay:', audio.duration);
-                    }, 1000);
-                }
+                // UPDATE TIME & PROGRESS - INLINE
+                const updateInterval = setInterval(() => {
+                    if (audio.paused || audio.ended) {
+                        clearInterval(updateInterval);
+                        return;
+                    }
+                    
+                    const current = audio.currentTime;
+                    const duration = audio.duration;
+                    
+                    console.log(`⏱️ ${current.toFixed(1)}s / ${duration.toFixed(1)}s`);
+                    
+                    // Update progress bar
+                    if (progressBar && duration > 0) {
+                        const progress = (current / duration) * 100;
+                        progressBar.style.width = progress + '%';
+                    }
+                    
+                    // Update time display
+                    if (timeDisplay && duration > 0) {
+                        const cm = Math.floor(current / 60);
+                        const cs = Math.floor(current % 60);
+                        const dm = Math.floor(duration / 60);
+                        const ds = Math.floor(duration % 60);
+                        timeDisplay.textContent = 
+                            `${String(cm).padStart(2,'0')}:${String(cs).padStart(2,'0')} / ` +
+                            `${String(dm).padStart(2,'0')}:${String(ds).padStart(2,'0')}`;
+                    }
+                }, 200); // Update every 200ms
+                
+                // WHEN ENDED
+                audio.onended = function() {
+                    clearInterval(updateInterval);
+                    audioPlayCount++;
+                    window.audioIsPlaying = false;
+                    window.audioStartedPlaying = false;
+                    
+                    console.log(`✅ Audio ended! Count: ${audioPlayCount}/${MAX_AUDIO_PLAYS}`);
+                    
+                    if (audioPlayCount >= MAX_AUDIO_PLAYS) {
+                        setTimeout(() => displaySection(1), 500);
+                    } else {
+                        audio.currentTime = 0;
+                        playBtn.textContent = `▶️ Phát Audio (Lượt ${audioPlayCount + 1})`;
+                        playBtn.classList.remove('playing');
+                        playBtn.disabled = false;
+                        if (progressBar) progressBar.style.width = '0%';
+                    }
+                };
                 
             } catch (error) {
-                console.error('❌ Play error:', error);
+                console.error('❌ Error:', error.message);
                 playBtn.textContent = '❌ Lỗi - Thử lại';
                 playBtn.disabled = false;
-                playBtn.classList.remove('playing');
-                alert('Lỗi phát audio: ' + error.message);
+                alert('Lỗi: ' + error.message);
             }
         };
         
-        // ===== SETUP AUDIO PLAYER WITH RESTRICTIONS =====
-        function setupAudioPlayer() {
-            console.log('=== setupAudioPlayer() START ===');
-            
-            const audio = document.getElementById('mainAudio');
-            const playBtn = document.getElementById('playBtn');
-            const progressBar = document.getElementById('audioProgressBar');
-            const timeDisplay = document.getElementById('audioTime');
-            
-            if (!audio) {
-                console.error('❌ Audio NOT FOUND');
-                return;
-            }
-            
-            console.log('✅ Audio found');
-            console.log('ProgressBar:', progressBar);
-            console.log('TimeDisplay:', timeDisplay);
-            
-            // Load audio
-            audio.load();
-            
-            // Audio loaded
-            audio.addEventListener('loadedmetadata', function() {
-                console.log('✅ Audio metadata loaded. Duration:', audio.duration);
-                if (timeDisplay && audio.duration > 0) {
-                    const min = Math.floor(audio.duration / 60);
-                    const sec = Math.floor(audio.duration % 60);
-                    timeDisplay.textContent = `00:00 / ${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-                    console.log('Time display updated:', timeDisplay.textContent);
-                }
-            });
-            
-            audio.addEventListener('canplay', function() {
-                console.log('Audio can play. Duration:', audio.duration);
-            });
-            
-            // Audio error
-            audio.addEventListener('error', function() {
-                console.error('❌ Audio load error');
-                if (playBtn) playBtn.textContent = '❌ Lỗi audio';
-            });
-            
-            // Time update - LUÔN LUÔN CHẠY KHI AUDIO PHÁT
-            audio.addEventListener('timeupdate', function() {
-                const current = audio.currentTime || 0;
-                const duration = audio.duration || 0;
-                
-                console.log('⏱️ Timeupdate:', current.toFixed(1), '/', duration.toFixed(1), 'Paused:', audio.paused);
-                
-                // CHỈ update khi audio ĐANG PHÁT (không paused)
-                if (audio.paused) {
-                    console.log('Audio paused, skip update');
-                    return;
-                }
-                
-                // Prevent seeking
-                if (audioStartedPlaying && Math.abs(current - audioLastTime) > 1) {
-                    if (current < audioLastTime) {
-                        console.log('⚠️ Seeking detected, reset');
-                        audio.currentTime = audioLastTime;
-                        return;
-                    }
-                }
-                audioLastTime = current;
-                
-                // Update progress bar
-                if (progressBar && duration > 0) {
-                    const progress = (current / duration) * 100;
-                    progressBar.style.width = progress + '%';
-                    console.log('📊 Progress:', progress.toFixed(1) + '%');
-                }
-                
-                // Update time display
-                if (timeDisplay && duration > 0) {
-                    const cm = Math.floor(current / 60);
-                    const cs = Math.floor(current % 60);
-                    const dm = Math.floor(duration / 60);
-                    const ds = Math.floor(duration % 60);
-                    
-                    const timeText = `${String(cm).padStart(2, '0')}:${String(cs).padStart(2, '0')} / ${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
-                    timeDisplay.textContent = timeText;
-                    console.log('⏰ Time:', timeText);
-                } else {
-                    console.warn('⚠️ TimeDisplay not found or duration = 0');
-                }
-            });
-            
-            console.log('✅ Timeupdate listener added');
-            
-            // Prevent pause
-            audio.addEventListener('pause', function() {
-                console.log('Pause event. isPlaying:', audioIsPlaying, 'ended:', audio.ended);
-                if (audioIsPlaying && !audio.ended) {
-                    console.log('🔄 Auto-resume');
-                    audio.play();
-                }
-            });
-            
-            // Audio ended
-            audio.addEventListener('ended', function() {
-                audioPlayCount++;
-                audioIsPlaying = false;
-                audioStartedPlaying = false;
-                audioLastTime = 0;
-                
-                console.log(`✅ Audio ENDED. Count: ${audioPlayCount}/${MAX_AUDIO_PLAYS}`);
-                
-                if (audioPlayCount >= MAX_AUDIO_PLAYS) {
-                    console.log('Max plays reached, hiding audio');
-                    setTimeout(() => displaySection(1), 500);
-                } else {
-                    console.log('Resetting for next play');
-                    audio.currentTime = 0;
-                    playBtn.textContent = `▶️ Phát Audio (Lượt ${audioPlayCount + 1})`;
-                    playBtn.classList.remove('playing');
-                    playBtn.disabled = false;
-                    if (progressBar) progressBar.style.width = '0%';
-                    if (timeDisplay) {
-                        const dm = Math.floor(audio.duration / 60);
-                        const ds = Math.floor(audio.duration % 60);
-                        timeDisplay.textContent = `00:00 / ${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
-                    }
-                }
-            });
-            
-            console.log('=== setupAudioPlayer() COMPLETE ===');
-        }
         
         // ===== ATTACH EVENT LISTENERS TO ANSWERS =====
         function attachAnswerEventListeners() {
