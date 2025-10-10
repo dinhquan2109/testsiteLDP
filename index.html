@@ -2128,28 +2128,20 @@
                 console.log('Input boxes created:', document.querySelectorAll('.text-input').length);
             }
             
-            // Setup audio player event if in listening section
-            if (sectionNum === 1 && audioPlayCount < MAX_AUDIO_PLAYS) {
-                const audio = document.getElementById('mainAudio');
-                if (audio) {
-                    audio.addEventListener('play', function() {
-                        if (audioPlayCount < MAX_AUDIO_PLAYS) {
-                            audioPlayCount++;
-                            if (audioPlayCount >= MAX_AUDIO_PLAYS) {
-                                setTimeout(() => {
-                                    this.pause();
-                                    displaySection(1); // Refresh to show "no more plays"
-                                }, 100);
-                            }
-                        }
-                    });
-                }
-            }
-            
             // Attach event listeners
             attachAnswerEventListeners();
             updateProgressCircles();
             updateNavButtons();
+            
+            // Audio setup - CHỈ LOAD, KHÔNG addEventListener
+            if (sectionNum === 1 && audioPlayCount < MAX_AUDIO_PLAYS) {
+                console.log('📻 Audio section ready, count:', audioPlayCount);
+                const audio = document.getElementById('mainAudio');
+                if (audio) {
+                    audio.load();
+                    console.log('✅ Audio loaded');
+                }
+            }
         }
         
         // Global audio state - MUST BE WINDOW LEVEL
