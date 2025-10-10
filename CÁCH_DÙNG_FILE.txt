@@ -1,0 +1,75 @@
+📦 FILE ĐÃ CÓ TRONG WORKSPACE!
+
+════════════════════════════════════════════════════════
+
+✅ FILE CHÍNH:
+
+   index.html (99KB)
+   
+   → File này ĐÃ HOÀN CHỈNH!
+   → Có tất cả code mới
+   → Sẵn sàng upload
+
+════════════════════════════════════════════════════════
+
+🚀 CÁCH SỬ DỤNG:
+
+CÁCH 1: Copy nội dung (NHANH NHẤT)
+────────────────────────────────
+1. Click vào file: index.html (trong workspace)
+2. Ctrl + A (chọn tất cả)
+3. Ctrl + C (copy)
+4. Mở file index.html trên server
+5. Ctrl + A (chọn tất cả cũ)
+6. Ctrl + V (paste code mới)
+7. Save
+
+CÁCH 2: Upload file (NẾU CÓ FTP/cPanel)
+────────────────────────────────
+1. Trong workspace, file index.html
+2. Right-click → Download (nếu có)
+3. Hoặc dùng FTP client
+4. Upload lên server
+5. Ghi đè file cũ
+
+CÁCH 3: Dùng Git (NẾU CÓ GIT)
+────────────────────────────────
+1. git add index.html
+2. git commit -m "Update"
+3. git push
+4. Pull trên server
+
+════════════════════════════════════════════════════════
+
+💡 GIẢI THÍCH DẤU +/-:
+
+Nếu bạn thấy dấu +/- trước mỗi dòng:
+→ Đó là GIT DIFF (chỉ để xem thay đổi)
+→ KHÔNG PHẢI file thật
+
+File thật (index.html):
+→ Không có dấu +/-
+→ Chỉ có code thuần
+→ Mở trong editor bình thường
+
+════════════════════════════════════════════════════════
+
+📂 MỞ FILE:
+
+1. Trong Cursor/VSCode:
+   - Click vào index.html ở sidebar
+   - File sẽ mở ra
+   - Bạn sẽ thấy code thuần (không có +/-)
+
+2. Nếu thấy diff view:
+   - Close diff view
+   - Mở file thật (Explorer → index.html)
+
+════════════════════════════════════════════════════════
+
+✅ FILE index.html TRONG WORKSPACE NÀY
+   ĐÃ HOÀN CHỈNH VÀ SẴN SÀNG DÙNG!
+
+   CHỈ CẦN COPY hoặc UPLOAD lên server!
+
+════════════════════════════════════════════════════════
