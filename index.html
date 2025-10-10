@@ -1177,7 +1177,7 @@
             transform: translateY(-2px);
         }
 
-        /* RESULT PAGE STYLES - BEAUTIFUL NEW DESIGN */
+        /* RESULT PAGE STYLES - PREMIUM DESIGN */
         .result-page {
             display: none;
             position: fixed;
@@ -1185,50 +1185,80 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e7d5a 0%, #2d8f67 50%, #1a6b4d 100%);
             z-index: 3000;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 30px 20px;
             overflow-y: auto;
+            position: relative;
+        }
+        
+        .result-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(76, 175, 80, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(46, 125, 50, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(27, 94, 32, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .result-page::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 100px,
+                    rgba(255, 255, 255, 0.01) 100px,
+                    rgba(255, 255, 255, 0.01) 200px
+                );
+            pointer-events: none;
+            z-index: 0;
+            animation: backgroundShift 60s linear infinite;
+        }
+        
+        @keyframes backgroundShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
 
         .result-page.show {
             display: flex;
         }
-        
-        .result-page::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
-            opacity: 0.3;
-            pointer-events: none;
-        }
 
         .result-container {
             max-width: 950px;
             width: 100%;
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            background: #fffef9;
+            border-radius: 2px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
             overflow: hidden;
             position: relative;
+            z-index: 1;
             margin: 20px auto;
-            animation: resultPopIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: fadeInUp 0.6s ease-out;
         }
         
-        @keyframes resultPopIn {
-            0% {
+        @keyframes fadeInUp {
+            from {
                 opacity: 0;
-                transform: scale(0.8) translateY(50px);
+                transform: translateY(20px);
             }
-            100% {
+            to {
                 opacity: 1;
-                transform: scale(1) translateY(0);
+                transform: translateY(0);
             }
         }
 
@@ -1663,7 +1693,13 @@
                 <div class="spiral-hole"></div>
             </div>
 
-            <div class="result-logo">IC</div>
+            <div class="result-logo">
+                <div class="logo-lines">
+                    <div class="logo-line"></div>
+                    <div class="logo-line"></div>
+                    <div class="logo-line"></div>
+                </div>
+            </div>
 
             <div class="result-content">
                 <h1 class="result-title-new">CHÚC MỪNG BẠN ĐÃ HOÀN THÀNH BÀI THI</h1>
@@ -1681,10 +1717,10 @@
                 </div>
 
                 <div class="completion-message">
-                    <p style="margin-bottom: 15px;">
+                    <p>
                         Chúc mừng bạn đã hoàn thành bài thi <strong>HSK Placement Test</strong> cùng với ICANCONNECT.
                     </p>
-                    <p style="margin-bottom: 15px;">
+                    <p>
                         Bạn đã nhận được <strong><span id="finalScore">0</span> điểm</strong> trên tổng <strong><span id="totalQuestions">10</span> điểm</strong>, 
                         tương đương với trình độ <strong id="levelBadge"></strong>.
                     </p>
@@ -1693,18 +1729,29 @@
                     </p>
                 </div>
 
-                <div class="score-badge-new">
-                    Số đáp án đúng: <span id="correctCount">0</span>/<span id="totalAnswers">10</span>
+                <!-- Phần Nghe -->
+                <div class="answers-section">
+                    <div class="section-title">
+                        📻 Phần Nghe: <span id="listeningScore">0</span>/5 đúng
+                    </div>
+                    <div class="answers-grid" id="listeningGrid"></div>
                 </div>
 
-                <div class="answers-grid" id="answersGrid"></div>
-
-                <!-- AI Feedback Section -->
-                <div id="aiFeedbackSection" style="display: none;" class="ai-feedback-section">
-                    <div class="ai-feedback-title">
-                        🤖 Nhận xét AI cho bài viết của bạn
+                <!-- Phần Đọc -->
+                <div class="answers-section">
+                    <div class="section-title">
+                        📖 Phần Điền Đáp Án: <span id="readingScore">0</span>/5 đúng
                     </div>
-                    <div id="aiFeedbackContent" class="ai-feedback-content">
+                    <div class="answers-grid" id="readingGrid"></div>
+                </div>
+
+                <!-- AI Feedback cho Phần Viết -->
+                <div id="aiFeedbackSection" style="display: none;" class="writing-section">
+                    <div class="writing-title">
+                        <span class="writing-icon">✍️</span>
+                        Nhận xét AI cho Phần Viết
+                    </div>
+                    <div id="aiFeedbackContent" class="writing-content">
                         <div class="ai-loading">
                             <div class="ai-loading-spinner"></div>
                             <div>Đang phân tích bài viết của bạn...</div>
@@ -1713,7 +1760,7 @@
                 </div>
 
                 <div class="result-buttons">
-                    <button class="btn-result home" id="btnFinish">Hoàn tất</button>
+                    <button class="btn-result home" id="btnFinish"><span>Hoàn tất</span></button>
                 </div>
             </div>
         </div>
@@ -2647,21 +2694,39 @@
             }
         }
         
-        // ===== RENDER ANSWERS GRID =====
+        // ===== RENDER ANSWERS GRID - SEPARATE SECTIONS =====
         function renderAnswersGrid(score, total) {
-            const grid = document.getElementById('answersGrid');
-            grid.innerHTML = '';
+            const listeningGrid = document.getElementById('listeningGrid');
+            const readingGrid = document.getElementById('readingGrid');
             
-            // Create result array for 10 questions
-            const results = [];
+            let listeningCorrect = 0;
+            let readingCorrect = 0;
             
-            // Listening questions (0-4)
+            // Clear grids
+            listeningGrid.innerHTML = '';
+            readingGrid.innerHTML = '';
+            
+            // Render Listening (0-4)
             listeningQuestions.forEach((q, i) => {
                 const correct = userAnswers[i] === q.correct_answer;
-                results.push({ question: i + 1, correct: correct });
+                if (correct) listeningCorrect++;
+                
+                const item = document.createElement('div');
+                item.className = `answer-item ${correct ? 'correct' : 'incorrect'}`;
+                
+                const questionNum = document.createElement('span');
+                questionNum.textContent = i + 1;
+                
+                const icon = document.createElement('div');
+                icon.className = `check-icon ${correct ? 'correct' : 'incorrect'}`;
+                icon.textContent = correct ? '✓' : '✕';
+                
+                item.appendChild(questionNum);
+                item.appendChild(icon);
+                listeningGrid.appendChild(item);
             });
             
-            // Reading questions (5-9)
+            // Render Reading (5-9)
             const readingStartIdx = listeningQuestions.length;
             readingQuestions.forEach((q, i) => {
                 const globalIdx = readingStartIdx + i;
@@ -2669,25 +2734,26 @@
                 const correctAnswer = q.correct_answer;
                 const correct = userAnswer && correctAnswer && 
                     userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
-                results.push({ question: globalIdx + 1, correct: correct });
-            });
-            
-            // Render grid
-            results.forEach(result => {
+                if (correct) readingCorrect++;
+                
                 const item = document.createElement('div');
-                item.className = `answer-item ${result.correct ? 'correct' : 'incorrect'}`;
+                item.className = `answer-item ${correct ? 'correct' : 'incorrect'}`;
                 
                 const questionNum = document.createElement('span');
-                questionNum.textContent = result.question;
+                questionNum.textContent = globalIdx + 1;
                 
                 const icon = document.createElement('div');
-                icon.className = `check-icon ${result.correct ? 'correct' : 'incorrect'}`;
-                icon.textContent = result.correct ? '✓' : '✕';
+                icon.className = `check-icon ${correct ? 'correct' : 'incorrect'}`;
+                icon.textContent = correct ? '✓' : '✕';
                 
                 item.appendChild(questionNum);
                 item.appendChild(icon);
-                grid.appendChild(item);
+                readingGrid.appendChild(item);
             });
+            
+            // Update scores
+            document.getElementById('listeningScore').textContent = listeningCorrect;
+            document.getElementById('readingScore').textContent = readingCorrect;
         }
         
         // ===== GET AI FEEDBACK USING GEMINI =====
@@ -2752,7 +2818,14 @@ Hãy trả lời bằng tiếng Việt, ngắn gọn (200-300 từ), thân thi�
                 
                 const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Không thể tạo nhận xét.';
                 
-                feedbackContent.innerHTML = `<div style="white-space: pre-wrap;">${aiText}</div>`;
+                // Format AI feedback into paragraphs
+                const paragraphs = aiText.split('\n\n').filter(p => p.trim());
+                let formattedHTML = '';
+                paragraphs.forEach(para => {
+                    formattedHTML += `<p>${para.trim()}</p>`;
+                });
+                
+                feedbackContent.innerHTML = formattedHTML || `<p>${aiText}</p>`;
                 
             } catch (error) {
                 console.error('AI Feedback error:', error);
