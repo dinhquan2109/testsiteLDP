@@ -854,14 +854,67 @@
         }
 
         .audio-section audio {
-            width: 100%;
-            max-width: 500px;
-            margin: 15px 0;
+            display: none; /* Hide default audio player */
         }
 
         .audio-info {
             font-size: 14px;
             color: #1976d2;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        #audioControls {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .audio-play-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .audio-play-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .audio-play-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .audio-play-btn.playing {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+        
+        #audioProgress {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        #audioProgressBar {
+            height: 100%;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        #audioTime {
+            font-size: 14px;
+            color: #666;
             font-weight: bold;
         }
 
@@ -1927,12 +1980,19 @@
                         <div class="section-description">Nghe file audio và trả lời 5 câu hỏi</div>
                     </div>
                     <div class="audio-section">
-                        <div class="audio-info">⚠️ File audio chỉ được nghe tối đa ${MAX_AUDIO_PLAYS} lần (Đã nghe: ${audioPlayCount}/${MAX_AUDIO_PLAYS})</div>
-                        <audio id="mainAudio" controls ${audioPlayCount >= MAX_AUDIO_PLAYS ? 'style="display:none;"' : ''}>
+                        <div class="audio-info">⚠️ File audio phải nghe HẾT mới tính 1 lượt. Tối đa 2 lượt (Đã nghe hết: ${audioPlayCount}/${MAX_AUDIO_PLAYS})</div>
+                        <audio id="mainAudio" controlsList="nodownload noplaybackrate" ${audioPlayCount >= MAX_AUDIO_PLAYS ? 'style="display:none;"' : ''}>
                             <source src="${listeningQuestions[0]?.audio_url || ''}" type="audio/mpeg">
                             Trình duyệt của bạn không hỗ trợ phát audio.
                         </audio>
-                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px;">❌ Đã hết lượt nghe</div>' : ''}
+                        <div id="audioControls" ${audioPlayCount >= MAX_AUDIO_PLAYS ? 'style="display:none;"' : ''}>
+                            <button id="playBtn" class="audio-play-btn">▶️ Phát Audio</button>
+                            <div id="audioProgress">
+                                <div id="audioProgressBar"></div>
+                            </div>
+                            <div id="audioTime">00:00 / 00:00</div>
+                        </div>
+                        ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px;">❌ Đã hết lượt nghe (đã nghe hết 2 lần)</div>' : ''}
                     </div>
                 `;
                 
@@ -2076,6 +2136,111 @@
             attachAnswerEventListeners();
             updateProgressCircles();
             updateNavButtons();
+        }
+        
+        // ===== SETUP AUDIO PLAYER WITH RESTRICTIONS =====
+        function setupAudioPlayer() {
+            const audio = document.getElementById('mainAudio');
+            const playBtn = document.getElementById('playBtn');
+            const progressBar = document.getElementById('audioProgressBar');
+            const timeDisplay = document.getElementById('audioTime');
+            
+            if (!audio || !playBtn) return;
+            
+            let isPlaying = false;
+            let hasStartedPlaying = false;
+            
+            // Play/Pause button
+            playBtn.addEventListener('click', function() {
+                if (isPlaying) {
+                    // KHÔNG CHO PAUSE - bỏ qua click
+                    return;
+                } else {
+                    audio.play();
+                    isPlaying = true;
+                    hasStartedPlaying = true;
+                    playBtn.textContent = '⏸️ Đang phát...';
+                    playBtn.classList.add('playing');
+                    playBtn.disabled = true; // Disable button khi đang phát
+                }
+            });
+            
+            // Prevent seeking - không cho tua
+            let lastTime = 0;
+            audio.addEventListener('timeupdate', function() {
+                // Chỉ cho phép phát tiến tới, không cho tua lùi
+                if (hasStartedPlaying && Math.abs(audio.currentTime - lastTime) > 1) {
+                    // Nếu nhảy quá 1 giây (seeking), reset về vị trí cũ
+                    if (audio.currentTime < lastTime) {
+                        audio.currentTime = lastTime;
+                    }
+                }
+                lastTime = audio.currentTime;
+                
+                // Update progress bar
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = progress + '%';
+                
+                // Update time display
+                const currentMin = Math.floor(audio.currentTime / 60);
+                const currentSec = Math.floor(audio.currentTime % 60);
+                const durationMin = Math.floor(audio.duration / 60) || 0;
+                const durationSec = Math.floor(audio.duration % 60) || 0;
+                
+                timeDisplay.textContent = 
+                    `${String(currentMin).padStart(2, '0')}:${String(currentSec).padStart(2, '0')} / ` +
+                    `${String(durationMin).padStart(2, '0')}:${String(durationSec).padStart(2, '0')}`;
+            });
+            
+            // Prevent pause - không cho dừng giữa chừng
+            audio.addEventListener('pause', function() {
+                if (isPlaying && !audio.ended) {
+                    // Nếu đang phát mà bị pause (không phải do ended), tiếp tục phát
+                    audio.play();
+                }
+            });
+            
+            // Count only when audio ENDS (chạy hết)
+            audio.addEventListener('ended', function() {
+                audioPlayCount++;
+                isPlaying = false;
+                hasStartedPlaying = false;
+                lastTime = 0;
+                
+                console.log(`Audio đã chạy hết. Lượt: ${audioPlayCount}/${MAX_AUDIO_PLAYS}`);
+                
+                if (audioPlayCount >= MAX_AUDIO_PLAYS) {
+                    // Đã hết lượt, ẩn audio player
+                    setTimeout(() => {
+                        displaySection(1); // Refresh to hide audio
+                    }, 500);
+                } else {
+                    // Còn lượt, reset để cho nghe lại
+                    audio.currentTime = 0;
+                    playBtn.textContent = `▶️ Phát Audio (Lượt ${audioPlayCount + 1})`;
+                    playBtn.classList.remove('playing');
+                    playBtn.disabled = false;
+                    progressBar.style.width = '0%';
+                }
+            });
+            
+            // Prevent right-click on audio (tránh download)
+            audio.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            
+            // Prevent keyboard controls
+            document.addEventListener('keydown', function(e) {
+                if (audio && !audio.paused) {
+                    // Chặn space, arrow keys khi audio đang phát
+                    if (e.code === 'Space' || e.code === 'ArrowLeft' || e.code === 'ArrowRight' || 
+                        e.code === 'ArrowUp' || e.code === 'ArrowDown') {
+                        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                            e.preventDefault();
+                        }
+                    }
+                }
+            });
         }
         
         // ===== ATTACH EVENT LISTENERS TO ANSWERS =====
