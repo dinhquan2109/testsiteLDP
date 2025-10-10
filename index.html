@@ -2242,39 +2242,48 @@
                 if (playBtn) playBtn.textContent = '❌ Lỗi audio';
             });
             
-            // Time update - QUAN TRỌNG!
+            // Time update - LUÔN LUÔN CHẠY KHI AUDIO PHÁT
             audio.addEventListener('timeupdate', function() {
-                console.log('Timeupdate - Current:', audio.currentTime, 'Duration:', audio.duration);
+                const current = audio.currentTime || 0;
+                const duration = audio.duration || 0;
+                
+                console.log('⏱️ Timeupdate:', current.toFixed(1), '/', duration.toFixed(1), 'Paused:', audio.paused);
+                
+                // CHỈ update khi audio ĐANG PHÁT (không paused)
+                if (audio.paused) {
+                    console.log('Audio paused, skip update');
+                    return;
+                }
                 
                 // Prevent seeking
-                if (audioStartedPlaying && Math.abs(audio.currentTime - audioLastTime) > 1) {
-                    if (audio.currentTime < audioLastTime) {
+                if (audioStartedPlaying && Math.abs(current - audioLastTime) > 1) {
+                    if (current < audioLastTime) {
+                        console.log('⚠️ Seeking detected, reset');
                         audio.currentTime = audioLastTime;
+                        return;
                     }
                 }
-                audioLastTime = audio.currentTime;
+                audioLastTime = current;
                 
                 // Update progress bar
-                if (progressBar) {
-                    if (audio.duration && audio.duration > 0) {
-                        const progress = (audio.currentTime / audio.duration) * 100;
-                        progressBar.style.width = progress + '%';
-                        console.log('Progress:', progress.toFixed(1) + '%');
-                    }
+                if (progressBar && duration > 0) {
+                    const progress = (current / duration) * 100;
+                    progressBar.style.width = progress + '%';
+                    console.log('📊 Progress:', progress.toFixed(1) + '%');
                 }
                 
                 // Update time display
-                if (timeDisplay) {
-                    const duration = audio.duration || 0;
-                    if (duration > 0) {
-                        const cm = Math.floor(audio.currentTime / 60);
-                        const cs = Math.floor(audio.currentTime % 60);
-                        const dm = Math.floor(duration / 60);
-                        const ds = Math.floor(duration % 60);
-                        
-                        const timeText = `${String(cm).padStart(2, '0')}:${String(cs).padStart(2, '0')} / ${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
-                        timeDisplay.textContent = timeText;
-                    }
+                if (timeDisplay && duration > 0) {
+                    const cm = Math.floor(current / 60);
+                    const cs = Math.floor(current % 60);
+                    const dm = Math.floor(duration / 60);
+                    const ds = Math.floor(duration % 60);
+                    
+                    const timeText = `${String(cm).padStart(2, '0')}:${String(cs).padStart(2, '0')} / ${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
+                    timeDisplay.textContent = timeText;
+                    console.log('⏰ Time:', timeText);
+                } else {
+                    console.warn('⚠️ TimeDisplay not found or duration = 0');
                 }
             });
             
@@ -2282,7 +2291,9 @@
             
             // Prevent pause
             audio.addEventListener('pause', function() {
+                console.log('Pause event. isPlaying:', audioIsPlaying, 'ended:', audio.ended);
                 if (audioIsPlaying && !audio.ended) {
+                    console.log('🔄 Auto-resume');
                     audio.play();
                 }
             });
@@ -2294,16 +2305,23 @@
                 audioStartedPlaying = false;
                 audioLastTime = 0;
                 
-                console.log(`✅ Audio ended. Count: ${audioPlayCount}/${MAX_AUDIO_PLAYS}`);
+                console.log(`✅ Audio ENDED. Count: ${audioPlayCount}/${MAX_AUDIO_PLAYS}`);
                 
                 if (audioPlayCount >= MAX_AUDIO_PLAYS) {
+                    console.log('Max plays reached, hiding audio');
                     setTimeout(() => displaySection(1), 500);
                 } else {
+                    console.log('Resetting for next play');
                     audio.currentTime = 0;
                     playBtn.textContent = `▶️ Phát Audio (Lượt ${audioPlayCount + 1})`;
                     playBtn.classList.remove('playing');
                     playBtn.disabled = false;
                     if (progressBar) progressBar.style.width = '0%';
+                    if (timeDisplay) {
+                        const dm = Math.floor(audio.duration / 60);
+                        const ds = Math.floor(audio.duration % 60);
+                        timeDisplay.textContent = `00:00 / ${String(dm).padStart(2, '0')}:${String(ds).padStart(2, '0')}`;
+                    }
                 }
             });
             
