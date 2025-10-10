@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo 3 Trình Độ HSK</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .level-option {
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .level-option.beginner {
+            background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+            border: 3px solid #56ab2f;
+        }
+        .level-option.intermediate {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: 3px solid #f5576c;
+        }
+        .level-option.advanced {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border: 3px solid #00f2fe;
+        }
+        .level-option:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .level-name {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .level-desc {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 8px;
+        }
+        .level-range {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        @media (max-width: 768px) {
+            .level-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Demo 3 Trình Độ HSK với Màu Gradient</h1>
+        
+        <div class="level-grid">
+            <div class="level-option beginner">
+                <div class="level-name">HSK 1-2</div>
+                <div class="level-desc">Cơ Bản</div>
+                <div class="level-range">初级 • Beginner</div>
+            </div>
+            
+            <div class="level-option intermediate">
+                <div class="level-name">HSK 3-4</div>
+                <div class="level-desc">Trung Cấp</div>
+                <div class="level-range">中级 • Intermediate</div>
+            </div>
+            
+            <div class="level-option advanced">
+                <div class="level-name">HSK 5-6</div>
+                <div class="level-desc">Nâng Cao</div>
+                <div class="level-range">高级 • Advanced</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 50px; text-align: center; color: #666;">
+            <p>Hover vào từng ô để xem hiệu ứng!</p>
+            <p>✅ Xanh lá: Dễ, thân thiện (HSK 1-2)</p>
+            <p>✅ Hồng/Đỏ: Nhiệt huyết (HSK 3-4)</p>
+            <p>✅ Xanh dương: Chuyên nghiệp (HSK 5-6)</p>
+        </div>
+    </div>
+</body>
+</html>

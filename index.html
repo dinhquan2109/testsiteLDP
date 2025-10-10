@@ -581,41 +581,66 @@
             background: white;
             border: 3px solid #e0e0e0;
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         
         @media (max-width: 480px) {
             .level-option {
-                padding: 15px;
+                padding: 20px;
             }
+        }
+        
+        /* Level colors - từ dễ đến khó */
+        .level-option[data-level="beginner"] {
+            background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+            border-color: #56ab2f;
+            color: white;
+        }
+        
+        .level-option[data-level="intermediate"] {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-color: #f5576c;
+            color: white;
+        }
+        
+        .level-option[data-level="advanced"] {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-color: #00f2fe;
+            color: white;
         }
 
         .level-option:hover {
-            border-color: #7cb342;
-            background: #f1f8e9;
-            transform: translateY(-3px);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .level-option.selected {
-            border-color: #4caf50;
-            background: #e8f5e9;
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
         }
-
-        .level-name {
-            font-size: 24px;
+        
+        .level-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            color: #4caf50;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
-            color: #1e7e5f;
-            margin-bottom: 5px;
+            font-size: 18px;
         }
 
-        .level-desc {
-            font-size: 13px;
-            color: #666;
-        }
 
         .start-test-btn {
             width: 100%;
@@ -1483,29 +1508,20 @@
                 <div class="level-selector">
                     <h3 class="level-selector-title">Vui lòng chọn trình độ muốn test</h3>
                     <div class="level-grid">
-                        <div class="level-option" data-level="1" data-range="1-11">
-                            <div class="level-name">HSK 1</div>
-                            <div class="level-desc">Cơ bản</div>
+                        <div class="level-option" data-level="beginner" data-range="1-22" data-hsk="1-2">
+                            <div class="level-name">HSK 1-2</div>
+                            <div class="level-desc">Cơ Bản</div>
+                            <div class="level-range">初级 • Beginner</div>
                         </div>
-                        <div class="level-option" data-level="2" data-range="12-22">
-                            <div class="level-name">HSK 2</div>
-                            <div class="level-desc">Sơ cấp</div>
+                        <div class="level-option" data-level="intermediate" data-range="23-44" data-hsk="3-4">
+                            <div class="level-name">HSK 3-4</div>
+                            <div class="level-desc">Trung Cấp</div>
+                            <div class="level-range">中级 • Intermediate</div>
                         </div>
-                        <div class="level-option" data-level="3" data-range="23-33">
-                            <div class="level-name">HSK 3</div>
-                            <div class="level-desc">Trung cấp thấp</div>
-                        </div>
-                        <div class="level-option" data-level="4" data-range="34-44">
-                            <div class="level-name">HSK 4</div>
-                            <div class="level-desc">Trung cấp</div>
-                        </div>
-                        <div class="level-option" data-level="5" data-range="45-55">
-                            <div class="level-name">HSK 5</div>
-                            <div class="level-desc">Trung cấp cao</div>
-                        </div>
-                        <div class="level-option" data-level="6" data-range="56-66">
-                            <div class="level-name">HSK 6</div>
-                            <div class="level-desc">Nâng cao</div>
+                        <div class="level-option" data-level="advanced" data-range="45-66" data-hsk="5-6">
+                            <div class="level-name">HSK 5-6</div>
+                            <div class="level-desc">Nâng Cao</div>
+                            <div class="level-range">高级 • Advanced</div>
                         </div>
                     </div>
                 </div>
@@ -1839,7 +1855,7 @@
                 if (error) throw error;
 
                 if (!questions || questions.length === 0) {
-                    alert(`Không tìm thấy câu hỏi cho HSK ${selectedLevel}. Vui lòng liên hệ quản trị viên.`);
+                    alert(`Không tìm thấy câu hỏi cho HSK ${selectedHSK}. Vui lòng liên hệ quản trị viên.`);
                     btn.disabled = false;
                     btn.textContent = 'BẮT ĐẦU';
                     return;
@@ -2334,19 +2350,19 @@
             let message = '';
 
             if (percentage >= 90) {
-                level = `HSK ${selectedLevel} - Xuất sắc`;
+                level = `HSK ${selectedHSK} - Xuất sắc`;
                 message = 'Xuất sắc! Bạn có trình độ tiếng Trung rất cao, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 75) {
-                level = `HSK ${selectedLevel} - Rất tốt`;
+                level = `HSK ${selectedHSK} - Rất tốt`;
                 message = 'Rất tốt! Bạn có nền tảng tiếng Trung vững chắc, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 60) {
-                level = `HSK ${selectedLevel} - Khá`;
+                level = `HSK ${selectedHSK} - Khá`;
                 message = 'Khá tốt! Bạn đang trên đà phát triển, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else if (percentage >= 40) {
-                level = `HSK ${selectedLevel} - Trung bình`;
+                level = `HSK ${selectedHSK} - Trung bình`;
                 message = 'Tốt! Bạn đã có kiến thức cơ bản, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             } else {
-                level = `HSK ${selectedLevel} - Cần cải thiện`;
+                level = `HSK ${selectedHSK} - Cần cải thiện`;
                 message = 'Bạn đang bắt đầu hành trình học tiếng Trung, phía trung tâm sẽ liên hệ với bạn trong thời gian ngắn nhất!';
             }
 
