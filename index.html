@@ -3080,8 +3080,21 @@
         
         // ===== RENDER ANSWERS GRID - SEPARATE SECTIONS =====
         function renderAnswersGrid(score, total) {
+            console.log('🎯 === RENDERING ANSWERS GRID ===');
+            console.log('Score:', score, 'Total:', total);
+            
             const listeningGrid = document.getElementById('listeningGrid');
             const readingGrid = document.getElementById('readingGrid');
+            
+            console.log('Grids found:', {
+                listening: !!listeningGrid,
+                reading: !!readingGrid
+            });
+            
+            if (!listeningGrid || !readingGrid) {
+                console.error('❌ Grids not found!');
+                return;
+            }
             
             let listeningCorrect = 0;
             let readingCorrect = 0;
@@ -3089,6 +3102,7 @@
             // Clear grids
             listeningGrid.innerHTML = '';
             readingGrid.innerHTML = '';
+            console.log('Grids cleared');
             
             // Render Listening (0-4)
             listeningQuestions.forEach((q, i) => {
@@ -3142,15 +3156,31 @@
         
         // ===== GET AI FEEDBACK USING GEMINI =====
         async function getAIFeedback(essay, prompt) {
+            console.log('🤖 === GET AI FEEDBACK CALLED ===');
+            console.log('Essay:', essay.substring(0, 50) + '...');
+            console.log('Prompt:', prompt);
+            
             const feedbackSection = document.getElementById('aiFeedbackSection');
             const feedbackContent = document.getElementById('aiFeedbackContent');
             
+            console.log('Elements found:', {
+                section: !!feedbackSection,
+                content: !!feedbackContent
+            });
+            
+            if (!feedbackSection || !feedbackContent) {
+                console.error('❌ AI feedback elements not found!');
+                return;
+            }
+            
             // Show section with loading
             feedbackSection.style.display = 'block';
+            console.log('✅ AI section displayed');
+            
             feedbackContent.innerHTML = `
                 <div class="ai-loading">
                     <div class="ai-loading-spinner"></div>
-                    <div>Đang phân tích bài viết của bạn...</div>
+                    <div>正在分析您的作文... Đang phân tích bài viết...</div>
                 </div>
             `;
             
