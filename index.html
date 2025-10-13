@@ -316,14 +316,20 @@
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: #4caf50;
-            font-size: 20px;
+            color: #fff;
+            background: #4caf50;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 14px;
             display: none;
-            margin-top: 12px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
         }
 
         .check-icon.show {
-            display: block;
+            display: flex;
         }
 
         .error-message {
@@ -690,23 +696,31 @@
             }
         }
         
-        /* Level colors - từ dễ đến khó */
-        .level-option[data-level="beginner"] {
-            background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
-            border-color: #56ab2f;
-            color: white;
+        /* Level colors HSK1→HSK5 - tăng dần độ mạnh màu */
+        .level-option[data-level="hsk1"] {
+            background: linear-gradient(135deg, #b7f3a6 0%, #7ed957 40%, #63c66d 100%);
+            border-color: #63c66d;
+            color: #0b3d2c;
         }
-        
-        .level-option[data-level="intermediate"] {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-color: #f5576c;
-            color: white;
+        .level-option[data-level="hsk2"] {
+            background: linear-gradient(135deg, #a6e4ff 0%, #6bc1ff 45%, #4aa8ff 100%);
+            border-color: #4aa8ff;
+            color: #072a42;
         }
-        
-        .level-option[data-level="advanced"] {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            border-color: #00f2fe;
-            color: white;
+        .level-option[data-level="hsk3"] {
+            background: linear-gradient(135deg, #ffe0b2 0%, #ffb74d 40%, #ff9f43 100%);
+            border-color: #ff9f43;
+            color: #5a3300;
+        }
+        .level-option[data-level="hsk4"] {
+            background: linear-gradient(135deg, #f6a6ff 0%, #e178ff 45%, #d84dff 100%);
+            border-color: #d84dff;
+            color: #3b0d4a;
+        }
+        .level-option[data-level="hsk5"] {
+            background: linear-gradient(135deg, #ffb3ba 0%, #ff6b77 45%, #ff4d5a 100%);
+            border-color: #ff4d5a;
+            color: #4a0b12;
         }
 
         .level-option:hover {
@@ -717,6 +731,7 @@
         .level-option.selected {
             transform: translateY(-5px) scale(1.05);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            filter: saturate(1.1) brightness(0.98);
         }
         
         .level-option.selected::after {
@@ -1073,6 +1088,55 @@
             font-weight: bold;
             color: #0d5943;
             margin-bottom: 25px;
+        }
+        /* Image choice (Yes/No) for Section 2 */
+        .image-choice-item {
+            display: grid;
+            grid-template-columns: 120px 1fr 180px;
+            gap: 16px;
+            align-items: center;
+        }
+        .image-thumb {
+            width: 120px;
+            height: 90px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid #e0e0e0;
+            background: #f7f7f7;
+        }
+        .image-caption {
+            color: #333;
+            font-size: 15px;
+        }
+        .image-choice-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .image-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 25px;
+            border: 2px solid #e0e0e0;
+            background: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            color: #333;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .image-toggle:hover { transform: translateY(-2px); }
+        .image-toggle.yes.selected {
+            border-color: #4caf50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .image-toggle.no.selected {
+            border-color: #ef5350;
+            background: #ffebee;
+            color: #c62828;
         }
 
         .question-text {
@@ -2139,19 +2203,19 @@
                 <div class="level-selector">
                     <h3 class="level-selector-title">Vui lòng chọn trình độ muốn test</h3>
                     <div class="level-grid">
-                        <div class="level-option" data-level="hsk1" data-range="1-22" data-hsk="1">
+                        <div class="level-option" data-level="hsk1" data-range="1-22" data-hsk="1" data-table="questions">
                             <div class="level-name">HSK1</div>
                         </div>
-                        <div class="level-option" data-level="hsk2" data-range="23-44" data-hsk="2">
+                        <div class="level-option" data-level="hsk2" data-hsk="2" data-table="hsk2_questions">
                             <div class="level-name">HSK2</div>
                         </div>
-                        <div class="level-option" data-level="hsk3" data-range="45-66" data-hsk="3">
+                        <div class="level-option" data-level="hsk3" data-hsk="3" data-table="hsk3_questions">
                             <div class="level-name">HSK3</div>
                         </div>
-                        <div class="level-option" data-level="hsk4" data-range="67-88" data-hsk="4">
+                        <div class="level-option" data-level="hsk4" data-hsk="4" data-table="hsk4_questions">
                             <div class="level-name">HSK4</div>
                         </div>
-                        <div class="level-option" data-level="hsk5" data-range="89-110" data-hsk="5">
+                        <div class="level-option" data-level="hsk5" data-hsk="5" data-table="hsk5_questions">
                             <div class="level-name">HSK5</div>
                         </div>
                     </div>
@@ -2317,7 +2381,8 @@
         // NEW: Level selection
         let selectedLevel = null;
         let selectedRange = null;
-        let selectedHSK = null; // "1-2", "3-4", hoặc "5-6"
+        let selectedHSK = null; // numeric: 1..5
+        let selectedTable = null; // per-level table name
         
         // Section data
         let listeningQuestions = [];
@@ -2349,11 +2414,21 @@
                 input.classList.remove('error');
                 input.classList.add('valid');
                 error.classList.remove('show');
-                check.classList.add('show');
+                // chỉ hiển thị tick khi blur
+                check.classList.remove('show');
             } else {
                 input.classList.remove('error');
                 input.classList.remove('valid');
                 error.classList.remove('show');
+                check.classList.remove('show');
+            }
+        });
+        document.getElementById('fullname').addEventListener('blur', function() {
+            const input = this;
+            const check = document.getElementById('fullnameCheck');
+            if (input.value.trim().length >= 3) {
+                check.classList.add('show');
+            } else {
                 check.classList.remove('show');
             }
         });
@@ -2382,7 +2457,23 @@
                 input.classList.remove('error');
                 input.classList.add('valid');
                 error.classList.remove('show');
+                // chỉ hiển thị tick khi blur
+                check.classList.remove('show');
+            }
+        });
+        document.getElementById('age').addEventListener('blur', function() {
+            const input = this;
+            const value = input.value.trim();
+            const check = document.getElementById('ageCheck');
+            if (value === '') {
+                check.classList.remove('show');
+                return;
+            }
+            const age = parseInt(value);
+            if (!isNaN(age) && age >= 1 && age <= 120) {
                 check.classList.add('show');
+            } else {
+                check.classList.remove('show');
             }
         });
 
@@ -2399,11 +2490,21 @@
                 input.classList.remove('error');
                 input.classList.add('valid');
                 error.classList.remove('show');
-                check.classList.add('show');
+                // chỉ hiển thị tick khi blur
+                check.classList.remove('show');
             } else {
                 input.classList.remove('error');
                 input.classList.remove('valid');
                 error.classList.remove('show');
+                check.classList.remove('show');
+            }
+        });
+        document.getElementById('phone').addEventListener('blur', function() {
+            const input = this;
+            const check = document.getElementById('phoneCheck');
+            if (validatePhone(input.value)) {
+                check.classList.add('show');
+            } else {
                 check.classList.remove('show');
             }
         });
@@ -2421,11 +2522,21 @@
                 input.classList.remove('error');
                 input.classList.add('valid');
                 error.classList.remove('show');
-                check.classList.add('show');
+                // chỉ hiển thị tick khi blur
+                check.classList.remove('show');
             } else {
                 input.classList.remove('error');
                 input.classList.remove('valid');
                 error.classList.remove('show');
+                check.classList.remove('show');
+            }
+        });
+        document.getElementById('email').addEventListener('blur', function() {
+            const input = this;
+            const check = document.getElementById('emailCheck');
+            if (validateEmail(input.value)) {
+                check.classList.add('show');
+            } else {
                 check.classList.remove('show');
             }
         });
@@ -2537,8 +2648,9 @@
                 
                 // Save selected level
                 selectedLevel = this.dataset.level;
-                selectedRange = this.dataset.range;
-                selectedHSK = this.dataset.hsk; // "1-2", "3-4", hoặc "5-6"
+                selectedRange = this.dataset.range || null;
+                selectedHSK = this.dataset.hsk; // numeric string
+                selectedTable = this.dataset.table || 'questions';
                 
                 console.log('Selected:', {level: selectedLevel, range: selectedRange, hsk: selectedHSK});
                 
@@ -2564,15 +2676,26 @@
             btn.innerHTML = '<span class="loading-spinner"></span> Đang tải câu hỏi...';
 
             try {
-                // Parse range (e.g., "1-20" -> [1, 20])
-                const [startNum, endNum] = selectedRange.split('-').map(Number);
+                let questions;
+                let error;
                 
-                const { data: questions, error } = await supabase
-                    .from('questions')
-                    .select('*')
-                    .gte('order_number', startNum)
-                    .lte('order_number', endNum)
-                    .order('order_number');
+                if (selectedTable === 'questions' && selectedRange) {
+                    // Backward compatibility for HSK1 using main table + range
+                    const [startNum, endNum] = selectedRange.split('-').map(Number);
+                    ({ data: questions, error } = await supabase
+                        .from('questions')
+                        .select('*')
+                        .gte('order_number', startNum)
+                        .lte('order_number', endNum)
+                        .order('order_number'));
+                } else {
+                    // Per-level tables: expect explicit section field
+                    ({ data: questions, error } = await supabase
+                        .from(selectedTable)
+                        .select('*')
+                        .order('section', { ascending: true })
+                        .order('order_number', { ascending: true }));
+                }
 
                 if (error) throw error;
 
@@ -2583,10 +2706,16 @@
                     return;
                 }
 
-                // Separate questions by section (first 5 = listening, next 5 = reading, last 1 = writing)
-                listeningQuestions = questions.slice(0, 5);  // First 5 questions
-                readingQuestions = questions.slice(5, 10);   // Next 5 questions
-                writingQuestions = questions.slice(10, 11);  // Last 1 question
+                // Separate by section field if available, else fallback split
+                if (questions[0] && 'section' in questions[0]) {
+                    listeningQuestions = questions.filter(q => q.section === 'listening');
+                    readingQuestions = questions.filter(q => q.section === 'reading');
+                    writingQuestions = questions.filter(q => q.section === 'writing');
+                } else {
+                    listeningQuestions = questions.slice(0, 5);
+                    readingQuestions = questions.slice(5, 10);
+                    writingQuestions = questions.slice(10, 11);
+                }
                 
                 testQuestions = questions;
                 userAnswers = {};
@@ -2665,29 +2794,53 @@
                     </div>
                 `;
                 
-                document.getElementById('questionCounter').textContent = `Phần nghe (5 câu)`;
+                document.getElementById('questionCounter').textContent = `Phần nghe (${sectionQuestions.length} câu)`;
                 document.getElementById('pageInfo').textContent = '1/3 phần nghe';
                 
             } else if (sectionNum === 2) {
-                // READING SECTION - FILL IN THE BLANK
+                // SECTION 2: HSK1 = Đọc/Điền; HSK2+ = Nghe + Hình ảnh
                 sectionQuestions = readingQuestions;
                 startIdx = listeningQuestions.length;
-                
-                const passage = readingQuestions[0]?.reading_passage || 'Đoạn văn sẽ được hiển thị ở đây...';
-                
-                html += `
-                    <div class="section-header">
-                        <div class="section-title">📖 PHẦN 2: ĐIỀN ĐÁP ÁN (điền đáp án bằng tiếng trung)</div>
-                        <div class="section-description">Đọc đoạn văn và điền đáp án đúng cho 5 câu hỏi</div>
-                    </div>
-                    <div class="reading-passage">
-                        <div class="passage-title">📖  Đọc văn:</div>
-                        <div class="passage-text">${passage}</div>
-                    </div>
-                `;
-                
-                document.getElementById('questionCounter').textContent = `Phần 2: Điền đáp án (5 câu)`;
-                document.getElementById('pageInfo').textContent = '2/3 - Điền đáp án';
+
+                if (selectedHSK === '1') {
+                    const passage = readingQuestions[0]?.reading_passage || 'Đoạn văn sẽ được hiển thị ở đây...';
+                    html += `
+                        <div class="section-header">
+                            <div class="section-title">📖 PHẦN 2: ĐIỀN ĐÁP ÁN</div>
+                            <div class="section-description">Đọc đoạn văn và điền đáp án đúng</div>
+                        </div>
+                        <div class="reading-passage">
+                            <div class="passage-title">📖  Đọc văn:</div>
+                            <div class="passage-text">${passage}</div>
+                        </div>
+                    `;
+                    document.getElementById('questionCounter').textContent = `Phần 2: Điền đáp án (${sectionQuestions.length} câu)`;
+                    document.getElementById('pageInfo').textContent = '2/3 - Điền đáp án';
+                } else {
+                    html += `
+                        <div class="section-header">
+                            <div class="section-title">🎧 PHẦN 2: NGHE + NHẬN DIỆN HÌNH ẢNH</div>
+                            <div class="section-description">Nghe Audio, với mỗi hình bên dưới hãy chọn Tick (Có) hoặc X (Không)</div>
+                        </div>
+                        <div class="audio-section">
+                            <div class="audio-info">⚠️ Audio tối đa 2 lượt</div>
+                            ${audioPlayCount >= MAX_AUDIO_PLAYS ? '<div style="color: #f44336; margin-top: 10px; font-weight: bold; font-size: 16px;"></div>' : `
+                            <audio id="mainAudio" controlsList="nodownload noplaybackrate" style="display: none;">
+                                <source src="${sectionQuestions[0]?.audio_url || ''}" type="audio/mpeg">
+                            </audio>
+                            <div id="audioControls" style="margin-top: 15px;">
+                                <button id="playBtn" class="audio-play-btn" onclick="window.handleAudioPlay()">▶️ Phát Audio</button>
+                                <div id="audioProgress" style="margin: 15px 0;">
+                                    <div id="audioProgressBar"></div>
+                                </div>
+                                <div id="audioTime">00:00 / 00:00</div>
+                            </div>
+                            `}
+                        </div>
+                    `;
+                    document.getElementById('questionCounter').textContent = `Phần 2: Nghe + Hình ảnh (${sectionQuestions.length} câu)`;
+                    document.getElementById('pageInfo').textContent = '2/3 - Nghe + Hình ảnh';
+                }
                 
             } else if (sectionNum === 3) {
                 // WRITING SECTION
@@ -2717,6 +2870,12 @@
             }
             
             container.innerHTML = html;
+            if (!sectionQuestions || sectionQuestions.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'question-item';
+                empty.innerHTML = '<div style="text-align:center;color:#777;font-weight:700;">Chưa có câu hỏi cho phần này</div>';
+                container.appendChild(empty);
+            }
             
             // Render questions for listening section (multiple choice)
             if (sectionNum === 1) {
@@ -2753,34 +2912,54 @@
                 });
             }
             
-            // Render questions for reading section (fill in the blank)
+            // Render questions for reading section
             if (sectionNum === 2) {
-                console.log('=== RENDERING SECTION 2 (FILL IN) ===');
-                console.log('Reading questions:', sectionQuestions);
-                
-                sectionQuestions.forEach((question, idx) => {
-                    const globalIdx = startIdx + idx;
-                    const questionDiv = document.createElement('div');
-                    questionDiv.className = 'question-item';
-                    
-                    const savedAnswer = userAnswers[globalIdx] || '';
-                    
-                    let qHtml = `
-                        <div class="question-header">${globalIdx + 1}. ${question.question_text}</div>
-                        <div class="text-input-container" style="display: block !important;">
-                            <input type="text" 
-                                   class="text-input" 
-                                   data-question="${globalIdx}" 
-                                   value="${savedAnswer}" 
-                                   placeholder="Nhập đáp án của bạn...">
-                        </div>
-                    `;
-                    
-                    questionDiv.innerHTML = qHtml;
-                    container.appendChild(questionDiv);
-                });
-                
-                console.log('Input boxes created:', document.querySelectorAll('.text-input').length);
+                if (selectedHSK === '1') {
+                    console.log('=== RENDERING SECTION 2 (HSK1 FILL IN) ===');
+                    sectionQuestions.forEach((question, idx) => {
+                        const globalIdx = startIdx + idx;
+                        const questionDiv = document.createElement('div');
+                        questionDiv.className = 'question-item';
+                        const savedAnswer = userAnswers[globalIdx] || '';
+                        let qHtml = `
+                            <div class="question-header">${globalIdx + 1}. ${question.question_text}</div>
+                            <div class="text-input-container" style="display: block !important;">
+                                <input type="text" 
+                                       class="text-input" 
+                                       data-question="${globalIdx}" 
+                                       value="${savedAnswer}" 
+                                       placeholder="Nhập đáp án của bạn...">
+                            </div>
+                        `;
+                        questionDiv.innerHTML = qHtml;
+                        container.appendChild(questionDiv);
+                    });
+                } else {
+                    console.log('=== RENDERING SECTION 2 (IMAGE YES/NO) ===');
+                    sectionQuestions.forEach((question, idx) => {
+                        const globalIdx = startIdx + idx;
+                        const questionDiv = document.createElement('div');
+                        questionDiv.className = 'question-item';
+                        const savedAnswer = userAnswers[globalIdx] || '';
+                        const yesSelected = savedAnswer === 'Y';
+                        const noSelected = savedAnswer === 'N';
+                        const imageUrl = question.image_url || question.image || '';
+                        const caption = question.question_text || '';
+                        let qHtml = `
+                            <div class="question-header">${globalIdx + 1}. ${caption}</div>
+                            <div class="image-choice-item">
+                                <img class="image-thumb" src="${imageUrl}" alt="item ${globalIdx + 1}" />
+                                <div class="image-caption">Hình trên có xuất hiện trong đoạn nghe?</div>
+                                <div class="image-choice-actions">
+                                    <div class="image-toggle yes ${yesSelected ? 'selected' : ''}" data-question="${globalIdx}" data-choice="Y">✓ Có</div>
+                                    <div class="image-toggle no ${noSelected ? 'selected' : ''}" data-question="${globalIdx}" data-choice="N">✕ Không</div>
+                                </div>
+                            </div>
+                        `;
+                        questionDiv.innerHTML = qHtml;
+                        container.appendChild(questionDiv);
+                    });
+                }
             }
             
             // Attach event listeners
@@ -2789,7 +2968,7 @@
             updateNavButtons();
             
             // Audio setup - CHỈ LOAD, KHÔNG addEventListener
-            if (sectionNum === 1 && audioPlayCount < MAX_AUDIO_PLAYS) {
+            if ((sectionNum === 1 || sectionNum === 2) && audioPlayCount < MAX_AUDIO_PLAYS) {
                 console.log('📻 Audio section ready, count:', audioPlayCount);
                 const audio = document.getElementById('mainAudio');
                 if (audio) {
@@ -2919,7 +3098,21 @@
                 });
             });
             
-            // Text inputs (fill-in)
+            // Image Yes/No toggles (section 2)
+            document.querySelectorAll('.image-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const questionIdx = parseInt(this.dataset.question);
+                    const choice = this.dataset.choice; // 'Y' or 'N'
+                    const parent = this.parentElement;
+                    parent.querySelectorAll('.image-toggle').forEach(t => t.classList.remove('selected'));
+                    this.classList.add('selected');
+                    userAnswers[questionIdx] = choice;
+                    updateProgressCircles();
+                    updateNavButtons();
+                });
+            });
+
+            // Text inputs (fill-in) for HSK1 Section 2
             document.querySelectorAll('.text-input').forEach(input => {
                 input.addEventListener('input', function() {
                     const questionIdx = parseInt(this.dataset.question);
@@ -3091,7 +3284,7 @@
         document.getElementById('btnSubmit').addEventListener('click', function() {
             const answeredCount = Object.keys(userAnswers).length;
             const totalQuestions = testQuestions.length; // Should be 11
-            const totalScorableQuestions = listeningQuestions.length + readingQuestions.length; // 10 questions
+            const totalScorableQuestions = listeningQuestions.length + readingQuestions.length; // số câu chấm điểm
 
             if (answeredCount < totalQuestions) {
                 if (!confirm(`Bạn mới trả lời ${answeredCount}/${totalQuestions} câu.\nBạn có chắc chắn muốn nộp bài?`)) {
@@ -3111,26 +3304,76 @@
             submitBtn.innerHTML = '<span class="loading-spinner"></span> Đang chấm bài...';
 
             let score = 0;
+            const pointsPerQuestion = (selectedHSK === '1') ? 2 : 1; // HSK1: 2 điểm/câu
+            let writingAIScore = 0; // 0-10
+            let writingAIComment = '';
             
             // Score listening questions (index 0-4) - Multiple choice
             listeningQuestions.forEach((q, i) => {
                 if (userAnswers[i] === q.correct_answer) {
-                    score++;
+                    score += pointsPerQuestion;
                 }
             });
             
-            // Score reading questions (index 5-9) - Fill in the blank (case insensitive)
+            // Score reading questions (index 5-9)
             const readingStartIdx = listeningQuestions.length;
             readingQuestions.forEach((q, i) => {
                 const globalIdx = readingStartIdx + i;
                 const userAnswer = userAnswers[globalIdx];
                 const correctAnswer = q.correct_answer;
-                
-                if (userAnswer && correctAnswer && 
-                    userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
-                    score++;
+                // If this section is image Yes/No: expect 'Y' or 'N'
+                if (userAnswer && correctAnswer) {
+                    if ((userAnswer === 'Y' || userAnswer === 'N') && (correctAnswer === 'Y' || correctAnswer === 'N')) {
+                        if (userAnswer === correctAnswer) score += pointsPerQuestion;
+                    } else if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
+                        if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) score += pointsPerQuestion;
+                    }
                 }
             });
+
+            // AI score for writing (0-10) + AI comment
+            try {
+                const writingIndex = listeningQuestions.length + readingQuestions.length;
+                const writingAnswer = userAnswers[writingIndex];
+                if (writingAnswer && writingAnswer.trim().length > 0) {
+                    const ai = await getAIWritingScore(writingAnswer, selectedHSK);
+                    if (ai && typeof ai.total !== 'undefined') {
+                        let totalNum = Number(ai.total);
+                        if (Number.isNaN(totalNum) && typeof ai.total === 'string') {
+                            const m = ai.total.match(/\d+(?:\.\d+)?/);
+                            if (m) totalNum = Number(m[0]);
+                        }
+                        // Luôn làm tròn xuống để khớp với hiển thị 9/10 -> 9
+                        writingAIScore = Math.floor(Math.max(0, Math.min(10, totalNum)));
+                        score += writingAIScore;
+                    }
+                    // get friendly comment for storage
+                    const aiComment = await getAIWritingComment(writingAnswer, selectedHSK);
+                    if (typeof aiComment === 'string') {
+                        writingAIComment = aiComment.trim().slice(0, 4000);
+                        // Override score using total parsed from comment if present (ensure consistency)
+                        let parsed = null;
+                        // pattern like "8/10" or "8.5/10"
+                        let m = writingAIComment.match(/(\d+(?:[\.,]\d+)?)\s*\/\s*10/);
+                        if (m) {
+                            parsed = Number(m[1].replace(',', '.'));
+                        } else {
+                            // fallback: first number 0..10 near keywords 'tổng điểm' or 'điểm'
+                            m = writingAIComment.match(/tổng\s*điểm[^\d]*(\d+(?:[\.,]\d+)?)/i) || writingAIComment.match(/\b(\d+(?:[\.,]\d+)?)\b/);
+                            if (m) parsed = Number(m[1].replace(',', '.'));
+                        }
+                        if (typeof parsed === 'number' && !Number.isNaN(parsed)) {
+                            const normalized = Math.floor(Math.max(0, Math.min(10, parsed)));
+                            // adjust total score to reflect overridden writing score
+                            score -= writingAIScore;
+                            writingAIScore = normalized;
+                            score += writingAIScore;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn('AI writing score failed:', e.message);
+            }
 
             try {
                 const { error } = await supabase
@@ -3139,6 +3382,8 @@
                         placement_id: userRowId,
                         answers: userAnswers,
                         score: score,
+                        writing_ai_score: writingAIScore,
+                        writing_ai_comment: writingAIComment,
                         selected_level: selectedHSK, // Lưu "1-2", "3-4", hoặc "5-6"
                         completed_at: new Date().toISOString()
                     }]);
@@ -3166,9 +3411,13 @@
             const minutes = Math.floor(elapsedTime / 60);
             const seconds = elapsedTime % 60;
             
-            // Total scorable questions = listening (5) + reading (5) = 10
+            // Total scorable = listening + reading (+ writing 10 điểm nếu có)
             const scorableQuestions = listeningQuestions.length + readingQuestions.length;
-            const percentage = scorableQuestions > 0 ? (score / scorableQuestions) * 100 : 0;
+            const maxPointsPerQuestion = (selectedHSK === '1') ? 2 : 1;
+            const writingIdxForPercent = listeningQuestions.length + readingQuestions.length;
+            const hasWriting = (userAnswers[writingIdxForPercent] || '').trim().length > 0;
+            const maxTotalPoints = scorableQuestions * maxPointsPerQuestion + (hasWriting ? 10 : 0);
+            const percentage = maxTotalPoints > 0 ? (score / maxTotalPoints) * 100 : 0;
             
             // Determine level
             let level = '';
@@ -3207,8 +3456,8 @@
             renderAnswersGrid(score, scorableQuestions);
             
             // Get AI feedback for writing (if exists)
-            const writingIndex = listeningQuestions.length + readingQuestions.length;
-            const writingAnswer = userAnswers[writingIndex];
+            const writingIdxForFeedback = listeningQuestions.length + readingQuestions.length;
+            const writingAnswer = userAnswers[writingIdxForFeedback];
             
             if (writingAnswer && writingAnswer.trim().length > 0) {
                 console.log('Getting AI feedback for writing...');
@@ -3406,6 +3655,48 @@ Xin hãy trả lời bằng giọng điệu thân thiện và khích lệ。`
                     </p>
                 `;
             }
+        }
+
+        // ===== GET AI WRITING SCORE (0-10) =====
+        async function getAIWritingScore(essay, hskLevel) {
+            // Rule: 5 tiêu chí, mỗi tiêu chí 0-2 điểm, tổng 10
+            const rubric = `Bạn là giáo viên tiếng Trung. Hãy chấm điểm bài viết theo 5 tiêu chí, mỗi tiêu chí 0-2 điểm (tổng 10).
+1) Nội dung (内容): có đủ thông tin: tên, tuổi, nghề/học vấn, sở thích, nhận xét; đủ 20-30 từ.
+2) Từ vựng (词汇): dùng đúng và phù hợp cấp độ HSK${hskLevel || '2'}.
+3) Ngữ pháp (语法): cấu trúc đúng, câu hoàn chỉnh.
+4) Tính liên kết (连贯性): mạch lạc, tự nhiên.
+5) Biểu đạt & cảm xúc (表达): có cảm xúc, tự nhiên, tích cực.
+Trả về JSON thuần theo schema: {"content":0-2,"vocab":0-2,"grammar":0-2,"coherence":0-2,"expression":0-2,"total":0-10,"notes":"ngắn gọn"}. Không kèm văn bản nào ngoài JSON.`;
+
+            const GEMINI_API_KEY = 'AIzaSyA0KtdYeuXgVA33SgZHpfYZLrsJN1uouSQ';
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const requestBody = {
+                contents: [{ parts: [{ text: `${rubric}\n\nBài viết:\n${essay}` }]}]
+            };
+            const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) });
+            if (!response.ok) throw new Error('AI scoring API error');
+            const data = await response.json();
+            const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            try {
+                const jsonStart = raw.indexOf('{');
+                const jsonEnd = raw.lastIndexOf('}');
+                const jsonText = raw.substring(jsonStart, jsonEnd + 1);
+                return JSON.parse(jsonText);
+            } catch {
+                return null;
+            }
+        }
+
+        // ===== GET AI WRITING COMMENT (text) =====
+        async function getAIWritingComment(essay, hskLevel) {
+            const prompt = `Bạn là giáo viên tiếng Trung. Hãy viết nhận xét ngắn gọn, thân thiện (120-200 chữ), chỉ ra điểm mạnh và điểm cần cải thiện theo 5 tiêu chí: nội dung, từ vựng (HSK${hskLevel||'2'}), ngữ pháp, liên kết, biểu đạt & cảm xúc. Kết thúc bằng lời động viên. Nhận xét bằng tiếng việt nhé, phần đầu sẽ là Chào em và nói thêm 1, 2 câu gì đó khích lệ, các phần Nội dung:, Từ vựng: không thêm các chi tiết thừa như ***.`;
+            const GEMINI_API_KEY = 'AIzaSyA0KtdYeuXgVA33SgZHpfYZLrsJN1uouSQ';
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const requestBody = { contents: [{ parts: [{ text: prompt + "\n\nBài viết:\n" + essay }]}] };
+            const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) });
+            if (!response.ok) throw new Error('AI comment API error');
+            const data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
         }
 
         // ===== FINISH BUTTON =====
