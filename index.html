@@ -1973,7 +1973,6 @@
                 <span class="easy">Bài thi đáng giá đầu vào</span><br>
                 <span class="placement"> tiếng trung HSK </span>
             </h1>
-            <div class="hero-subtitle">TEST</div>
         </div>
 
         <div class="main-content">
@@ -2141,19 +2140,13 @@
                     <h3 class="level-selector-title">Vui lòng chọn trình độ muốn test</h3>
                     <div class="level-grid">
                         <div class="level-option" data-level="beginner" data-range="1-22" data-hsk="1-2">
-                            <div class="level-name">HSK 2</div>
-                            <div class="level-desc">Cơ Bản</div>
-                            <div class="level-range">初级</div>
+                            <div class="level-name"> Bài test HSK1 (đầu vào HSK2)</div>
                         </div>
                         <div class="level-option" data-level="intermediate" data-range="23-44" data-hsk="3-4">
-                            <div class="level-name">HSK 3</div>
-                            <div class="level-desc">Trung Cấp</div>
-                            <div class="level-range">中级</div>
+                            <div class="level-name">Bài test HSK2 (đầu vào HSK3)</div>
                         </div>
                         <div class="level-option" data-level="advanced" data-range="45-66" data-hsk="5-6">
-                            <div class="level-name">HSK 4</div>
-                            <div class="level-desc">Nâng Cao</div>
-                            <div class="level-range">高级</div>
+                            <div class="level-name">Bài test HSK3 (đầu vào HSK4)</div>
                         </div>
                     </div>
                 </div>
@@ -2242,46 +2235,15 @@
 
                 <div class="completion-message">
                     <p>
-                        Chúc mừng bạn đã hoàn thành bài thi <strong>HSK Placement Test</strong> cùng với ICANCONNECT.
+                        Chúc mừng bạn đã hoàn thành bài thi <strong>HSK Placement Test</strong> cùng với ALOHA.
                     </p>
                     <p>
-                        Bạn đã nhận được <strong><span id="finalScore">0</span> điểm</strong> trên tổng <strong><span id="totalQuestions">10</span> điểm</strong>, 
-                        tương đương với trình độ <strong id="levelBadge"></strong>.
+                        Bộ phận Tư vấn Tuyển sinh ALOHA sẽ liên hệ bạn trong thời gian sớm nhất để trả kết quả bài test và tư vấn lộ trình học phù hợp.
                     </p>
                     <p id="resultMessage">
-                        Chúc mừng bạn đã hoàn thành bài kiểm tra!
                     </p>
                 </div>
 
-                <!-- Phần Nghe -->
-                <div class="answers-section">
-                    <div class="section-title">
-                        📻 Phần Nghe: <span id="listeningScore">0</span>/5 đúng
-                    </div>
-                    <div class="answers-grid" id="listeningGrid"></div>
-                </div>
-
-                <!-- Phần Đọc -->
-                <div class="answers-section">
-                    <div class="section-title">
-                        📖 Phần Điền Đáp Án: <span id="readingScore">0</span>/5 đúng
-                    </div>
-                    <div class="answers-grid" id="readingGrid"></div>
-                </div>
-
-                <!-- AI Feedback cho Phần Viết -->
-                <div id="aiFeedbackSection" style="display: none;" class="writing-section">
-                    <div class="writing-title">
-                        <span class="writing-icon">✍️</span>
-                        Nhận xét cho Phần Viết
-                    </div>
-                    <div id="aiFeedbackContent" class="writing-content">
-                        <div class="ai-loading">
-                            <div class="ai-loading-spinner"></div>
-                            <div>Đang phân tích bài viết của bạn...</div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="result-buttons">
                     <button class="btn-result home" id="btnFinish"><span>Hoàn tất</span></button>
@@ -2604,7 +2566,7 @@
                 if (error) throw error;
 
                 if (!questions || questions.length === 0) {
-                    alert(`Không tìm thấy câu hỏi cho HSK ${selectedHSK}. Vui lòng liên hệ quản trị viên.`);
+                    alert(`Đề thi ${selectedHSK} đang được cập nhật.`);
                     btn.disabled = false;
                     btn.textContent = 'BẮT ĐẦU';
                     return;
