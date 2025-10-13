@@ -38,13 +38,13 @@
             font-size: 24px;
             font-weight: bold;
             letter-spacing: 2px;
-            max-width: 150px;
+            max-width: 250px;
             height: auto;
         }
 
         .logo img {
             max-width: 100%;
-            max-height: 120px;
+            max-height: 200px;
             height: auto;
             width: auto;
             object-fit: contain;
@@ -652,7 +652,7 @@
 
         .level-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -2139,14 +2139,20 @@
                 <div class="level-selector">
                     <h3 class="level-selector-title">Vui lòng chọn trình độ muốn test</h3>
                     <div class="level-grid">
-                        <div class="level-option" data-level="beginner" data-range="1-22" data-hsk="2">
-                            <div class="level-name"> Bài test HSK1 (đầu vào HSK2)</div>
+                        <div class="level-option" data-level="hsk1" data-range="1-22" data-hsk="1">
+                            <div class="level-name">HSK1</div>
                         </div>
-                        <div class="level-option" data-level="intermediate" data-range="23-44" data-hsk="3">
-                            <div class="level-name">Bài test HSK2 (đầu vào HSK3)</div>
+                        <div class="level-option" data-level="hsk2" data-range="23-44" data-hsk="2">
+                            <div class="level-name">HSK2</div>
                         </div>
-                        <div class="level-option" data-level="advanced" data-range="45-66" data-hsk="4">
-                            <div class="level-name">Bài test HSK3 (đầu vào HSK4)</div>
+                        <div class="level-option" data-level="hsk3" data-range="45-66" data-hsk="3">
+                            <div class="level-name">HSK3</div>
+                        </div>
+                        <div class="level-option" data-level="hsk4" data-range="67-88" data-hsk="4">
+                            <div class="level-name">HSK4</div>
+                        </div>
+                        <div class="level-option" data-level="hsk5" data-range="89-110" data-hsk="5">
+                            <div class="level-name">HSK5</div>
                         </div>
                     </div>
                 </div>
@@ -2330,24 +2336,29 @@
         }
 
         // ===== FORM VALIDATION =====
-        document.getElementById('fullname').addEventListener('blur', function() {
+        document.getElementById('fullname').addEventListener('input', function() {
             const input = this;
             const error = document.getElementById('fullnameError');
             const check = document.getElementById('fullnameCheck');
-            if (input.value.trim().length < 3) {
+            if (input.value.trim().length > 0 && input.value.trim().length < 3) {
                 input.classList.add('error');
                 input.classList.remove('valid');
                 error.classList.add('show');
                 check.classList.remove('show');
-            } else {
+            } else if (input.value.trim().length >= 3) {
                 input.classList.remove('error');
                 input.classList.add('valid');
                 error.classList.remove('show');
                 check.classList.add('show');
+            } else {
+                input.classList.remove('error');
+                input.classList.remove('valid');
+                error.classList.remove('show');
+                check.classList.remove('show');
             }
         });
 
-        document.getElementById('age').addEventListener('blur', function() {
+        document.getElementById('age').addEventListener('input', function() {
             const input = this;
             const error = document.getElementById('ageError');
             const check = document.getElementById('ageCheck');
