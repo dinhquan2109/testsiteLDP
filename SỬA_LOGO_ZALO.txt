@@ -1,0 +1,69 @@
+✅ ĐÃ SỬA HEADER - CẦN THAY LOGO & ZALO!
+
+════════════════════════════════════════════════════════
+
+🎨 HEADER MỚI:
+
+[LOGO IMAGE]              [📱 Zalo OA] [📞 024.6885.7468]
+
+════════════════════════════════════════════════════════
+
+⚠️ CẦN THAY ĐỔI 2 CHỖ:
+
+1. LOGO IMAGE (Dòng ~1805)
+────────────────────────────────
+Tìm:
+<img src="https://via.placeholder.com/..." alt="Aloha Logo">
+
+Thay bằng logo thật:
+<img src="/path/to/logo.png" alt="Aloha Logo">
+
+Hoặc:
+<img src="https://your-domain.com/logo.png" alt="Aloha Logo">
+
+2. ZALO OA LINK (Dòng ~1807)
+────────────────────────────────
+Tìm:
+<a href="https://zalo.me/ZALO_OA_ID"
+
+Thay bằng:
+<a href="https://zalo.me/YOUR_OA_ID"
+
+Hoặc link đầy đủ của Zalo OA
+<a href="https://zalo.me/1234567890"
+
+════════════════════════════════════════════════════════
+
+🔗 LẤY ZALO OA LINK:
+
+1. Mở Zalo OA Manager
+2. Cài đặt → Thông tin OA
+3. Copy "Link OA" hoặc "OA ID"
+4. Format: https://zalo.me/[OA_ID]
+
+════════════════════════════════════════════════════════
+
+📦 FILES:
+
+   - index.html (113KB) ← UPLOAD sau khi thay!
+   - ĐÃ_SỬA_HEADER.md ← Chi tiết
+
+════════════════════════════════════════════════════════
+
+🚀 SAU KHI THAY:
+
+1. Upload index.html
+2. Ctrl + Shift + R
+3. Test click Zalo → Mở Zalo OA
+4. Test click Phone → Gọi điện
+
+════════════════════════════════════════════════════════
+
+💡 PLACEHOLDER HIỆN TẠI:
+
+Logo: https://via.placeholder.com/... (ảnh demo)
+Zalo: https://zalo.me/ZALO_OA_ID (cần thay)
+
+→ THAY BẰNG LINK THẬT!
+
+════════════════════════════════════════════════════════
